@@ -1,0 +1,674 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Induction, Three Ideas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:baseline; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px}
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.nbtn{width:40px; height:40px; border-radius:9px; border:2px solid var(--rule-2); background:var(--panel-2);
+  font-family:var(--mono); font-weight:700; font-size:14px; cursor:pointer; transition:.12s}
+.nbtn:hover{border-color:var(--acc)}
+.nbtn[aria-pressed="true"]{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .nbtn[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); width:100%; cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-top:12px;
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.12em; line-height:1.85}
+.verdict{display:inline-block; font-family:var(--mono); font-weight:700; font-size:12px; padding:3px 9px;
+  border-radius:6px; margin-left:8px; letter-spacing:.05em}
+.verdict.T{background:var(--ok-soft); color:var(--ok); border:1px solid var(--ok-line)}
+.verdict.F{background:var(--bad-soft); color:var(--bad); border:1px solid var(--bad-line)}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:16.5px; margin-bottom:9px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* assume viewer */
+.slots{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+.slot{padding:7px 12px; border-radius:8px; font-family:var(--mono); font-size:13px; font-weight:700;
+  border:2px solid var(--rule-2); background:var(--panel-2); color:var(--ink-3)}
+.slot.have{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.slot.goal{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .slot.goal{color:#0B0D14}
+.slot.none{background:var(--warn-soft); border-color:var(--warn); color:var(--warn); border-style:dashed}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:13px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2)}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:7px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.5; color:var(--ink-2)}
+
+/* bar */
+.barwrap{margin-top:14px}
+.bar{height:44px; border-radius:9px; border:1px solid var(--rule-2); background:var(--panel-2); overflow:hidden;
+  display:flex; position:relative}
+.seg2{height:100%; border-right:1px solid rgba(255,255,255,.35); transition:width .25s}
+.gap{height:100%; background:repeating-linear-gradient(45deg,var(--bad-soft),var(--bad-soft) 6px,transparent 6px,transparent 12px);
+  border-left:2px solid var(--bad); transition:width .25s; display:flex; align-items:center; justify-content:center}
+.barlbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  margin-top:6px}
+
+/* derivation */
+.deriv{margin-top:12px; display:flex; flex-direction:column; gap:0}
+.dline{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk);
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.05em; line-height:1.6; opacity:0;
+  max-height:0; overflow:hidden; transition:opacity .25s, max-height .25s, padding .25s}
+.dline.on{opacity:1; max-height:220px}
+.dline.good{border-left-color:var(--ok); background:var(--ok-soft)}
+.dline.bad{border-left-color:var(--bad); background:var(--bad-soft)}
+.dline .why{display:block; font-family:var(--sans); font-size:13px; color:var(--ink-3); margin-top:3px}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Recitation 03</div>
+    <h1>Three ideas that make induction proofs work</h1>
+    <p class="sub">You've argued these at the board. Here they are stripped down to the parts that decide whether a
+      proof actually holds together.</p>
+  </div>
+</header>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>A predicate is a sentence</h2></div>
+
+    <p><span class="m">P</span>(<span class="m">n</span>) has to be something that can be <strong>true or false</strong>.
+      Not a number, not a formula sitting on its own — a sentence with an <span class="m">n</span> in it. Fix
+      <span class="m">n</span>, and you get a claim you could agree or disagree with.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick a predicate and a number. See what sentence you get.</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="pdsel"></div>
+      </div>
+      <div class="row" id="pdnums" style="margin-top:10px"></div>
+      <div class="out" id="pdout"></div>
+      <div class="expl" id="pdexpl"></div>
+    </div>
+
+    <div class="note">
+      Notice that <span class="m">D</span>(<span class="m">n</span>) is <strong>false</strong> at
+      <span class="m">n</span> = 2, 3, 4 and true from 5 onward. That's completely fine — a predicate is allowed to be
+      false somewhere. It's just why we'd write the claim as “for all
+      <span class="m">n</span> ≥ 5” instead of “for all <span class="m">n</span>”.
+    </div>
+
+    <h3>Which of these could you actually run an induction on?</h3>
+    <p>Judge the <em>shape</em>, not whether the claim happens to be true.</p>
+
+    <div class="card">
+      <div id="tri"></div>
+      <div class="expl" id="trisum"></div>
+    </div>
+
+    <div class="note warnb">
+      <strong>The two ways it goes wrong.</strong> Write a formula like
+      “<span class="m">P</span>(<span class="m">n</span>) = <span class="m">n</span>(<span class="m">n</span>+1)/2”
+      and <span class="m">P</span>(3) is the number 6 — you can't assume a 6. Write
+      “<span class="m">P</span>(<span class="m">n</span>) ≔ for all <span class="m">n</span>, …” and there's no
+      <span class="m">n</span> left to vary, so <span class="m">P</span>(3) and
+      <span class="m">P</span>(4) say the same thing and the induction can never move.
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>Ordinary vs. strong induction</h2></div>
+
+    <p>Both work the same way: prove a starting case, then show how to get from earlier cases to the next one. The
+      only difference is <strong>how much you're allowed to assume</strong> when you take that step.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>What do I get to assume?</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="kindsel">
+          <button data-k="ord" aria-pressed="true">Ordinary</button>
+          <button data-k="str">Strong</button>
+        </div>
+      </div>
+      <div class="row" id="knums" style="margin-top:10px"></div>
+      <div class="slots" id="kslots"></div>
+      <div class="expl" id="kexpl"></div>
+    </div>
+
+    <div class="note okb">
+      <strong>Look at <span class="m">n</span> = 0 with strong induction selected.</strong> There are no smaller
+      cases, so you assume <em>nothing</em> — which means you have to prove
+      <span class="m">P</span>(0) outright. That's your base case, and it appears on its own. You don't bolt it on;
+      strong induction hands it to you.
+    </div>
+
+    <p>Written out, the strong assumption is “<span class="mm"><span class="m">P</span>(<span class="m">m</span>) for
+      every <span class="m">m</span> &lt; <span class="m">n</span></span>”. That little
+      <span class="mm"><span class="m">m</span> &lt; <span class="m">n</span></span> is worth the ink: at
+      <span class="m">n</span> = 1 it gives you <span class="m">P</span>(0) and nothing else. Compare the version you
+      might scribble at a board — “assume <span class="m">P</span>(0), <span class="m">P</span>(1), …,
+      <span class="m">P</span>(<span class="m">n</span>−1)” — where the dots quietly suggest
+      <span class="m">P</span>(1) is in there even when <span class="m">n</span> = 1. That's exactly the gap you
+      found in recitation, and the inequality can't make that mistake.</p>
+
+    <h3>So which one do you need?</h3>
+    <p>It depends on one thing: <strong>which earlier cases your step actually uses.</strong></p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>My step proves <span class="m">P</span>(<span class="m">n</span>) using…</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="needsel"></div>
+      </div>
+      <div class="slots" id="needslots"></div>
+      <div class="pair" id="needpair"></div>
+      <div class="expl" id="needexpl"></div>
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>Sometimes you have to claim more</h2></div>
+
+    <p>Here's the move that feels backwards: your induction gets stuck, so you make the claim
+      <strong>harder</strong> — and now it works. It makes sense once you remember that the thing you're proving is
+      also the thing you get to assume. A weak claim gives you a weak assumption.</p>
+
+    <p>Take the halving sum. Add a half, then a quarter, then an eighth, and so on:</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Drag to add more terms. Watch what's left over.</h4>
+      <div class="row" style="margin-top:0;width:100%">
+        <input type="range" id="bslider" min="1" max="10" value="3">
+      </div>
+      <div class="barwrap">
+        <div class="bar" id="bar"></div>
+        <div class="barlbl"><span id="bsum"></span><span id="bgap"></span></div>
+      </div>
+      <div class="expl" id="bexpl"></div>
+    </div>
+
+    <p>The sum never reaches 1 — so let's try to prove <strong>“the sum is less than 1”</strong> by induction. Pick
+      which assumption you're carrying and step through what happens.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Run the induction step</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="hypsel">
+          <button data-k="weak" aria-pressed="true">Assume: sum &lt; 1</button>
+          <button data-k="strong">Assume: sum = 1 − 1/2ⁿ</button>
+        </div>
+      </div>
+      <div class="deriv" id="deriv"></div>
+      <div class="row"><button class="btn pri" id="dnext">Next line</button>
+        <button class="btn" id="dreset">Restart</button></div>
+    </div>
+
+    <div class="note">
+      <strong>The stronger claim is the one that works.</strong> “Less than 1” lets the sum sit right at the edge, so
+      there's no room for the next term. “Exactly 1 − 1/2<sup><span class="m">n</span></sup>” pins down
+      <em>how much</em> room is left — and that's the fact the step needs. You pay by having to prove more; you get
+      paid by having more to work with.
+    </div>
+
+    <div class="card">
+      <h4>Quick check</h4>
+      <div class="qtext" style="font-weight:600;font-size:15.6px">Why did claiming <em>more</em> make the proof easier?</div>
+      <div class="opts" id="q1">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Equations are easier to work with than inequalities.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>The step has to prove more, but it also gets to <em>assume</em> more — and here the extra information is worth more than the extra work.</span></button>
+        <button class="opt" data-c="2"><span class="mk">C</span><span>1 − 1/2<sup>n</sup> is smaller than 1, and smaller targets are always easier to hit.</span></button>
+      </div>
+      <div class="fb" id="q1fb"></div>
+    </div>
+
+    <div class="note">
+      <strong>You've seen this before.</strong> The chocolate-bar predicate had to say “<em>every</em> sequence of
+      splits takes <span class="m">mn</span> − 1” rather than “some sequence does”. Same move: the stronger statement
+      is the one the step can actually use.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="take">
+      <h3 style="font-size:19px">The short version</h3>
+      <ol>
+        <li><strong><span class="m">P</span>(<span class="m">n</span>) must be a sentence.</strong> If you can't answer “is it true?”, nothing you assume or conclude means anything.</li>
+        <li><strong>Pick your induction by what the step uses.</strong> Only the previous case → ordinary. Anything further back, or something you can't predict → strong.</li>
+        <li><strong>Say “for every <span class="m">m</span> &lt; <span class="m">n</span>”, not “…”.</strong> The dots are where proofs hide their holes.</li>
+        <li><strong>Stuck? Try claiming more.</strong> A stronger predicate gives a stronger assumption, and that's often exactly what was missing.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Recitation 03, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- §1 predicate playground ---------- */
+var PREDS=[
+ {k:'E', name:'E(n)', def:'“<i>n</i> is even”',
+  say:function(n){ return n+' is even'; },
+  val:function(n){ return n%2===0; },
+  note:'True for every other number — a perfectly good predicate that is often false.'},
+ {k:'D', name:'D(n)', def:'“2<sup><i>n</i></sup> &gt; <i>n</i>²”',
+  say:function(n){ return '2<sup>'+n+'</sup> &gt; '+n+'²&nbsp; &nbsp;i.e.&nbsp; '+Math.pow(2,n)+' &gt; '+(n*n); },
+  val:function(n){ return Math.pow(2,n) > n*n; },
+  note:'False at 2, 3 and 4, then true forever after. That is why the claim would be written “for all <i>n</i> ≥ 5”.'},
+ {k:'T', name:'T(n)', def:'“1 + 2 + ⋯ + <i>n</i> = <i>n</i>(<i>n</i>+1)/2”',
+  say:function(n){
+    var lhs = n===0 ? '0' : Array.from({length:n},function(_,i){return i+1;}).join(' + ');
+    var s=n*(n+1)/2;
+    return lhs+' = '+n+'·'+(n+1)+'/2&nbsp; &nbsp;i.e.&nbsp; '+s+' = '+s; },
+  val:function(){ return true; },
+  note:'True for every <i>n</i> — which is exactly the sort of thing you would prove by induction.'}
+];
+(function(){
+  var sel=document.getElementById('pdsel'), nums=document.getElementById('pdnums'),
+      out=document.getElementById('pdout'), expl=document.getElementById('pdexpl');
+  if(!sel) return;
+  var cur=0, n=3;
+  PREDS.forEach(function(p,i){
+    var b=document.createElement('button');
+    b.innerHTML=p.name+' ≔ '+p.def; b.setAttribute('aria-pressed', i===0?'true':'false');
+    b.addEventListener('click',function(){
+      sel.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); cur=i; draw();
+    });
+    sel.appendChild(b);
+  });
+  for(var i=0;i<=8;i++){
+    (function(i){
+      var b=document.createElement('button'); b.className='nbtn'; b.textContent=i;
+      b.setAttribute('aria-pressed', i===3?'true':'false');
+      b.addEventListener('click',function(){
+        nums.querySelectorAll('.nbtn').forEach(function(x){x.setAttribute('aria-pressed','false');});
+        b.setAttribute('aria-pressed','true'); n=i; draw();
+      });
+      nums.appendChild(b);
+    })(i);
+  }
+  function draw(){
+    var p=PREDS[cur], v=p.val(n);
+    out.innerHTML='<b>'+p.k+'('+n+')</b> says:&nbsp; '+p.say(n)+
+      '<span class="verdict '+(v?'T':'F')+'">'+(v?'TRUE':'FALSE')+'</span>';
+    expl.innerHTML='Fixing <i>n</i> turned the predicate into an ordinary claim you can judge. '+p.note;
+  }
+  draw();
+})();
+
+/* ---------- §1 triage ---------- */
+var TRI=[
+ {t:'<i>P</i>(<i>n</i>) ≔ “<i>n</i>² ≥ <i>n</i>”', a:'ok',
+  w:'Usable. There is an <i>n</i>, and fixing it gives something true or false — <i>P</i>(3) is “9 ≥ 3”.'},
+ {t:'<i>P</i>(<i>n</i>) = <i>n</i>(<i>n</i>+1)/2', a:'num',
+  w:'This is a number. <i>P</i>(3) would be 6, and “assume 6” is not a sentence. Say instead: <i>P</i>(<i>n</i>) ≔ “1 + 2 + ⋯ + <i>n</i> = <i>n</i>(<i>n</i>+1)/2”.'},
+ {t:'<i>P</i>(<i>n</i>) ≔ “for all <i>n</i>, <i>n</i>² ≥ <i>n</i>”', a:'non',
+  w:'The “for all <i>n</i>” uses up the <i>n</i>, so nothing varies: <i>P</i>(3) and <i>P</i>(4) say the very same thing. This is the whole claim dressed up as the predicate.'},
+ {t:'<i>P</i>(<i>n</i>) ≔ “every set of <i>n</i> horses is the same colour”', a:'ok',
+  w:'Usable — and false once <i>n</i> ≥ 2, which does not matter here. Being usable is about shape, not truth.'},
+ {t:'<i>P</i>(<i>n</i>) ≔ “1 + 2 + ⋯ + <i>n</i>”', a:'num',
+  w:'A sum is a number, not a claim. There is nothing here to be true or false.'}
+];
+var LBL={ok:'Usable', num:'A number, not a sentence', non:'No <i>n</i> left to vary'};
+(function(){
+  var host=document.getElementById('tri'), sum=document.getElementById('trisum');
+  if(!host) return;
+  TRI.forEach(function(item){
+    var c=document.createElement('div'); c.className='tcard';
+    c.innerHTML='<div class="cand">'+item.t+'</div><div class="tbtns">'+
+      Object.keys(LBL).map(function(k){return '<button class="tbtn" data-k="'+k+'">'+LBL[k]+'</button>';}).join('')+
+      '</div><div class="tfb"></div>';
+    var fb=c.querySelector('.tfb');
+    c.querySelectorAll('.tbtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(c.dataset.done) return; c.dataset.done='1';
+        var ok=b.dataset.k===item.a;
+        c.querySelectorAll('.tbtn').forEach(function(x){ x.classList.add('lk');
+          if(x.dataset.k===item.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+        fb.className='tfb show '+(ok?'g':'b'); fb.innerHTML=item.w;
+        var d=host.querySelectorAll('.tcard[data-done]').length;
+        sum.innerHTML=d+' of '+TRI.length+' sorted.'+(d===TRI.length?' <strong>Three are usable.</strong> The other two fail on shape alone — before anyone asks whether the claim is true.':'');
+      });
+    });
+    host.appendChild(c);
+  });
+  sum.textContent='0 of '+TRI.length+' sorted.';
+})();
+
+/* ---------- §2 assumption viewer ---------- */
+(function(){
+  var kindsel=document.getElementById('kindsel'), nums=document.getElementById('knums'),
+      slots=document.getElementById('kslots'), expl=document.getElementById('kexpl');
+  if(!kindsel) return;
+  var kind='ord', n=4;
+  kindsel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){
+      kindsel.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); kind=b.dataset.k; draw();
+    });
+  });
+  for(var i=0;i<=5;i++){
+    (function(i){
+      var b=document.createElement('button'); b.className='nbtn'; b.textContent='n='+i;
+      b.style.width='auto'; b.style.padding='0 12px';
+      b.setAttribute('aria-pressed', i===4?'true':'false');
+      b.addEventListener('click',function(){
+        nums.querySelectorAll('.nbtn').forEach(function(x){x.setAttribute('aria-pressed','false');});
+        b.setAttribute('aria-pressed','true'); n=i; draw();
+      });
+      nums.appendChild(b);
+    })(i);
+  }
+  function draw(){
+    slots.innerHTML='';
+    var have=[];
+    if(kind==='ord'){ if(n>=1) have=[n-1]; }
+    else { for(var i=0;i<n;i++) have.push(i); }
+    if(!have.length){
+      var s=document.createElement('div'); s.className='slot none'; s.textContent='nothing to assume';
+      slots.appendChild(s);
+    } else {
+      have.forEach(function(h){
+        var s=document.createElement('div'); s.className='slot have'; s.textContent='P('+h+')'; slots.appendChild(s);
+      });
+    }
+    var arrow=document.createElement('div');
+    arrow.className='slot'; arrow.style.border='none'; arrow.style.background='none'; arrow.textContent='⟶ prove';
+    slots.appendChild(arrow);
+    var g=document.createElement('div'); g.className='slot goal'; g.textContent='P('+n+')'; slots.appendChild(g);
+
+    if(!have.length){
+      expl.innerHTML= kind==='str'
+        ? '<strong>Nothing smaller than 0 exists</strong>, so you assume nothing and must prove <i>P</i>(0) on its own. That is your base case — strong induction produces it for free.'
+        : 'At <i>n</i> = 0 there is no previous case, so <i>P</i>(0) is the base case you prove directly.';
+    } else if(kind==='ord'){
+      expl.innerHTML='Ordinary induction hands you <strong>only the case just before</strong>: <i>P</i>('+(n-1)+'). If your step needs anything further back, this is not enough.';
+    } else {
+      expl.innerHTML='Strong induction hands you <strong>every</strong> case below <i>n</i>: '+
+        have.map(function(h){return 'P('+h+')';}).join(', ')+'. Never <i>P</i>('+n+') itself — the assumption is <i>m</i> &lt; <i>n</i>, strictly.'+
+        (n===1?' <strong>At n = 1 that is just P(0)</strong> — not P(1). The dots version is what blurs this.':'');
+    }
+  }
+  draw();
+})();
+
+/* ---------- §2 which induction ---------- */
+var NEEDS=[
+ {k:'prev', label:'P(n−1)', uses:function(n){return [n-1];}, ord:true,
+  w:'Only the case right before. That is exactly what ordinary induction gives you.',
+  ow:'This is the one case ordinary induction hands you.',
+  sw:'Works too — strong induction gives you P(n−1) along with everything else. It is just more than you need.'},
+ {k:'two', label:'P(n−1) and P(n−2)', uses:function(n){return [n-1,n-2];}, ord:false,
+  w:'Reaching back two means you also need two starting cases proved by hand.',
+  ow:'Ordinary induction only gives you P(n−1). P(n−2) is not available.',
+  sw:'Strong induction gives you both. You will also need two base cases, since the step cannot run at n = 0 or n = 1.'},
+ {k:'half', label:'P(n ÷ 2)', uses:function(n){return [Math.floor(n/2)];}, ord:false,
+  w:'Halving jumps a long way down — from n = 10 you land on 5, nowhere near 9.',
+  ow:'Ordinary induction gives you P(9) when proving P(10). You wanted P(5).',
+  sw:'Strong induction covers every smaller case, so P(5) is there whenever you need it.'},
+ {k:'any', label:'some smaller case (unpredictable)', uses:function(){return [];}, ord:false,
+  w:'If you cannot say in advance which case the step will reach for, you need all of them.',
+  ow:'Ordinary induction gives you one specific case. You cannot rely on it being the one you need.',
+  sw:'This is what strong induction is for. Whatever smaller case turns up, you already have it.'}
+];
+(function(){
+  var sel=document.getElementById('needsel'), slots=document.getElementById('needslots'),
+      pair=document.getElementById('needpair'), expl=document.getElementById('needexpl');
+  if(!sel) return;
+  var cur=0, N=7;
+  NEEDS.forEach(function(item,i){
+    var b=document.createElement('button'); b.textContent=item.label;
+    b.setAttribute('aria-pressed', i===0?'true':'false');
+    b.addEventListener('click',function(){
+      sel.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); cur=i; draw();
+    });
+    sel.appendChild(b);
+  });
+  function draw(){
+    var item=NEEDS[cur], needs=item.uses(N).filter(function(v){return v>=0 && v<N;});
+    slots.innerHTML='<div class="slot" style="border:none;background:none;color:var(--ink-3)">proving P('+N+') needs:</div>';
+    needs.forEach(function(v){
+      var s=document.createElement('div'); s.className='slot have'; s.textContent='P('+v+')'; slots.appendChild(s);
+    });
+    if(item.k==='any'){
+      var q=document.createElement('div'); q.className='slot none';
+      q.textContent='P(?) — could be any of P(0) … P('+(N-1)+')'; slots.appendChild(q);
+    }
+    pair.innerHTML=
+      '<div class="vcard '+(item.ord?'yes':'no')+'"><div class="vt">'+(item.ord?'✓':'✗')+' Ordinary</div>'+
+        '<div class="vw">'+item.ow+'</div></div>'+
+      '<div class="vcard yes"><div class="vt">✓ Strong</div><div class="vw">'+item.sw+'</div></div>';
+    expl.innerHTML=item.w;
+  }
+  draw();
+})();
+
+/* ---------- §3 halving bar ---------- */
+(function(){
+  var s=document.getElementById('bslider'), bar=document.getElementById('bar'),
+      bs=document.getElementById('bsum'), bg=document.getElementById('bgap'), expl=document.getElementById('bexpl');
+  if(!s) return;
+  function draw(){
+    var n=+s.value, html='', sum=0;
+    for(var i=1;i<=n;i++){
+      var w=1/Math.pow(2,i); sum+=w;
+      var shade=22+Math.min(i,9)*7;
+      html+='<div class="seg2" style="width:'+(w*100)+'%;background:color-mix(in srgb, var(--acc) '+(100-shade)+'%, var(--panel))"></div>';
+    }
+    var gap=1-sum;
+    html+='<div class="gap" style="width:'+(gap*100)+'%"></div>';
+    bar.innerHTML=html;
+    bs.textContent='1/2 + 1/4 + ⋯ + 1/2^'+n+'  =  '+sum.toFixed(6);
+    bg.innerHTML='gap left over = 1/2<sup>'+n+'</sup> = '+gap.toFixed(6);
+    expl.innerHTML='With '+n+' term'+(n===1?'':'s')+', the sum is <strong>'+sum.toFixed(6)+'</strong> and the striped gap is <strong>'+gap.toFixed(6)+'</strong>. '+
+      'Every term fills exactly half of what is left, so the gap halves each time and the bar never quite fills. '+
+      'The sum is always <strong>exactly 1 − 1/2<sup>'+n+'</sup></strong> — and that exact value is the fact the proof will need.';
+  }
+  s.addEventListener('input',draw); draw();
+})();
+
+/* ---------- §3 derivation stepper ---------- */
+var DERIV={
+ weak:[
+  {t:'You may assume:&nbsp; 1/2 + 1/4 + ⋯ + 1/2<sup><i>n</i></sup> &nbsp;&lt; 1', why:'This is all the weak claim gives you.'},
+  {t:'Add the next term to both sides:&nbsp; (1/2 + ⋯ + 1/2<sup><i>n</i></sup>) + 1/2<sup><i>n</i>+1</sup> &nbsp;&lt;&nbsp; 1 + 1/2<sup><i>n</i>+1</sup>', why:'The left side is now the sum for n+1.'},
+  {t:'You needed to show it is &lt; 1.', why:'That is the claim at n+1.'},
+  {t:'But 1 + 1/2<sup><i>n</i>+1</sup> is <b>bigger</b> than 1.', why:'The bound you derived is too loose to conclude anything.', cls:'bad'},
+  {t:'✗ Stuck — the step does not close.', why:'The assumption allowed the sum to sit right at 1, leaving no room for another term.', cls:'bad'}
+ ],
+ strong:[
+  {t:'You may assume:&nbsp; 1/2 + 1/4 + ⋯ + 1/2<sup><i>n</i></sup> &nbsp;= 1 − 1/2<sup><i>n</i></sup>', why:'The stronger claim pins down the exact value.'},
+  {t:'Add the next term:&nbsp; = (1 − 1/2<sup><i>n</i></sup>) + 1/2<sup><i>n</i>+1</sup>', why:'Same move as before — but now with an equality.'},
+  {t:'And 1/2<sup><i>n</i></sup> − 1/2<sup><i>n</i>+1</sup> = 1/2<sup><i>n</i>+1</sup>', why:'Half of a half is the other half.'},
+  {t:'So the sum &nbsp;= 1 − 1/2<sup><i>n</i>+1</sup>', why:'Which is exactly the claim at n+1.', cls:'good'},
+  {t:'✓ The step closes. And since 1 − 1/2<sup><i>n</i></sup> is always less than 1, the original claim follows.', why:'You proved something stronger, and got the thing you wanted for free.', cls:'good'}
+ ]
+};
+(function(){
+  var sel=document.getElementById('hypsel'), host=document.getElementById('deriv'),
+      next=document.getElementById('dnext'), reset=document.getElementById('dreset');
+  if(!sel) return;
+  var kind='weak', shown=0;
+  function render(){
+    host.innerHTML='';
+    DERIV[kind].forEach(function(l,i){
+      var d=document.createElement('div');
+      d.className='dline'+(l.cls?' '+l.cls:'')+(i<shown?' on':'');
+      d.innerHTML=l.t+'<span class="why">'+l.why+'</span>';
+      host.appendChild(d);
+    });
+    next.disabled = shown>=DERIV[kind].length;
+    next.textContent = shown>=DERIV[kind].length ? 'Done' : (shown===0?'Start':'Next line');
+  }
+  sel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){
+      sel.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); kind=b.dataset.k; shown=0; render();
+    });
+  });
+  next.addEventListener('click',function(){ if(shown<DERIV[kind].length){ shown++; render(); } });
+  reset.addEventListener('click',function(){ shown=0; render(); });
+  render();
+})();
+
+/* ---------- §3 quick check ---------- */
+(function(){
+  var opts=document.getElementById('q1'), fb=document.getElementById('q1fb');
+  if(!opts) return;
+  var done=false;
+  opts.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(done) return; done=true;
+      var ok=+o.dataset.c===1;
+      opts.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+        if(+x.dataset.c===1) x.classList.add('correct');
+        else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+      fb.className='fb show '+(ok?'good':'bad');
+      fb.innerHTML=ok
+        ? '<strong>Yes.</strong> Strengthening cuts both ways, and the trade is often worth it — here the exact value is precisely what the step was missing.'
+        : '<strong>Not quite.</strong> It is not about equations being nicer, and the new claim is genuinely <em>harder</em>, not easier. What changed is that the assumption got stronger too, and that gain outweighed the cost. (Answer: B.)';
+    });
+  });
+})();
+
+})();
+</script>
