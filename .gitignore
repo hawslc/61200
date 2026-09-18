@@ -1,0 +1,16 @@
+# Course source material — lecture PDFs are read locally, never committed.
+# They are copyrighted 6.1200J/18.062J staff materials and are large (~25 MB).
+lectures/
+
+# Student work and anything with a real name attached to it.
+student-work/
+submissions/
+
+# macOS / editor noise
+.DS_Store
+*.swp
+*~
+
+# Scratch
+scratch/
+*.tmp

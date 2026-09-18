@@ -244,7 +244,11 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
     <div class="shead"><span class="snum">2</span><h2>Ordinary vs. strong induction</h2></div>
 
     <p>Both work the same way: prove a starting case, then show how to get from earlier cases to the next one. The
-      only difference is <strong>how much you're allowed to assume</strong> when you take that step.</p>
+      only difference is <strong>how much you're allowed to assume</strong> when you take that step. Ordinary
+      induction gives you <span class="mm"><span class="m">P</span>(<span class="m">n</span>) ⇒
+      <span class="m">P</span>(<span class="m">n</span>+1)</span>; strong induction gives you
+      <span class="mm"><span class="m">P</span>(0) ∧ <span class="m">P</span>(1) ∧ … ∧
+      <span class="m">P</span>(<span class="m">n</span>) ⇒ <span class="m">P</span>(<span class="m">n</span>+1)</span>.</p>
 
     <div class="card">
       <span class="tag">Try it</span>
@@ -261,20 +265,23 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
     </div>
 
     <div class="note okb">
-      <strong>Look at <span class="m">n</span> = 0 with strong induction selected.</strong> There are no smaller
-      cases, so you assume <em>nothing</em> — which means you have to prove
-      <span class="m">P</span>(0) outright. That's your base case, and it appears on its own. You don't bolt it on;
-      strong induction hands it to you.
+      <strong>Both conditions are separate obligations.</strong> Lecture states strong induction as two things you
+      must prove: first that <span class="m">P</span>(0) is true, and second that
+      <span class="mm"><span class="m">P</span>(0) ∧ <span class="m">P</span>(1) ∧ … ∧
+      <span class="m">P</span>(<span class="m">n</span>) ⇒ <span class="m">P</span>(<span class="m">n</span>+1)</span>
+      for every <span class="m">n</span>. The base case doesn't come out of the step — you owe it on its own, just
+      like in ordinary induction.
     </div>
 
-    <p>Written out, the strong assumption is “<span class="mm"><span class="m">P</span>(<span class="m">m</span>) for
-      every <span class="m">m</span> &lt; <span class="m">n</span></span>”. That little
-      <span class="mm"><span class="m">m</span> &lt; <span class="m">n</span></span> is worth the ink: at
-      <span class="m">n</span> = 1 it gives you <span class="m">P</span>(0) and nothing else. Compare the version you
-      might scribble at a board — “assume <span class="m">P</span>(0), <span class="m">P</span>(1), …,
-      <span class="m">P</span>(<span class="m">n</span>−1)” — where the dots quietly suggest
-      <span class="m">P</span>(1) is in there even when <span class="m">n</span> = 1. That's exactly the gap you
-      found in recitation, and the inequality can't make that mistake.</p>
+    <p>Now read those dots carefully at small <span class="m">n</span>, because that's where the gap you found in
+      recitation lives. At <span class="m">n</span> = 0, the chain
+      “<span class="mm"><span class="m">P</span>(0) ∧ … ∧ <span class="m">P</span>(<span class="m">n</span>)</span>”
+      has collapsed to a single term: the step is just
+      <span class="mm"><span class="m">P</span>(0) ⇒ <span class="m">P</span>(1)</span>, and
+      <span class="m">P</span>(1) is <em>not</em> something you may assume. The “…” is suggestive, not literal —
+      it stands for however many cases actually exist below the one you're proving, which at the bottom of the
+      induction is very few. Whenever you write the chain, check what it says at your smallest
+      <span class="m">n</span>.</p>
 
     <h3>So which one do you need?</h3>
     <p>It depends on one thing: <strong>which earlier cases your step actually uses.</strong></p>
@@ -367,7 +374,7 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       <ol>
         <li><strong><span class="m">P</span>(<span class="m">n</span>) must be a sentence.</strong> If you can't answer “is it true?”, nothing you assume or conclude means anything.</li>
         <li><strong>Pick your induction by what the step uses.</strong> Only the previous case → ordinary. Anything further back, or something you can't predict → strong.</li>
-        <li><strong>Say “for every <span class="m">m</span> &lt; <span class="m">n</span>”, not “…”.</strong> The dots are where proofs hide their holes.</li>
+        <li><strong>Read the dots at your smallest <span class="m">n</span>.</strong> “<span class="m">P</span>(0) ∧ … ∧ <span class="m">P</span>(<span class="m">n</span>)” collapses to one term at <span class="m">n</span> = 0, and the base case is still yours to prove separately.</li>
         <li><strong>Stuck? Try claiming more.</strong> A stronger predicate gives a stronger assumption, and that's often exactly what was missing.</li>
       </ol>
     </div>
@@ -500,31 +507,22 @@ var LBL={ok:'Usable', num:'A number, not a sentence', non:'No <i>n</i> left to v
   function draw(){
     slots.innerHTML='';
     var have=[];
-    if(kind==='ord'){ if(n>=1) have=[n-1]; }
-    else { for(var i=0;i<n;i++) have.push(i); }
-    if(!have.length){
-      var s=document.createElement('div'); s.className='slot none'; s.textContent='nothing to assume';
-      slots.appendChild(s);
-    } else {
-      have.forEach(function(h){
-        var s=document.createElement('div'); s.className='slot have'; s.textContent='P('+h+')'; slots.appendChild(s);
-      });
-    }
+    if(kind==='ord'){ have=[n]; }
+    else { for(var i=0;i<=n;i++) have.push(i); }
+    have.forEach(function(h){
+      var s=document.createElement('div'); s.className='slot have'; s.textContent='P('+h+')'; slots.appendChild(s);
+    });
     var arrow=document.createElement('div');
     arrow.className='slot'; arrow.style.border='none'; arrow.style.background='none'; arrow.textContent='⟶ prove';
     slots.appendChild(arrow);
-    var g=document.createElement('div'); g.className='slot goal'; g.textContent='P('+n+')'; slots.appendChild(g);
+    var g=document.createElement('div'); g.className='slot goal'; g.textContent='P('+(n+1)+')'; slots.appendChild(g);
 
-    if(!have.length){
-      expl.innerHTML= kind==='str'
-        ? '<strong>Nothing smaller than 0 exists</strong>, so you assume nothing and must prove <i>P</i>(0) on its own. That is your base case — strong induction produces it for free.'
-        : 'At <i>n</i> = 0 there is no previous case, so <i>P</i>(0) is the base case you prove directly.';
-    } else if(kind==='ord'){
-      expl.innerHTML='Ordinary induction hands you <strong>only the case just before</strong>: <i>P</i>('+(n-1)+'). If your step needs anything further back, this is not enough.';
+    if(kind==='ord'){
+      expl.innerHTML='Ordinary induction hands you <strong>only the case just before</strong>: <i>P</i>('+n+') ⇒ <i>P</i>('+(n+1)+'). If your step needs anything further back, this is not enough.';
     } else {
-      expl.innerHTML='Strong induction hands you <strong>every</strong> case below <i>n</i>: '+
-        have.map(function(h){return 'P('+h+')';}).join(', ')+'. Never <i>P</i>('+n+') itself — the assumption is <i>m</i> &lt; <i>n</i>, strictly.'+
-        (n===1?' <strong>At n = 1 that is just P(0)</strong> — not P(1). The dots version is what blurs this.':'');
+      expl.innerHTML='Strong induction hands you <strong>every</strong> case up to <i>n</i>: '+
+        have.map(function(h){return 'P('+h+')';}).join(' ∧ ')+' ⇒ <i>P</i>('+(n+1)+'). Never <i>P</i>('+(n+1)+') itself — that is what you are proving.'+
+        (n===0?' <strong>At n = 0 the chain is just P(0)</strong>, so the step is P(0) ⇒ P(1) and nothing more. This is where the dots mislead.':'');
     }
   }
   draw();
