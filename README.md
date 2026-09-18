@@ -25,16 +25,3 @@ beyond a webfont. Open one in a browser.
   makes an interactive widget worth building
 - [`course/PITFALLS.md`](course/PITFALLS.md) — mistakes the course names, from
   *proof by example* to *buildup error* to *the ratio fallacy*
-
-## Lecture PDFs
-
-`lectures/` holds the source notes. It is gitignored — the PDFs are ~25 MB of
-staff course material and don't belong in version control. Drop them in locally
-to give the tools something to read.
-
-## Working on this repo
-
-See [`CLAUDE.md`](CLAUDE.md). Three skills live in `.claude/skills/`:
-`recitation-companion` (build a companion), `concept-explainer` (explain a
-concept in the course's terms), `proof-feedback` (critique a proof against the
-course's stated standards).
