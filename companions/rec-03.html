@@ -57,9 +57,10 @@ header.hero h1{font-size:clamp(31px,6vw,48px)}
 header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
 
 section{padding:54px 0 6px}
-.shead{display:flex; align-items:baseline; gap:12px; margin-bottom:6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
 .snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
-  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px}
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
 section h2{font-size:clamp(24px,4vw,31px)}
 section p{margin-top:13px; max-width:64ch}
 section h3{font-size:18px; margin:30px 0 6px}
