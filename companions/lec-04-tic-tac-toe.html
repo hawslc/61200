@@ -244,9 +244,9 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
     <p>So a state is just the board plus whose turn it is. Some pairs, like a board of nine X’s, can never come up in
       play — telling those apart is §2’s job.</p>
 
-    <p>That last clause is the whole design. Winning doesn’t trigger anything; it just leaves you in a state the
-      transition rule has nothing to say about. In state-machine vocabulary the state is <strong>stuck</strong>, and a
-      play that reaches it has <strong>terminated</strong>.</p>
+    <p>That last clause is the whole design. Winning doesn’t trigger anything; it just leaves you in a state with no
+      outgoing transitions — a <strong>final state</strong>. A play that reaches a final state has
+      <strong>terminated</strong>.</p>
 
     <div class="card">
       <span class="tag">Try it</span>
@@ -337,25 +337,35 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
 <!-- ================= §3 ================= -->
 <section id="s3">
   <div class="wrap">
-    <div class="shead"><span class="snum">3</span><h2>Counting empty squares proves the game ends</h2></div>
+    <div class="shead"><span class="snum">3</span><h2>A potential function proves the game ends</h2></div>
 
     <p>Termination is a separate obligation from correctness — the course splits them deliberately, and
-      <strong>partial correctness</strong> is the name for what you get if you only do the invariant half. For the
-      other half you need a <strong>derived variable</strong>: a function from states to ℝ that behaves predictably
-      along every transition.</p>
+      <strong>partial correctness</strong> is the name for what you get if you only do the invariant half. The tool for
+      the other half is a <strong>potential function</strong> (also called a <strong>derived variable</strong>): a
+      function that assigns a number to every state. It isn’t part of the state and the machine never looks at it — you
+      compute it from the state, so you can watch how it changes along each transition.</p>
+
+    <p>The potential function here counts empty cells. The whole termination proof is three lines:</p>
 
     <div class="defn">
       <div class="dl">
-        <span class="dt">e(s)</span>
-        <span class="dd">the number of – entries in <span class="m">b</span>. &nbsp;<span class="mm">e(q₀) = 9</span>, and <span class="mm">e(s) ∈ ℕ</span> always.</span>
+        <span class="dt">1 · define</span>
+        <span class="dd"><span class="mm">e : states → ℕ</span>, &nbsp;<span class="mm">e(s)</span> = the number of –
+          entries in <span class="m">b</span>. At the start, <span class="mm">e(q₀) = 9</span>.</span>
+
+        <span class="dt">2 · decreases</span>
+        <span class="dd">every transition fills exactly one empty cell, so
+          <span class="mm">s ↦ t</span> implies <span class="mm">e(t) = e(s) − 1 &lt; e(s)</span>. That makes
+          <span class="m">e</span> <strong>strictly decreasing</strong>.</span>
+
+        <span class="dt">3 · conclude</span>
+        <span class="dd">a sequence of natural numbers can’t decrease forever. Along any play the values go
+          <span class="mm">9, 8, 7, …</span>, so there are <strong>at most 9 transitions</strong> before a final state.</span>
       </div>
     </div>
 
-    <p>Every transition fills a square that was empty, so <span class="mm">s ↦ t</span> gives
-      <span class="mm">e(t) = e(s) − 1</span>: <span class="m">e</span> is <strong>strictly decreasing</strong> and
-      ℕ-valued. There is no infinite strictly decreasing sequence in ℕ, so no play runs forever — and since
-      <span class="mm">e(q₀) = 9</span>, every play is stuck after <strong>at most 9 transitions</strong>. You get the
-      bound for free, out of the same argument.</p>
+    <p>Both ingredients matter. The values have to live in ℕ (or anything else with no infinite descending chain), and
+      the decrease has to be strict on <em>every</em> transition. The widget below breaks the second one.</p>
 
     <div class="card">
       <span class="tag">Try it</span>
@@ -371,20 +381,20 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       <p style="margin-top:10px; font-size:14.6px; color:var(--ink-2)" id="ruledesc"></p>
       <div class="chartwrap">
         <div class="chart" id="chart"></div>
-        <div class="axis"><span>q₀</span><span>e(s) after each transition</span></div>
+        <div class="axis"><span>q₀</span><span>potential e(s) after each transition</span></div>
         <div class="status" id="chartstatus"></div>
       </div>
     </div>
 
-    <div class="note">Under the slide rule <span class="m">e</span> is still a perfectly good derived variable — it’s
-      just only <strong>weakly</strong> decreasing, and weakly decreasing proves nothing about termination. The
+    <div class="note">Under the slide rule <span class="m">e</span> is still a perfectly good potential function — it’s
+      just only <strong>weakly</strong> decreasing (a slide gives <span class="mm">e(t) = e(s)</span>), and weakly decreasing proves nothing about termination. The
       variable didn’t break. The <em>proof</em> broke, and the machine really does have infinite runs, so no repair is
       possible. That’s the honest order to think in: the argument fails first, and then you go looking for whether the
       claim was ever true.</div>
 
     <div class="card">
       <span class="tag">Check</span>
-      <h4>Why does <span class="m">e</span> prove the game ends?</h4>
+      <h4>Why does the potential function <span class="m">e</span> prove the game ends?</h4>
       <div class="opts" id="q1">
         <button class="opt" data-c="0"><span class="mk">A</span><span>Because <span class="mm">e(s) ≤ 9</span> at every
           reachable state, so the game can’t go on forever.</span></button>
@@ -397,7 +407,7 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
     </div>
 
     <div class="note okb">Put the two halves together and you have the full statement. <strong>Termination:</strong>
-      every play reaches a stuck state within 9 transitions. <strong>Partial correctness:</strong> a stuck state is
+      every play reaches a final state within 9 transitions. <strong>Partial correctness:</strong> a final state is
       either a board with a line (someone won) or a full board with none (a draw) — which is just the contrapositive of
       the transition rule, since any other state has an empty square and no line, hence a transition out.</div>
   </div>
@@ -411,13 +421,13 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       <ol>
         <li><strong>Put everything in the state.</strong> If the transition rule needs to know it, it belongs in the
           tuple — here, whose turn it is. A machine that consults the history isn’t a machine.</li>
-        <li><strong>Terminal means stuck, not special.</strong> Don’t add a “game over” flag. Restrict the transition
-          relation and let the winning boards have nothing to go to.</li>
+        <li><strong>A final state is one with no transitions out.</strong> Don’t add a “game over” flag. Restrict the
+          transition relation and let the winning boards have nothing to go to.</li>
         <li><strong>Prove preserved, then cite the Invariant Principle.</strong> Preserved is a one-line check per
           transition type; true at <span class="mm">q₀</span> is usually immediate. The Principle does the rest.</li>
         <li><strong>An invariant is a proof of impossibility.</strong> P failing means unreachable. P holding means
           nothing — for reachability you must exhibit a path.</li>
-        <li><strong>Strictly decreasing and ℕ-valued is the termination argument.</strong> Weakly decreasing isn’t.
+        <li><strong>A strictly decreasing, ℕ-valued potential function proves termination.</strong> Weakly decreasing isn’t.
           And the starting value is your step bound: <span class="mm">e(q₀) = 9</span>, so at most 9 moves.</li>
       </ol>
     </div>
@@ -500,11 +510,11 @@ function empties(b){ var a=[]; for(var i=0;i<9;i++) if(b[i]===".") a.push(i); re
     var n = w ? 0 : es.length;
     outn.innerHTML = '<span class="pill '+(n===0?"bad":"ok")+'">'+n+'</span>';
     if(w){
-      outtxt.innerHTML = "<strong>Stuck.</strong> "+b[w[0]]+" has a line, so the transition rule gives this state "+
+      outtxt.innerHTML = "<strong>Final state.</strong> "+b[w[0]]+" has a line, so the transition rule gives this state "+
         "nothing to go to. The play has terminated after "+hist.length+" transitions. The state still records "+
         "p = "+turn+" — it is just that nothing uses it.";
     } else if(n===0){
-      outtxt.innerHTML = "<strong>Stuck.</strong> No empty square, no line — a draw, reached in 9 transitions, "+
+      outtxt.innerHTML = "<strong>Final state.</strong> No empty square, no line — a draw, reached in 9 transitions, "+
         "which is the bound §3 proves.";
     } else {
       outtxt.innerHTML = "One per empty cell: "+turn+" may play "+
@@ -554,7 +564,7 @@ var CANDS=[
  {b:"XOXXXOOXO",
   cand:"Full board, five X, four O, no line anywhere.",
   ans:"yes", path:[4,1,0,8,2,6,3,5,7],
-  fb:"<strong>Reachable.</strong> A draw — the terminal state with e(s) = 0. Nine transitions, the maximum: "+
+  fb:"<strong>Reachable.</strong> A draw — a final state with e(s) = 0. Nine transitions, the maximum: "+
      "X(2,2), O(1,2), X(1,1), O(3,3), X(1,3), O(3,1), X(2,1), O(2,3), X(3,2)."}
 ];
 (function(){
@@ -657,7 +667,7 @@ var CANDS=[
     var n=series.length-1;
     if(kind==="place"){
       if(done()){
-        stat.innerHTML='<span class="pill ok">terminated</span> &nbsp; e reached 0 after '+n+
+        stat.innerHTML='<span class="pill ok">final state</span> &nbsp; e reached 0 after '+n+
           " transitions. Nine strict decreases from e(q₀) = 9, and there was never room for a tenth.";
         stepb.disabled=true;
       } else {
