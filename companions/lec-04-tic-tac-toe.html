@@ -1,0 +1,711 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tic-Tac-Toe, Formally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; margin:0}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+code{font-family:var(--mono); font-size:.88em; background:var(--panel-2); padding:1px 5px; border-radius:5px}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)}
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover:not(:disabled){border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+
+.defn{background:var(--sunk); border:1px solid var(--rule); border-left:3px solid var(--teal); border-radius:0 10px 10px 0;
+  padding:14px 17px; margin-top:16px}
+.defn .dl{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; align-items:baseline}
+.defn .dt{font-family:var(--mono); font-size:13px; font-weight:700; color:var(--teal); white-space:nowrap}
+.defn .dd{font-size:15.2px; line-height:1.55}
+
+/* ---- play board ---- */
+.play{display:grid; grid-template-columns:auto 1fr; gap:20px; margin-top:14px; align-items:start}
+@media(max-width:620px){.play{grid-template-columns:1fr}}
+.board{display:grid; grid-template-columns:repeat(3,66px); grid-auto-rows:66px; gap:6px}
+.sq{border-radius:10px; border:2px solid var(--rule-2); background:var(--panel-2); font-family:var(--disp);
+  font-size:30px; font-weight:700; cursor:pointer; transition:.12s; color:var(--ink-3); position:relative}
+.sq:hover:not(:disabled){border-color:var(--acc); background:var(--acc-soft)}
+.sq:disabled{cursor:default}
+.sq.x{color:var(--acc); background:var(--acc-soft); border-color:var(--acc-line)}
+.sq.o{color:var(--teal); background:var(--teal-soft); border-color:var(--teal-line)}
+.sq.win{border-color:var(--ok); box-shadow:0 0 0 3px var(--ok-soft)}
+.sq .idx{position:absolute; top:2px; left:5px; font-family:var(--mono); font-size:9.5px; font-weight:400;
+  color:var(--ink-3); opacity:.6}
+.statebox{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:12px 14px;
+  font-family:var(--mono); font-size:13px; line-height:1.7; word-break:break-word}
+.statebox .lbl{color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase; display:block;
+  margin-bottom:4px}
+.tuple{font-size:14px}
+.tuple .bx{color:var(--acc); font-weight:700}
+.tuple .bo{color:var(--teal); font-weight:700}
+.log{margin-top:10px; font-family:var(--mono); font-size:12.5px; color:var(--ink-2); line-height:1.9;
+  word-break:break-word}
+.log .s0{color:var(--acc); font-weight:700}
+.pill{display:inline-block; font-family:var(--mono); font-weight:700; font-size:11.5px; padding:3px 9px;
+  border-radius:6px; letter-spacing:.04em; border:1px solid var(--rule-2); background:var(--panel-2)}
+.pill.ok{background:var(--ok-soft); color:var(--ok); border-color:var(--ok-line)}
+.pill.bad{background:var(--bad-soft); color:var(--bad); border-color:var(--bad-line)}
+.pill.warn{background:var(--warn-soft); color:var(--warn); border-color:var(--warn-line)}
+
+.meters{display:grid; grid-template-columns:1fr; gap:9px; margin-top:12px}
+.meter{background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:9px 12px}
+.meter .mt{display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:11.5px;
+  color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase}
+.pips{display:flex; gap:4px; margin-top:7px}
+.pip{height:14px; flex:1; border-radius:3px; background:var(--panel-3); border:1px solid var(--rule-2);
+  transition:.2s}
+.pip.on{background:var(--teal); border-color:var(--teal)}
+.inv{display:flex; gap:7px; flex-wrap:wrap; align-items:center; margin-top:8px; font-family:var(--mono); font-size:13px}
+
+/* ---- triage ---- */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:11px; padding:13px 15px; margin-top:11px;
+  display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start}
+@media(max-width:560px){.tcard{grid-template-columns:1fr}}
+.mini{display:grid; grid-template-columns:repeat(3,30px); grid-auto-rows:30px; gap:3px; flex:none}
+.mcell{border-radius:6px; border:1px solid var(--rule-2); background:var(--panel); display:flex;
+  align-items:center; justify-content:center; font-family:var(--disp); font-weight:700; font-size:16px;
+  color:var(--ink-3); transition:.15s}
+.mcell.x{color:var(--acc); background:var(--acc-soft); border-color:var(--acc-line)}
+.mcell.o{color:var(--teal); background:var(--teal-soft); border-color:var(--teal-line)}
+.cand{font-size:15px; line-height:1.5}
+.counts{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); margin-top:5px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap; margin-top:9px}
+.tbtn{font-size:12.6px; padding:5px 11px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+.trace{font-family:var(--mono); font-size:12px; color:var(--ink-2); margin-top:7px; min-height:1.4em}
+
+/* ---- derived variable chart ---- */
+.chartwrap{margin-top:14px; background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px}
+.chart{display:flex; align-items:flex-end; gap:5px; height:150px; border-bottom:2px solid var(--rule-2);
+  border-left:2px solid var(--rule-2); padding:0 4px 0 6px}
+.col{flex:1; min-width:10px; background:var(--teal); border-radius:4px 4px 0 0; position:relative;
+  transition:height .22s; display:flex; align-items:flex-start; justify-content:center}
+.col.flat{background:var(--bad)}
+.col .cv{position:absolute; top:-18px; font-family:var(--mono); font-size:10.5px; color:var(--ink-3); font-weight:700}
+.axis{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--ink-3);
+  margin-top:7px}
+.status{margin-top:11px; font-size:14.4px; line-height:1.5}
+
+/* ---- mcq ---- */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · Lecture 04 · state machines</div>
+    <h1>Tic-tac-toe is a state machine</h1>
+    <p class="sub">The 8-puzzle gets the lecture. Here is the same apparatus — states, transitions, a preserved
+      predicate, a derived variable — on a game you already know the rules of, so the only new thing is the machinery.</p>
+  </div>
+</header>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>A state is the whole board, not the last move</h2></div>
+
+    <p>The temptation is to call “X plays the centre” a state. It isn’t — it’s a transition. A state has to carry
+      everything the next transition needs to know, and that means the full board <em>and</em> whose turn it is.</p>
+
+    <div class="defn">
+      <div class="dl">
+        <span class="dt">Q</span>
+        <span class="dd">pairs <span class="mm">(<span class="m">b</span>, <span class="m">p</span>)</span>, where
+          <span class="m">b</span> : {1, …, 9} → {X, O, ·} records the board and
+          <span class="m">p</span> ∈ {X, O} says who moves next.</span>
+        <span class="dt">q₀</span>
+        <span class="dd">the empty board with <span class="m">p</span> = X. &nbsp;(One start state. Everything else has
+          to be <em>reached</em>.)</span>
+        <span class="dt">s ↦ t</span>
+        <span class="dd"><span class="mm">(<span class="m">b</span>, <span class="m">p</span>) ↦
+          (<span class="m">b</span>[<span class="m">i</span> ≔ <span class="m">p</span>], <span class="m">p̄</span>)</span>
+          for any square <span class="m">i</span> with <span class="m">b</span>(<span class="m">i</span>) = ·, provided
+          <span class="m">b</span> has no three-in-a-row. A won board has <strong>no outgoing transitions</strong>.</span>
+      </div>
+    </div>
+
+    <p>That last clause is the whole design. Winning doesn’t trigger anything; it just leaves you in a state the
+      transition rule has nothing to say about. In state-machine vocabulary the state is <strong>stuck</strong>, and a
+      play that reaches it has <strong>terminated</strong>.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Click a square to take a transition</h4>
+      <div class="play">
+        <div>
+          <div class="board" id="bd"></div>
+          <div class="row">
+            <button class="btn" id="undo">Undo</button>
+            <button class="btn" id="rnd">Random transition</button>
+            <button class="btn pri" id="reset">Back to q₀</button>
+          </div>
+        </div>
+        <div>
+          <div class="statebox">
+            <span class="lbl">current state</span>
+            <div class="tuple" id="tup"></div>
+            <div class="log" id="log"></div>
+          </div>
+          <div class="meters">
+            <div class="meter">
+              <div class="mt"><span>outgoing transitions</span><span id="outn"></span></div>
+              <div id="outtxt" style="font-size:13.4px; margin-top:5px; line-height:1.45"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="inv" id="invrow"></div>
+    </div>
+
+    <div class="note">The state tuple is doing real work. Drop <span class="m">p</span> from the state and the
+      transition relation stops being well defined — you’d have to look at the history to know whose mark goes down
+      next, and a state machine is not allowed to look at history. Everything it knows, it knows because the state
+      says so.</div>
+  </div>
+  <hr class="soft">
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>An invariant rules boards out, never in</h2></div>
+
+    <p>Here is the predicate. For a state <span class="mm">s = (<span class="m">b</span>, <span class="m">p</span>)</span>,
+      write <span class="mm">#X</span> and <span class="mm">#O</span> for the number of each mark on
+      <span class="m">b</span>:</p>
+
+    <div class="defn">
+      <div class="dl">
+        <span class="dt">P(s)</span>
+        <span class="dd"><span class="mm">(#X = #O &nbsp;∧&nbsp; <span class="m">p</span> = X) &nbsp;∨&nbsp;
+          (#X = #O + 1 &nbsp;∧&nbsp; <span class="m">p</span> = O)</span></span>
+      </div>
+    </div>
+
+    <p><strong>P is preserved.</strong> Suppose <span class="mm">P(s)</span> and <span class="mm">s ↦ t</span>. Either
+      <span class="m">p</span> = X, in which case <span class="mm">#X = #O</span> and the transition writes one X and
+      hands the turn to O, giving <span class="mm">#X = #O + 1</span> with <span class="m">p</span> = O — the second
+      disjunct. Or <span class="m">p</span> = O, in which case <span class="mm">#X = #O + 1</span> and the transition
+      writes one O and hands back, giving <span class="mm">#X = #O</span> with <span class="m">p</span> = X — the first
+      disjunct. Either way <span class="mm">P(t)</span>.</p>
+
+    <p>And <span class="mm">P(q₀)</span> holds: <span class="mm">0 = 0</span> and <span class="m">p</span> = X. So by
+      the <strong>Invariant Principle</strong>, P is an invariant — true at <em>every reachable state</em>. Which gives
+      you the thing invariants are for: any state where P fails is unreachable, and you never had to search.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Reachable from q₀, or not?</h4>
+      <p style="margin-top:0; font-size:14.6px; color:var(--ink-2)">Four boards. Decide before you click — and where
+        a board <em>is</em> reachable, trace the play that gets there.</p>
+      <div id="triage"></div>
+    </div>
+
+    <div class="note warnb"><strong>The asymmetry is the point.</strong> An invariant can only ever prove
+      <em>un</em>reachability. When P fails, you are done — no reachable state looks like that. When P holds, you have
+      learned nothing: the third board above satisfies P and is still unreachable. To show a state
+      <em>is</em> reachable there is exactly one move, and it’s the one you made above — exhibit a path
+      <span class="mm">q₀ ↦ s₁ ↦ ⋯ ↦ s</span>.</div>
+
+    <p>This is the 8-puzzle argument with smaller numbers. There the invariant is the parity of the inversion count,
+      and it proves the famously unreachable configuration unreachable without examining a single one of the
+      181 440 states you <em>can</em> get to.</p>
+  </div>
+  <hr class="soft">
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>Counting empty squares proves the game ends</h2></div>
+
+    <p>Termination is a separate obligation from correctness — the course splits them deliberately, and
+      <strong>partial correctness</strong> is the name for what you get if you only do the invariant half. For the
+      other half you need a <strong>derived variable</strong>: a function from states to ℝ that behaves predictably
+      along every transition.</p>
+
+    <div class="defn">
+      <div class="dl">
+        <span class="dt">e(s)</span>
+        <span class="dd">the number of squares with <span class="mm"><span class="m">b</span>(<span class="m">i</span>)
+          = ·</span>. &nbsp;<span class="mm">e(q₀) = 9</span>, and <span class="mm">e(s) ∈ ℕ</span> always.</span>
+      </div>
+    </div>
+
+    <p>Every transition fills a square that was empty, so <span class="mm">s ↦ t</span> gives
+      <span class="mm">e(t) = e(s) − 1</span>: <span class="m">e</span> is <strong>strictly decreasing</strong> and
+      ℕ-valued. There is no infinite strictly decreasing sequence in ℕ, so no play runs forever — and since
+      <span class="mm">e(q₀) = 9</span>, every play is stuck after <strong>at most 9 transitions</strong>. You get the
+      bound for free, out of the same argument.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Same game, one rule changed</h4>
+      <div class="row">
+        <div class="seg" id="ruleseg">
+          <button data-k="place" aria-pressed="true">Place a mark</button>
+          <button data-k="slide" aria-pressed="false">Place <em>or</em> slide</button>
+        </div>
+        <button class="btn" id="stepbtn">Take a transition</button>
+        <button class="btn" id="stepreset">Reset</button>
+      </div>
+      <p style="margin-top:10px; font-size:14.6px; color:var(--ink-2)" id="ruledesc"></p>
+      <div class="chartwrap">
+        <div class="chart" id="chart"></div>
+        <div class="axis"><span>q₀</span><span>e(s) after each transition</span></div>
+        <div class="status" id="chartstatus"></div>
+      </div>
+    </div>
+
+    <div class="note">Under the slide rule <span class="m">e</span> is still a perfectly good derived variable — it’s
+      just only <strong>weakly</strong> decreasing, and weakly decreasing proves nothing about termination. The
+      variable didn’t break. The <em>proof</em> broke, and the machine really does have infinite runs, so no repair is
+      possible. That’s the honest order to think in: the argument fails first, and then you go looking for whether the
+      claim was ever true.</div>
+
+    <div class="card">
+      <span class="tag">Check</span>
+      <h4>Why does <span class="m">e</span> prove the game ends?</h4>
+      <div class="opts" id="q1">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Because <span class="mm">e(s) ≤ 9</span> at every
+          reachable state, so the game can’t go on forever.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>Because <span class="m">e</span> is ℕ-valued and
+          strictly decreases at every transition, and no sequence in ℕ can strictly decrease forever.</span></button>
+        <button class="opt" data-c="0"><span class="mk">C</span><span>Because every play ends in a win or a full
+          board, and both of those have <span class="mm">e(s) = 0</span> or a completed line.</span></button>
+      </div>
+      <div class="fb" id="q1fb"></div>
+    </div>
+
+    <div class="note okb">Put the two halves together and you have the full statement. <strong>Termination:</strong>
+      every play reaches a stuck state within 9 transitions. <strong>Partial correctness:</strong> a stuck state is
+      either a board with a line (someone won) or a full board with none (a draw) — which is just the contrapositive of
+      the transition rule, since any other state has an empty square and no line, hence a transition out.</div>
+  </div>
+  <hr class="soft">
+</section>
+
+<section id="short">
+  <div class="wrap">
+    <h2>The short version</h2>
+    <div class="take">
+      <ol>
+        <li><strong>Put everything in the state.</strong> If the transition rule needs to know it, it belongs in the
+          tuple — here, whose turn it is. A machine that consults the history isn’t a machine.</li>
+        <li><strong>Terminal means stuck, not special.</strong> Don’t add a “game over” flag. Restrict the transition
+          relation and let the winning boards have nothing to go to.</li>
+        <li><strong>Prove preserved, then cite the Invariant Principle.</strong> Preserved is a one-line check per
+          transition type; true at <span class="mm">q₀</span> is usually immediate. The Principle does the rest.</li>
+        <li><strong>An invariant is a proof of impossibility.</strong> P failing means unreachable. P holding means
+          nothing — for reachability you must exhibit a path.</li>
+        <li><strong>Strictly decreasing and ℕ-valued is the termination argument.</strong> Weakly decreasing isn’t.
+          And the starting value is your step bound: <span class="mm">e(q₀) = 9</span>, so at most 9 moves.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 04, state machines, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+var LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+var SUB="₀₁₂₃₄₅₆₇₈₉";
+function sub(n){ return String(n).split("").map(function(d){return SUB[+d];}).join(""); }
+function winline(b){
+  for(var i=0;i<LINES.length;i++){
+    var L=LINES[i];
+    if(b[L[0]]!=="." && b[L[0]]===b[L[1]] && b[L[1]]===b[L[2]]) return L;
+  }
+  return null;
+}
+function count(b,c){ var n=0; for(var i=0;i<9;i++) if(b[i]===c) n++; return n; }
+function empties(b){ var a=[]; for(var i=0;i<9;i++) if(b[i]===".") a.push(i); return a; }
+
+/* ---------- §1 play the machine ---------- */
+(function(){
+  var bd=document.getElementById("bd"), tup=document.getElementById("tup"), log=document.getElementById("log"),
+      outn=document.getElementById("outn"), outtxt=document.getElementById("outtxt"),
+      invrow=document.getElementById("invrow");
+  if(!bd) return;
+
+  var b, turn, hist, cells=[];
+  function fresh(){ b=".........".split(""); turn="X"; hist=[]; }
+  fresh();
+
+  for(var i=0;i<9;i++){
+    (function(i){
+      var btn=document.createElement("button");
+      btn.className="sq";
+      btn.innerHTML='<span class="idx">'+(i+1)+'</span><span class="mk"></span>';
+      btn.addEventListener("click",function(){ move(i); });
+      bd.appendChild(btn); cells.push(btn);
+    })(i);
+  }
+
+  function move(i){
+    if(b[i]!=="." || winline(b)) return;
+    b[i]=turn; hist.push(i); turn = (turn==="X") ? "O" : "X";
+    draw();
+  }
+
+  function boardText(){
+    var out="";
+    for(var r=0;r<3;r++){
+      for(var c=0;c<3;c++){
+        var ch=b[3*r+c];
+        out += ch==="X" ? '<span class="bx">X</span>' : ch==="O" ? '<span class="bo">O</span>' : "·";
+      }
+      if(r<2) out+=" / ";
+    }
+    return out;
+  }
+
+  function draw(){
+    var w=winline(b), es=empties(b);
+    for(var i=0;i<9;i++){
+      var cl="sq"+(b[i]==="X"?" x":b[i]==="O"?" o":"");
+      if(w && w.indexOf(i)>=0) cl+=" win";
+      cells[i].className=cl;
+      cells[i].querySelector(".mk").textContent = b[i]==="." ? "" : b[i];
+      cells[i].disabled = (b[i]!=="." || !!w);
+    }
+    tup.innerHTML = "s"+sub(hist.length)+" = ⟨ "+boardText()+" , "+turn+" ⟩";
+
+    var line="<span class=\"s0\">q₀</span>";
+    for(var k=1;k<=hist.length;k++) line += " ↦ s"+sub(k);
+    log.innerHTML = '<span class="lbl" style="margin-top:8px">path taken</span>'+line+
+      "<br>"+hist.length+" transition"+(hist.length===1?"":"s")+" from q₀";
+
+    var n = w ? 0 : es.length;
+    outn.innerHTML = '<span class="pill '+(n===0?"bad":"ok")+'">'+n+'</span>';
+    if(w){
+      outtxt.innerHTML = "<strong>Stuck.</strong> "+b[w[0]]+" has a line, so the transition rule gives this state "+
+        "nothing to go to. The play has terminated after "+hist.length+" transitions. The state still records "+
+        "p = "+turn+" — it is just that nothing uses it.";
+    } else if(n===0){
+      outtxt.innerHTML = "<strong>Stuck.</strong> No empty square, no line — a draw, reached in 9 transitions, "+
+        "which is the bound §3 proves.";
+    } else {
+      outtxt.innerHTML = "One per empty square: "+turn+" may play "+
+        es.map(function(i){return i+1;}).join(", ")+".";
+    }
+
+    var nx=count(b,"X"), no=count(b,"O");
+    var holds = (nx===no && turn==="X") || (nx===no+1 && turn==="O");
+    invrow.innerHTML = "#X = "+nx+" &nbsp; #O = "+no+" &nbsp; turn = "+turn+" &nbsp; "+
+      '<span class="pill '+(holds?"ok":"bad")+'">P(s) '+(holds?"✓ holds":"✗ fails")+"</span>"+
+      '<span style="font-family:var(--sans); font-size:13.2px; color:var(--ink-3)">'+
+      (holds?"— and it will keep holding, whatever you click":"")+"</span>";
+  }
+
+  document.getElementById("reset").addEventListener("click",function(){ fresh(); draw(); });
+  document.getElementById("undo").addEventListener("click",function(){
+    if(!hist.length) return;
+    var i=hist.pop(); b[i]="."; turn=(turn==="X")?"O":"X"; draw();
+  });
+  document.getElementById("rnd").addEventListener("click",function(){
+    if(winline(b)) return;
+    var es=empties(b); if(!es.length) return;
+    move(es[Math.floor(Math.random()*es.length)]);
+  });
+  draw();
+})();
+
+/* ---------- §2 triage ---------- */
+var CANDS=[
+ {b:"XXOXO....",
+  cand:"Three X, two O, nothing lined up.",
+  ans:"yes", path:[0,2,1,4,3],
+  fb:"<strong>Reachable.</strong> #X = #O + 1, so P says it is O’s turn — consistent. But P alone never settles "+
+     "this; what settles it is the play: X1, O3, X2, O5, X4, with no line completed along the way."},
+ {b:"XXXOO.X..",
+  cand:"X has the top row — and a fourth X in the corner.",
+  ans:"no", path:null,
+  fb:"<strong>Unreachable, and P proves it.</strong> #X = 4, #O = 2, so #X = #O + 2 — neither disjunct of P holds. "+
+     "No reachable state can look like this, and you never have to think about the game at all."},
+ {b:"XXXOOO...",
+  cand:"X has the top row, O has the middle row.",
+  ans:"no", path:null,
+  fb:"<strong>Unreachable — but P doesn’t catch it.</strong> #X = #O = 3 with X to move satisfies P perfectly. "+
+     "The argument you need is the transition rule: the move that completed X’s row left a state with a line, "+
+     "which has no outgoing transitions. O’s third mark would have to come after that. This is why a passing "+
+     "invariant is not evidence of reachability."},
+ {b:"XOXXXOOXO",
+  cand:"Full board, five X, four O, no line anywhere.",
+  ans:"yes", path:[4,1,0,8,2,6,3,5,7],
+  fb:"<strong>Reachable.</strong> A draw — the terminal state with e(s) = 0. Nine transitions, the maximum: "+
+     "X5, O2, X1, O9, X3, O7, X4, O6, X8."}
+];
+(function(){
+  var host=document.getElementById("triage");
+  if(!host) return;
+  CANDS.forEach(function(c){
+    var card=document.createElement("div"); card.className="tcard";
+    var mini=document.createElement("div"); mini.className="mini";
+    var cells=[];
+    for(var i=0;i<9;i++){
+      var d=document.createElement("div"); d.className="mcell"; mini.appendChild(d); cells.push(d);
+    }
+    function paint(str){
+      for(var i=0;i<9;i++){
+        cells[i].className="mcell"+(str[i]==="X"?" x":str[i]==="O"?" o":"");
+        cells[i].textContent = str[i]==="." ? "" : str[i];
+      }
+    }
+    paint(c.b);
+
+    var right=document.createElement("div");
+    var nx=count(c.b,"X"), no=count(c.b,"O");
+    right.innerHTML='<div class="cand">'+c.cand+'</div>'+
+      '<div class="counts">#X = '+nx+' &nbsp; #O = '+no+' &nbsp; e(s) = '+count(c.b,".")+'</div>'+
+      '<div class="tbtns"><button class="tbtn" data-a="yes">Reachable</button>'+
+      '<button class="tbtn" data-a="no">Unreachable</button></div>'+
+      '<div class="tfb"></div><div class="trace"></div>';
+    card.appendChild(mini); card.appendChild(right); host.appendChild(card);
+
+    var fb=right.querySelector(".tfb"), trace=right.querySelector(".trace"), done=false, timer=null;
+    right.querySelectorAll(".tbtn").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        if(done) return; done=true;
+        var ok = btn.dataset.a===c.ans;
+        right.querySelectorAll(".tbtn").forEach(function(x){
+          x.classList.add("lk");
+          if(x.dataset.a===c.ans) x.classList.add("ok"); else if(x===btn) x.classList.add("no");
+        });
+        fb.className="tfb show "+(ok?"g":"b");
+        fb.innerHTML=(ok?"":"<em>Not quite.</em> ")+c.fb;
+        if(c.path){
+          var tb=document.createElement("button");
+          tb.className="btn"; tb.style.marginTop="9px"; tb.style.fontSize="13px";
+          tb.textContent="Trace the play from q₀";
+          tb.addEventListener("click",function(){
+            if(timer) clearInterval(timer);
+            var cur=".........".split(""), k=0;
+            paint(cur.join("")); trace.textContent="q₀";
+            timer=setInterval(function(){
+              if(k>=c.path.length){ clearInterval(timer); timer=null;
+                trace.textContent += "   ✓ reached in "+c.path.length+" transitions"; return; }
+              cur[c.path[k]] = (k%2===0)?"X":"O";
+              paint(cur.join(""));
+              k++; trace.textContent += " ↦ s"+sub(k);
+            },430);
+          });
+          fb.appendChild(document.createElement("br"));
+          fb.appendChild(tb);
+        }
+      });
+    });
+  });
+})();
+
+/* ---------- §3 derived variable ---------- */
+(function(){
+  var seg=document.getElementById("ruleseg"), chart=document.getElementById("chart"),
+      stat=document.getElementById("chartstatus"), stepb=document.getElementById("stepbtn"),
+      resetb=document.getElementById("stepreset"), desc=document.getElementById("ruledesc");
+  if(!seg) return;
+
+  var kind="place", series=[9];
+
+  var TEXT={
+    place:"The real machine. Every transition writes a mark on an empty square, so e drops by exactly 1.",
+    slide:"A variant: once you have three marks down, a move may instead <em>slide</em> one of your own marks to an "+
+           "empty square. Legal game, different machine — and a sliding move leaves e unchanged."
+  };
+
+  function nextVal(){
+    var e=series[series.length-1];
+    if(kind==="place") return e-1;
+    /* three marks each go down first, then sliding forever */
+    if(series.length<=6) return e-1;
+    return e;
+  }
+  function done(){ return kind==="place" && series[series.length-1]===0; }
+
+  function render(){
+    desc.innerHTML=TEXT[kind];
+    chart.innerHTML="";
+    series.forEach(function(v,i){
+      var col=document.createElement("div");
+      var flat = i>0 && v===series[i-1];
+      col.className="col"+(flat?" flat":"");
+      col.style.height = (v===0 ? 3 : (v/9)*100) + "%";
+      col.innerHTML='<span class="cv">'+v+"</span>";
+      chart.appendChild(col);
+    });
+    var n=series.length-1;
+    if(kind==="place"){
+      if(done()){
+        stat.innerHTML='<span class="pill ok">terminated</span> &nbsp; e reached 0 after '+n+
+          " transitions. Nine strict decreases from e(q₀) = 9, and there was never room for a tenth.";
+        stepb.disabled=true;
+      } else {
+        stat.innerHTML="e(s) = "+series[n]+" after "+n+" transition"+(n===1?"":"s")+
+          ". Strictly decreasing, ℕ-valued — at most "+series[n]+" transitions left, no matter who plays what.";
+        stepb.disabled=false;
+      }
+    } else {
+      if(n>=6){
+        stat.innerHTML='<span class="pill bad">no bound</span> &nbsp; e has been flat for '+(n-5)+
+          " transition"+(n-5===1?"":"s")+" and can stay flat forever. Weakly decreasing bounds nothing; "+
+          "this run has no reason to stop.";
+      } else {
+        stat.innerHTML="e(s) = "+series[n]+" after "+n+" transition"+(n===1?"":"s")+
+          ". Still dropping — the marks are still going down. Keep clicking.";
+      }
+      stepb.disabled = series.length>=16;
+    }
+  }
+
+  seg.querySelectorAll("button").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      seg.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed","false"); });
+      btn.setAttribute("aria-pressed","true");
+      kind=btn.dataset.k; series=[9]; render();
+    });
+  });
+  stepb.addEventListener("click",function(){ if(!done()){ series.push(nextVal()); render(); } });
+  resetb.addEventListener("click",function(){ series=[9]; render(); });
+  render();
+})();
+
+/* ---------- §3 check ---------- */
+(function(){
+  var opts=document.getElementById("q1"), fb=document.getElementById("q1fb");
+  if(!opts) return;
+  var done=false;
+  opts.querySelectorAll(".opt").forEach(function(o){
+    o.addEventListener("click",function(){
+      if(done) return; done=true;
+      var ok=+o.dataset.c===1;
+      opts.querySelectorAll(".opt").forEach(function(x){ x.classList.add("locked");
+        if(+x.dataset.c===1) x.classList.add("correct");
+        else if(x===o) x.classList.add("wrong"); else x.classList.add("dim"); });
+      fb.className="fb show "+(ok?"good":"bad");
+      fb.innerHTML=ok
+        ? "<strong>Yes.</strong> Bounded isn’t enough and being ℕ-valued isn’t enough — it is the combination, plus "+
+          "<em>strict</em>, that forbids an infinite run."
+        : "<strong>Not quite.</strong> A stays bounded below 9 forever without ever decreasing — boundedness alone "+
+          "rules nothing out. C assumes what you are trying to prove: “every play ends” is the conclusion, not a "+
+          "premise. (Answer: B.)";
+    });
+  });
+})();
+
+})();
+</script>
