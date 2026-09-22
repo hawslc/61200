@@ -9,12 +9,12 @@ that keeps them faithful to the course's notation, vocabulary, and examples.
 ## Companions
 
 Each is a single self-contained HTML file — no build step, no dependencies
-beyond a webfont. Open one in a browser.
+beyond a webfont. The links below open the live copy on GitHub Pages.
 
 | For | Topic |
 |---|---|
-| Rec 03 | [Strong induction — predicates, ordinary vs. strong, strengthening](companions/rec-03.html) |
-| Lec 04 | [State machines — tic-tac-toe: states, invariants and reachability, potential functions](companions/lec-04.html) |
+| Rec 03 | [Strong induction — predicates, ordinary vs. strong, strengthening](https://hawslc.github.io/61200/companions/rec-03.html) |
+| Lec 04 | [State machines — tic-tac-toe: states, invariants and reachability, potential functions](https://hawslc.github.io/61200/companions/lec-04.html) |
 
 ## Reference
 

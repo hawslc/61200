@@ -48,7 +48,8 @@ number only, no topic slug:
 - `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
 - Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.
 - When adding one, add a row here, in the `README.md` table, and in the table at
-  the bottom of `course/COURSE-MAP.md`.
+  the bottom of `course/COURSE-MAP.md`. README links point at GitHub Pages:
+  `https://hawslc.github.io/61200/companions/<file>.html`.
 - When editing one that has been published, republish to its existing URL
   rather than creating a new artifact, so shared links keep working.
 
