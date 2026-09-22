@@ -212,58 +212,72 @@ hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
   background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
   font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
 footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+/* ---- slide-style extras ---- */
+.lead{font-size:17px}
+.qsub{margin:-4px 0 0; font-size:14.6px; color:var(--ink-2)}
+.pts{list-style:none; padding:0; margin:14px 0 0; display:flex; flex-direction:column; gap:6px; font-size:15.6px}
+.pts .ck{display:inline-block; width:1.4em; font-family:var(--mono); font-weight:700; color:var(--ok)}
+details.more{margin-top:10px; border:1px solid var(--rule); border-radius:9px; background:var(--panel)}
+details.more summary{cursor:pointer; padding:8px 13px; font-size:14.4px; font-weight:600; color:var(--acc);
+  list-style:none; display:flex; align-items:center; gap:8px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"▸"; font-size:12px; transition:transform .15s}
+details.more[open] summary::before{transform:rotate(90deg)}
+details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.55; color:var(--ink-2)}
+.card h4 .ex{font-weight:400}
 </style>
 
 <header class="hero">
   <div class="wrap">
     <div class="kicker">6.1200 · Lecture 04 · state machines</div>
     <h1>Tic-tac-toe is a state machine</h1>
-    <p class="sub">The 8-puzzle gets the lecture. Here is the same apparatus — states, transitions, a preserved
-      predicate, a derived variable — on a game you already know the rules of, so the only new thing is the machinery.</p>
+    <p class="sub">States, transitions, an invariant, a potential function — on a game you already know.</p>
   </div>
 </header>
 
 <!-- ================= §1 ================= -->
 <section id="s1">
   <div class="wrap">
-    <div class="shead"><span class="snum">1</span><h2>A state is the whole board, not the last move</h2></div>
-
-    <p>The temptation is to call “X plays the centre” a state. It isn’t — it’s a transition. A state has to carry
-      everything the next transition needs to know, and that means the full board <em>and</em> whose turn it is.</p>
+    <div class="shead"><span class="snum">1</span><h2>A state is the board + whose turn it is</h2></div>
 
     <div class="defn">
       <div class="dl">
         <span class="dt">state</span>
-        <span class="dd">a pair <span class="mm">s = (<span class="m">b</span>, <span class="m">p</span>)</span>.
-          The board <span class="m">b</span> is a 3×3 tuple whose entries are X, O, or – (empty), and
-          <span class="mm"><span class="m">p</span> ∈ {X, O}</span> is the player who moves next. For example,
-          <span class="ex">s = ( <span class="mat"><span class="bx">X</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="bo">O</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="bx">X</span></span> , O )</span></span>
+        <span class="dd"><span class="mm">s = (<span class="m">b</span>, <span class="m">p</span>)</span>: board <span class="m">b</span> is a 3×3 tuple of X / O / –,
+          and <span class="mm"><span class="m">p</span> ∈ {X, O}</span> moves next.</span>
+
+        <span class="dt">example</span>
+        <span class="dd"><span class="ex">( <span class="mat"><span class="bx">X</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="bo">O</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="bx">X</span></span> , O )</span></span>
 
         <span class="dt">q₀</span>
-        <span class="dd"><span class="ex">( <span class="mat"><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span></span> , X )</span> — the empty board, X to move.</span>
+        <span class="dd"><span class="ex">( <span class="mat"><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span></span> , X )</span></span>
 
         <span class="dt">s ↦ t</span>
-        <span class="dd">if nobody has three in a row, <span class="m">p</span> writes its mark in any empty cell and the
-          turn passes to the other player. If somebody has three in a row, there are <strong>no transitions</strong>.</span>
+        <span class="dd">No line yet → <span class="m">p</span> marks any empty cell; turn passes.
+          Line → <strong>no transitions</strong>.</span>
+
+        <span class="dt">final state</span>
+        <span class="dd">No outgoing transitions. Reach one and the play has <strong>terminated</strong>.</span>
       </div>
     </div>
 
-    <p>So a state is just the board plus whose turn it is. Some pairs, like a board of nine X’s, can never come up in
-      play — telling those apart is §2’s job.</p>
-
-    <p>That last clause is the whole design. Winning doesn’t trigger anything; it just leaves you in a state with no
-      outgoing transitions — a <strong>final state</strong>. A play that reaches a final state has
-      <strong>terminated</strong>.</p>
+    <details class="more"><summary>Why must <span class="m">p</span> be in the state?</summary><div class="body">
+      Without it, the rule can’t tell whose mark goes next — you’d need the move history, and a state machine only
+      sees the current state.</div></details>
+    <details class="more"><summary>Is every pair reachable?</summary><div class="body">
+      No. A board of nine X’s is a perfectly good pair, but play never produces it. Telling those apart is §2’s job.
+    </div></details>
 
     <div class="card">
       <span class="tag">Try it</span>
-      <h4>Click a square to take a transition</h4>
+      <h4>Click a cell = take a transition</h4>
       <div class="play">
         <div>
           <div class="board" id="bd"></div>
           <div class="row">
             <button class="btn" id="undo">Undo</button>
-            <button class="btn" id="rnd">Random transition</button>
+            <button class="btn" id="rnd">Random</button>
             <button class="btn pri" id="reset">Back to q₀</button>
           </div>
         </div>
@@ -284,34 +298,24 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       <div class="inv" id="invrow"></div>
     </div>
 
-    <div class="note">The state tuple is doing real work. Drop <span class="m">p</span> from the state and the
-      transition relation stops being well defined — you’d have to look at the history to know whose mark goes down
-      next, and a state machine is not allowed to look at history. Everything it knows, it knows because the state
-      says so.</div>
-
     <div class="card">
       <span class="tag">Check</span>
-      <h4>Two plays, one board</h4>
-      <p style="margin-top:0; font-size:14.8px">Play A goes X(1,1), O(2,2), X(3,3). Play B goes X(3,3), O(2,2), X(1,1).
-        Do they end in the same state?</p>
+      <h4>X(1,1), O(2,2), X(3,3) vs. X(3,3), O(2,2), X(1,1) — same state?</h4>
       <div class="opts" id="qa">
-        <button class="opt" data-c="0"><span class="mk">A</span><span>No — the moves happened in a different order.</span></button>
-        <button class="opt" data-c="0"><span class="mk">B</span><span>No — the last move was different: (3,3) in one, (1,1) in the other.</span></button>
-        <button class="opt" data-c="1"><span class="mk">C</span><span>Yes — both give the same board with O to move, and
-          that pair is the whole state.</span></button>
+        <button class="opt" data-c="0"><span class="mk">A</span><span>No — different order.</span></button>
+        <button class="opt" data-c="0"><span class="mk">B</span><span>No — different last move.</span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span>Yes — same board, O to move.</span></button>
       </div>
       <div class="fb" id="qafb"></div>
     </div>
 
     <div class="card">
       <span class="tag">Check</span>
-      <h4>Counting transitions out</h4>
-      <p style="margin-top:0; font-size:14.8px">How many outgoing transitions does this state have?
-        <span class="ex" style="margin-left:6px">( <span class="mat"><span class="bx">X</span><span class="bx">X</span><span class="bx">X</span><span class="bo">O</span><span class="bo">O</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span></span> , O )</span></p>
+      <h4>Outgoing transitions from <span class="ex" style="margin-left:4px">( <span class="mat"><span class="bx">X</span><span class="bx">X</span><span class="bx">X</span><span class="bo">O</span><span class="bo">O</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span></span> , O )</span> ?</h4>
       <div class="opts" id="qb">
-        <button class="opt" data-c="0"><span class="mk">A</span><span>4 — one for each empty cell O could play.</span></button>
-        <button class="opt" data-c="0"><span class="mk">B</span><span>1 — O has to block, so there is only one sensible move.</span></button>
-        <button class="opt" data-c="1"><span class="mk">C</span><span>0 — it’s a final state.</span></button>
+        <button class="opt" data-c="0"><span class="mk">A</span><span>4 — one per empty cell.</span></button>
+        <button class="opt" data-c="0"><span class="mk">B</span><span>1 — O must block.</span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span>0 — final state.</span></button>
       </div>
       <div class="fb" id="qbfb"></div>
     </div>
@@ -324,10 +328,6 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
   <div class="wrap">
     <div class="shead"><span class="snum">2</span><h2>An invariant rules boards out, never in</h2></div>
 
-    <p>Here is the predicate. For a state <span class="mm">s = (<span class="m">b</span>, <span class="m">p</span>)</span>,
-      write <span class="mm">#X</span> and <span class="mm">#O</span> for the number of each mark on
-      <span class="m">b</span>:</p>
-
     <div class="defn">
       <div class="dl">
         <span class="dt">P(s)</span>
@@ -336,34 +336,32 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       </div>
     </div>
 
-    <p><strong>P is preserved.</strong> Suppose <span class="mm">P(s)</span> and <span class="mm">s ↦ t</span>. Either
-      <span class="m">p</span> = X, in which case <span class="mm">#X = #O</span> and the transition writes one X and
-      hands the turn to O, giving <span class="mm">#X = #O + 1</span> with <span class="m">p</span> = O — the second
-      disjunct. Or <span class="m">p</span> = O, in which case <span class="mm">#X = #O + 1</span> and the transition
-      writes one O and hands back, giving <span class="mm">#X = #O</span> with <span class="m">p</span> = X — the first
-      disjunct. Either way <span class="mm">P(t)</span>.</p>
+    <ul class="pts">
+      <li><span class="ck">✓</span> True at <span class="mm">q₀</span>: <span class="mm">0 = 0</span>, X to move.</li>
+      <li><span class="ck">✓</span> <strong>Preserved</strong>: each move adds one mark and passes the turn.</li>
+      <li><span class="ck">⇒</span> <strong>Invariant</strong> (Invariant Principle). P fails ⇒ unreachable.</li>
+    </ul>
 
-    <p>And <span class="mm">P(q₀)</span> holds: <span class="mm">0 = 0</span> and <span class="m">p</span> = X. So by
-      the <strong>Invariant Principle</strong>, P is an invariant — true at <em>every reachable state</em>. Which gives
-      you the thing invariants are for: any state where P fails is unreachable, and you never had to search.</p>
+    <details class="more"><summary>Proof that P is preserved</summary><div class="body">
+      Suppose <span class="mm">P(s)</span> and <span class="mm">s ↦ t</span>.
+      If <span class="m">p</span> = X: <span class="mm">#X = #O</span>, X is added, O is next →
+      <span class="mm">#X = #O + 1</span>, <span class="m">p</span> = O.
+      If <span class="m">p</span> = O: <span class="mm">#X = #O + 1</span>, O is added, X is next →
+      <span class="mm">#X = #O</span>, <span class="m">p</span> = X. Either way <span class="mm">P(t)</span>.
+    </div></details>
 
     <div class="card">
       <span class="tag">Try it</span>
-      <h4>Reachable from q₀, or not?</h4>
-      <p style="margin-top:0; font-size:14.6px; color:var(--ink-2)">Four boards. Decide before you click — and where
-        a board <em>is</em> reachable, trace the play that gets there.</p>
+      <h4>Reachable from q₀? Decide, then trace the path.</h4>
       <div id="triage"></div>
     </div>
 
-    <div class="note warnb"><strong>The asymmetry is the point.</strong> An invariant can only ever prove
-      <em>un</em>reachability. When P fails, you are done — no reachable state looks like that. When P holds, you have
-      learned nothing: the third board above satisfies P and is still unreachable. To show a state
-      <em>is</em> reachable there is exactly one move, and it’s the one you made above — exhibit a path
-      <span class="mm">q₀ ↦ s₁ ↦ ⋯ ↦ s</span>.</div>
+    <div class="note warnb"><strong>P fails ⇒ unreachable. P holds ⇒ no conclusion</strong> — show a path
+      <span class="mm">q₀ ↦ ⋯ ↦ s</span>.</div>
 
-    <p>This is the 8-puzzle argument with smaller numbers. There the invariant is the parity of the inversion count,
-      and it proves the famously unreachable configuration unreachable without examining a single one of the
-      181 440 states you <em>can</em> get to.</p>
+    <details class="more"><summary>Same argument as the 8-puzzle</summary><div class="body">
+      There the invariant is the parity of the inversion count. It proves the famous configuration unreachable without
+      looking at any of the 181 440 reachable states.</div></details>
   </div>
   <hr class="soft">
 </section>
@@ -373,43 +371,36 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
   <div class="wrap">
     <div class="shead"><span class="snum">3</span><h2>A potential function proves the game ends</h2></div>
 
-    <p>Termination is a separate obligation from correctness — the course splits them deliberately, and
-      <strong>partial correctness</strong> is the name for what you get if you only do the invariant half. The tool for
-      the other half is a <strong>potential function</strong> (also called a <strong>derived variable</strong>): a
-      function that assigns a number to every state. It isn’t part of the state and the machine never looks at it — you
-      compute it from the state, so you can watch how it changes along each transition.</p>
-
-    <p>The potential function here counts empty cells. The whole termination proof is three lines:</p>
+    <p class="lead"><strong>Potential function</strong> (aka <strong>derived variable</strong>): a number computed
+      from each state.</p>
 
     <div class="defn">
       <div class="dl">
         <span class="dt">1 · define</span>
-        <span class="dd"><span class="mm">e : states → ℕ</span>, &nbsp;<span class="mm">e(s)</span> = the number of –
-          entries in <span class="m">b</span>. At the start, <span class="mm">e(q₀) = 9</span>.</span>
+        <span class="dd"><span class="mm">e(s)</span> = number of – cells. &nbsp;<span class="mm">e : states → ℕ</span>,
+          &nbsp;<span class="mm">e(q₀) = 9</span>.</span>
 
         <span class="dt">2 · decreases</span>
-        <span class="dd">every transition fills exactly one empty cell, so
-          <span class="mm">s ↦ t</span> implies <span class="mm">e(t) = e(s) − 1 &lt; e(s)</span>. That makes
-          <span class="m">e</span> <strong>strictly decreasing</strong>.</span>
+        <span class="dd"><span class="mm">s ↦ t &nbsp;⇒&nbsp; e(t) = e(s) − 1</span> &nbsp;— <strong>strictly</strong>.</span>
 
         <span class="dt">3 · conclude</span>
-        <span class="dd">a sequence of natural numbers can’t decrease forever. Along any play the values go
-          <span class="mm">9, 8, 7, …</span>, so there are <strong>at most 9 transitions</strong> before a final state.</span>
+        <span class="dd">ℕ can’t decrease forever ⇒ <strong>≤ 9 transitions</strong> to a final state.</span>
       </div>
     </div>
 
-    <p>Both ingredients matter. The values have to live in ℕ (or anything else with no infinite descending chain), and
-      the decrease has to be strict on <em>every</em> transition. The widget below breaks the second one.</p>
+    <details class="more"><summary>Why both ℕ-valued and strict?</summary><div class="body">
+      ℕ has no infinite descending chain, so a strict decrease on <em>every</em> transition has to stop. Drop either
+      condition and the argument fails — the widget below drops strictness.</div></details>
 
     <div class="card">
       <span class="tag">Try it</span>
-      <h4>Same game, one rule changed</h4>
+      <h4>Change one rule, lose the proof</h4>
       <div class="row">
         <div class="seg" id="ruleseg">
           <button data-k="place" aria-pressed="true">Place a mark</button>
           <button data-k="cover" aria-pressed="false">Place on top</button>
         </div>
-        <button class="btn" id="autob">Auto transition</button>
+        <button class="btn" id="autob">Auto</button>
         <button class="btn" id="stepreset">Back to q₀</button>
       </div>
       <p style="margin-top:10px; font-size:14.6px; color:var(--ink-2)" id="ruledesc"></p>
@@ -431,32 +422,28 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       </div>
     </div>
 
-    <div class="note">Under the place-on-top rule <span class="m">e</span> is still a perfectly good potential
-      function — it’s just only <strong>weakly</strong> decreasing (covering a mark gives
-      <span class="mm">e(t) = e(s)</span>), and weakly decreasing proves nothing about termination. The
-      variable didn’t break. The <em>proof</em> broke, and the machine really does have infinite runs, so no repair is
-      possible. That’s the honest order to think in: the argument fails first, and then you go looking for whether the
-      claim was ever true. (The §2 invariant goes too: an X covering an O raises #X and lowers #O, so
-      <span class="mm">#X − #O</span> jumps by 2.)</div>
+    <div class="note">Place on top: <span class="mm">e(t) = e(s)</span> — only <strong>weakly</strong> decreasing,
+      so no bound.</div>
+
+    <details class="more"><summary>What else breaks?</summary><div class="body">
+      The machine really can run forever, so no other potential function will rescue it. The §2 invariant goes too:
+      X covering O changes <span class="mm">#X − #O</span> by 2.</div></details>
 
     <div class="card">
       <span class="tag">Check</span>
-      <h4>Why does the potential function <span class="m">e</span> prove the game ends?</h4>
+      <h4>Why does <span class="m">e</span> prove the game ends?</h4>
       <div class="opts" id="q1">
-        <button class="opt" data-c="0"><span class="mk">A</span><span>Because <span class="mm">e(s) ≤ 9</span> at every
-          reachable state, so the game can’t go on forever.</span></button>
-        <button class="opt" data-c="1"><span class="mk">B</span><span>Because <span class="m">e</span> is ℕ-valued and
-          strictly decreases at every transition, and no sequence in ℕ can strictly decrease forever.</span></button>
-        <button class="opt" data-c="0"><span class="mk">C</span><span>Because every play ends in a win or a full
-          board, and both of those have <span class="mm">e(s) = 0</span> or a completed line.</span></button>
+        <button class="opt" data-c="0"><span class="mk">A</span><span><span class="mm">e(s) ≤ 9</span> always.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>ℕ-valued and strictly decreasing.</span></button>
+        <button class="opt" data-c="0"><span class="mk">C</span><span>Every play ends in a win or a full board.</span></button>
       </div>
       <div class="fb" id="q1fb"></div>
     </div>
 
-    <div class="note okb">Put the two halves together and you have the full statement. <strong>Termination:</strong>
-      every play reaches a final state within 9 transitions. <strong>Partial correctness:</strong> a final state is
-      either a board with a line (someone won) or a full board with none (a draw) — which is just the contrapositive of
-      the transition rule, since any other state has an empty square and no line, hence a transition out.</div>
+    <details class="more"><summary>The full claim: termination + partial correctness</summary><div class="body">
+      <strong>Termination:</strong> every play reaches a final state within 9 transitions.
+      <strong>Partial correctness:</strong> a final state is a win or a full board — any other state has an empty
+      cell and no line, so it has a transition out.</div></details>
   </div>
   <hr class="soft">
 </section>
@@ -466,16 +453,11 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
     <h2>The short version</h2>
     <div class="take">
       <ol>
-        <li><strong>Put everything in the state.</strong> If the transition rule needs to know it, it belongs in the
-          tuple — here, whose turn it is. A machine that consults the history isn’t a machine.</li>
-        <li><strong>A final state is one with no transitions out.</strong> Don’t add a “game over” flag. Restrict the
-          transition relation and let the winning boards have nothing to go to.</li>
-        <li><strong>Prove preserved, then cite the Invariant Principle.</strong> Preserved is a one-line check per
-          transition type; true at <span class="mm">q₀</span> is usually immediate. The Principle does the rest.</li>
-        <li><strong>An invariant is a proof of impossibility.</strong> P failing means unreachable. P holding means
-          nothing — for reachability you must exhibit a path.</li>
-        <li><strong>A strictly decreasing, ℕ-valued potential function proves termination.</strong> Weakly decreasing isn’t.
-          And the starting value is your step bound: <span class="mm">e(q₀) = 9</span>, so at most 9 moves.</li>
+        <li><strong>State = everything the next move needs.</strong> Board + turn. No history.</li>
+        <li><strong>Final state = no transitions out.</strong> No “game over” flag needed.</li>
+        <li><strong>Preserved + true at q₀ ⇒ invariant.</strong> That’s the Invariant Principle.</li>
+        <li><strong>Invariants rule out, never in.</strong> For reachability, show a path.</li>
+        <li><strong>Strictly decreasing ℕ-valued potential ⇒ termination.</strong> Its start value bounds the steps.</li>
       </ol>
     </div>
   </div>
@@ -483,58 +465,43 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
 
 <section id="beyond">
   <div class="wrap">
-    <div class="shead"><span class="snum">4</span><h2>The same three moves work on any machine</h2></div>
-    <p>Nothing above was really about tic-tac-toe. Each question below is a different machine; each one tests one of
-      the three sections.</p>
+    <div class="shead"><span class="snum">4</span><h2>Same three moves, other machines</h2></div>
+    <p class="lead">One check per section.</p>
 
     <div class="card">
       <span class="tag">Check · §1</span>
-      <h4>A vending machine</h4>
-      <p style="margin-top:0; font-size:14.8px">It takes 5¢ and 10¢ coins and dispenses a snack as soon as it has at
-        least 15¢. What is the least the state has to record?</p>
+      <h4>Vending machine: takes 5¢ and 10¢, dispenses at 15¢. Smallest state?</h4>
       <div class="opts" id="qg1">
-        <button class="opt" data-c="0"><span class="mk">A</span><span>The list of coins inserted so far, in order.</span></button>
-        <button class="opt" data-c="1"><span class="mk">B</span><span>The total inserted so far: 0¢, 5¢, or 10¢.</span></button>
-        <button class="opt" data-c="0"><span class="mk">C</span><span>The last coin inserted.</span></button>
+        <button class="opt" data-c="0"><span class="mk">A</span><span>The coins so far, in order.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>The total so far: 0¢, 5¢, or 10¢.</span></button>
+        <button class="opt" data-c="0"><span class="mk">C</span><span>The last coin.</span></button>
       </div>
       <div class="fb" id="qg1fb"></div>
     </div>
 
     <div class="card">
       <span class="tag">Check · §2</span>
-      <h4>Water jugs, Die Hard style</h4>
-      <p style="margin-top:0; font-size:14.8px">A state is <span class="mm">(<span class="m">a</span>,
-        <span class="m">b</span>)</span>, the gallons in a 3-gallon and a 6-gallon jug, starting at
-        <span class="mm">(0, 0)</span>. You can fill a jug, empty a jug, or pour one into the other until the first is
-        empty or the second is full. The predicate “both <span class="m">a</span> and <span class="m">b</span> are
-        multiples of 3” is preserved by every move. Can you ever reach <span class="mm">(0, 4)</span>?</p>
+      <h4>Die Hard jugs, 3 and 6 gallons, from <span class="mm">(0, 0)</span>. Can you reach <span class="mm">(0, 4)</span>?</h4>
+      <p class="qsub">Moves: fill, empty, pour. “Both amounts are multiples of 3” is preserved.</p>
       <div class="opts" id="qg2">
-        <button class="opt" data-c="0"><span class="mk">A</span><span>Can’t tell — an invariant only rules things
-          out, so you would have to search for a path.</span></button>
-        <button class="opt" data-c="1"><span class="mk">B</span><span>No — the predicate holds at
-          <span class="mm">(0, 0)</span>, so it’s an invariant, and it fails at <span class="mm">(0, 4)</span>.</span></button>
-        <button class="opt" data-c="0"><span class="mk">C</span><span>Yes, with enough pours — 4 is less than 6, so
-          the big jug can hold it.</span></button>
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Can’t tell — invariants only rule things out.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>No — it’s an invariant, and it fails at <span class="mm">(0, 4)</span>.</span></button>
+        <button class="opt" data-c="0"><span class="mk">C</span><span>Yes — 4 fits in the 6-gallon jug.</span></button>
       </div>
       <div class="fb" id="qg2fb"></div>
     </div>
 
     <div class="card">
       <span class="tag">Check · §3</span>
-      <h4>Picking a potential function</h4>
-      <p style="margin-top:0; font-size:14.8px">States are pairs <span class="mm">(<span class="m">x</span>,
-        <span class="m">y</span>)</span> of natural numbers. Two kinds of transition:
-        <span class="mm nw">(<span class="m">x</span>, <span class="m">y</span>) ↦ (<span class="m">x</span> − 1,
-        <span class="m">y</span> + 1)</span> when <span class="mm"><span class="m">x</span> &gt; 0</span>, and
-        <span class="mm nw">(<span class="m">x</span>, <span class="m">y</span>) ↦ (<span class="m">x</span>,
-        <span class="m">y</span> − 1)</span> when <span class="mm"><span class="m">y</span> &gt; 0</span>. Which
-        potential function proves the machine terminates? Try each one on both transitions.</p>
+      <h4>Which potential function proves termination?</h4>
+      <p class="qsub"><span class="mm nw">(<span class="m">x</span>, <span class="m">y</span>) ↦ (<span class="m">x</span> − 1, <span class="m">y</span> + 1)</span>
+        if <span class="mm"><span class="m">x</span> &gt; 0</span>; &nbsp;
+        <span class="mm nw">(<span class="m">x</span>, <span class="m">y</span>) ↦ (<span class="m">x</span>, <span class="m">y</span> − 1)</span>
+        if <span class="mm"><span class="m">y</span> &gt; 0</span>. Try each on both.</p>
       <div class="opts" id="qg3">
-        <button class="opt" data-c="0"><span class="mk">A</span><span><span class="mm"><span class="m">x</span> +
-          <span class="m">y</span></span></span></button>
+        <button class="opt" data-c="0"><span class="mk">A</span><span><span class="mm"><span class="m">x</span> + <span class="m">y</span></span></span></button>
         <button class="opt" data-c="0"><span class="mk">B</span><span><span class="mm"><span class="m">y</span></span></span></button>
-        <button class="opt" data-c="1"><span class="mk">C</span><span><span class="mm">2<span class="m">x</span> +
-          <span class="m">y</span></span></span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span><span class="mm">2<span class="m">x</span> + <span class="m">y</span></span></span></button>
       </div>
       <div class="fb" id="qg3fb"></div>
     </div>
@@ -617,15 +584,11 @@ function empties(b){ var a=[]; for(var i=0;i<9;i++) if(b[i]===".") a.push(i); re
     var n = w ? 0 : es.length;
     outn.innerHTML = '<span class="pill '+(n===0?"bad":"ok")+'">'+n+'</span>';
     if(w){
-      outtxt.innerHTML = "<strong>Final state.</strong> "+b[w[0]]+" has a line, so the transition rule gives this state "+
-        "nothing to go to. The play has terminated after "+hist.length+" transitions. The state still records "+
-        "p = "+turn+" — it is just that nothing uses it.";
+      outtxt.innerHTML = "<strong>Final state.</strong> "+b[w[0]]+" has a line — terminated after "+hist.length+" transitions.";
     } else if(n===0){
-      outtxt.innerHTML = "<strong>Final state.</strong> No empty square, no line — a draw, reached in 9 transitions, "+
-        "which is the bound §3 proves.";
+      outtxt.innerHTML = "<strong>Final state.</strong> Draw, after 9 transitions — the §3 bound.";
     } else {
-      outtxt.innerHTML = "One per empty cell: "+turn+" may play "+
-        es.map(function(i){return "("+rc(i)+")";}).join(", ")+".";
+      outtxt.innerHTML = turn+" may play "+es.map(function(i){return "("+rc(i)+")";}).join(", ")+".";
     }
 
     var nx=count(b,"X"), no=count(b,"O");
@@ -633,7 +596,7 @@ function empties(b){ var a=[]; for(var i=0;i<9;i++) if(b[i]===".") a.push(i); re
     invrow.innerHTML = "#X = "+nx+" &nbsp; #O = "+no+" &nbsp; turn = "+turn+" &nbsp; "+
       '<span class="pill '+(holds?"ok":"bad")+'">P(s) '+(holds?"✓ holds":"✗ fails")+"</span>"+
       '<span style="font-family:var(--sans); font-size:13.2px; color:var(--ink-3)">'+
-      (holds?"— and it will keep holding, whatever you click":"")+"</span>";
+      (holds?"— always, whatever you click":"")+"</span>";
   }
 
   document.getElementById("reset").addEventListener("click",function(){ fresh(); draw(); });
@@ -651,28 +614,14 @@ function empties(b){ var a=[]; for(var i=0;i<9;i++) if(b[i]===".") a.push(i); re
 
 /* ---------- §2 triage ---------- */
 var CANDS=[
- {b:"XXOXO....",
-  cand:"Three X, two O, nothing lined up.",
-  ans:"yes", path:[0,2,1,4,3],
-  fb:"<strong>Reachable.</strong> #X = #O + 1, so P says it is O’s turn — consistent. But P alone never settles "+
-     "this; what settles it is the play: X(1,1), O(1,3), X(1,2), O(2,2), X(2,1), with no line completed along the way."},
- {b:"XXXOO.X..",
-  cand:"X has the top row — and a fourth X in the corner.",
-  ans:"no", path:null,
-  fb:"<strong>Unreachable, and P proves it.</strong> #X = 4, #O = 2, so #X = #O + 2 — neither disjunct of P holds. "+
-     "No reachable state can look like this, and you never have to think about the game at all."},
- {b:"XXXOOO...",
-  cand:"X has the top row, O has the middle row.",
-  ans:"no", path:null,
-  fb:"<strong>Unreachable — but P doesn’t catch it.</strong> #X = #O = 3 with X to move satisfies P perfectly. "+
-     "The argument you need is the transition rule: the move that completed X’s row left a state with a line, "+
-     "which has no outgoing transitions. O’s third mark would have to come after that. This is why a passing "+
-     "invariant is not evidence of reachability."},
- {b:"XOXXXOOXO",
-  cand:"Full board, five X, four O, no line anywhere.",
-  ans:"yes", path:[4,1,0,8,2,6,3,5,7],
-  fb:"<strong>Reachable.</strong> A draw — a final state with e(s) = 0. Nine transitions, the maximum: "+
-     "X(2,2), O(1,2), X(1,1), O(3,3), X(1,3), O(3,1), X(2,1), O(2,3), X(3,2)."}
+ {b:"XXOXO....", cand:"Three X, two O, no line.", ans:"yes", path:[0,2,1,4,3],
+  fb:"<strong>Reachable</strong> — P holds, and a 5-move path exists. Trace it:"},
+ {b:"XXXOO.X..", cand:"Four X, two O.", ans:"no", path:null,
+  fb:"<strong>Unreachable — P proves it.</strong> #X = #O + 2 satisfies neither case."},
+ {b:"XXXOOO...", cand:"X’s top row and O’s middle row.", ans:"no", path:null,
+  fb:"<strong>Unreachable, though P holds.</strong> X’s line made a final state, so O’s third mark could never come."},
+ {b:"XOXXXOOXO", cand:"Full board, no line.", ans:"yes", path:[4,1,0,8,2,6,3,5,7],
+  fb:"<strong>Reachable</strong> — a draw, 9 transitions. Trace it:"}
 ];
 (function(){
   var host=document.getElementById("triage");
@@ -715,7 +664,7 @@ var CANDS=[
         if(c.path){
           var tb=document.createElement("button");
           tb.className="btn"; tb.style.marginTop="9px"; tb.style.fontSize="13px";
-          tb.textContent="Trace the play from q₀";
+          tb.textContent="Trace the path from q₀";
           tb.addEventListener("click",function(){
             if(timer) clearInterval(timer);
             var cur=".........".split(""), k=0;
@@ -746,10 +695,8 @@ var CANDS=[
   if(!seg || !bd) return;
 
   var TEXT={
-    place:"The real machine. Click an empty cell to place the next mark, or press Auto. Every transition fills one "+
-          "empty cell, so e drops by exactly 1.",
-    cover:"A variant: you may also place your mark <em>on top of</em> a cell that’s already taken — click any "+
-          "occupied cell, and your mark replaces what was there. Covering fills no empty cell, so e doesn’t change."
+    place:"Real rules: each move fills an empty cell, so e drops by 1.",
+    cover:"Variant: you may also cover a taken cell (click it). Covering fills nothing, so e stays put."
   };
   var kind="place", b, turn, series, cells=[], pips=[];
 
@@ -829,17 +776,15 @@ var CANDS=[
     var flats=0; for(var j=1;j<series.length;j++) if(series[j]===series[j-1]) flats++;
     if(fin){
       stat.innerHTML='<span class="pill ok">final state</span>&nbsp; '+
-        (w ? b[w[0]]+" has three in a row" : "Board full, no line — a draw")+", after "+n+" transition"+(n===1?"":"s")+
-        (kind==="place" ? ". e fell by exactly 1 every time, just as step 2 of the proof says." :
-         flats ? ". This play happened to end — but nothing forced it to." : ".");
+        (w ? b[w[0]]+" wins" : "Draw")+" after "+n+" transition"+(n===1?"":"s")+
+        (kind==="place" ? " — e fell by 1 every time." : flats ? " — this time. Nothing forced it." : ".");
     } else if(kind==="place"){
-      stat.innerHTML="e(s) = "+ev+", so at most "+ev+" more transition"+(ev===1?"":"s")+
-        ", whatever anyone plays.";
+      stat.innerHTML="At most "+ev+" more transition"+(ev===1?"":"s")+", whatever anyone plays.";
     } else if(flats){
-      stat.innerHTML='<span class="pill bad">no bound</span>&nbsp; '+flats+" transition"+(flats===1?"":"s")+
-        " so far left e unchanged. Covering never lowers e, so nothing stops this play — keep pressing Auto.";
+      stat.innerHTML='<span class="pill bad">no bound</span>&nbsp; e flat for '+flats+" transition"+(flats===1?"":"s")+
+        ". Keep pressing Auto — it never has to stop.";
     } else {
-      stat.innerHTML="Every move so far went on an empty cell, so e is still falling. Try covering a mark.";
+      stat.innerHTML="e still falling. Try covering a mark.";
     }
     autob.disabled=fin;
   }
@@ -857,35 +802,18 @@ var CANDS=[
 
 /* ---------- checks (§1, §3) ---------- */
 var MCQ={
-  qg1:{good:"<strong>Yes.</strong> What happens next depends only on the running total, so that’s the state. "+
-           "The list of coins would work but is history: 5+10 and 10+5 would be different states for no reason.",
-       bad:"<strong>Not quite.</strong> The list (A) is history — 5+10 and 10+5 would be different states that act "+
-           "identically. The last coin (C) isn’t enough: after a 5¢ coin you might be at 5¢ or 10¢, and those need "+
-           "different next moves. (Answer: B.)"},
-  qg2:{good:"<strong>Yes.</strong> Preserved and true at the start gives an invariant, by the Invariant "+
-           "Principle. It fails at (0, 4), so (0, 4) is unreachable — no search needed.",
-       bad:"<strong>Not quite.</strong> A gets the asymmetry backwards: ruling things out is exactly what an "+
-           "invariant does, and (0, 4) is being ruled out. C mistakes room for reachability — every move keeps "+
-           "both amounts multiples of 3, so 4 never appears. (Answer: B.)"},
-  qg3:{good:"<strong>Yes.</strong> The first transition gives 2(x−1) + (y+1) = 2x + y − 1, and the second lowers y "+
-           "by 1, so 2x + y drops by exactly 1 either way, and it stays in ℕ. Counting x twice is what outweighs the +1.",
-       bad:"<strong>Not quite.</strong> x + y stays the same on the first transition — only weakly decreasing, just "+
-           "like e under the place-on-top rule. y goes <em>up</em> on the first transition. 2x + y drops by 1 on "+
-           "both. (Answer: C.)"},
-  qa:{good:"<strong>Yes.</strong> The state is only the board and whose turn it is. Order and last move are history, "+
-          "and the machine doesn’t keep history — two different plays can land in the same state.",
-      bad:"<strong>Not quite.</strong> Order and last move are history, and the state doesn’t record history. Both "+
-          "plays leave X on (1,1) and (3,3), O on (2,2), O to move: one state. (Answer: C.)"},
-  qb:{good:"<strong>Yes.</strong> X has three in a row, and the transition rule only applies when nobody does. The "+
-          "empty cells and p = O are still part of the state; nothing uses them.",
-      bad:"<strong>Not quite.</strong> Check the rule before counting cells: transitions exist only when nobody has "+
-          "three in a row. X does, so this is a final state with 0 transitions out. (Answer: C.) “Sensible” "+
-          "moves don’t come into it either — the machine allows every legal move, good or bad."},
-  q1:{good:"<strong>Yes.</strong> Bounded isn’t enough and being ℕ-valued isn’t enough — it is the combination, plus "+
-          "<em>strict</em>, that forbids an infinite run.",
-      bad:"<strong>Not quite.</strong> A stays bounded below 9 forever without ever decreasing — boundedness alone "+
-          "rules nothing out. C assumes what you are trying to prove: “every play ends” is the conclusion, not a "+
-          "premise. (Answer: B.)"}
+  qg1:{good:"<strong>Yes.</strong> The next move depends only on the total. The coin list is history.",
+       bad:"<strong>No — B.</strong> The list is history (5+10 ≠ 10+5 as lists, same behaviour); the last coin can’t tell 5¢ from 10¢."},
+  qg2:{good:"<strong>Yes.</strong> Preserved + true at (0, 0) ⇒ invariant; it fails at (0, 4).",
+       bad:"<strong>No — B.</strong> Ruling (0, 4) out is exactly what an invariant does. Every move keeps both amounts multiples of 3."},
+  qg3:{good:"<strong>Yes.</strong> 2(x−1) + (y+1) = 2x + y − 1, and the second move lowers y. Down by 1 either way.",
+       bad:"<strong>No — C.</strong> x + y stays flat on the first move (like place-on-top); y goes up. 2x + y drops on both."},
+  qa:{good:"<strong>Yes.</strong> Same board, O to move — one state. Order is history.",
+      bad:"<strong>No — C.</strong> The state doesn’t record order or last move. Same board, O to move: one state."},
+  qb:{good:"<strong>Yes.</strong> X has a line, so the rule gives no transitions.",
+      bad:"<strong>No — C.</strong> X already has a line, so it’s a final state."},
+  q1:{good:"<strong>Yes.</strong> Strict decrease in ℕ can’t go on forever.",
+      bad:"<strong>No — B.</strong> Bounded alone rules nothing out; C assumes the conclusion."}
 };
 Object.keys(MCQ).forEach(function(id){
   var opts=document.getElementById(id), fb=document.getElementById(id+"fb");
