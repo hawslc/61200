@@ -144,8 +144,9 @@ Teaching notes:
 
 ## Where companions exist
 
-| Recitation | Topic | File |
+| For | Topic | File |
 |---|---|---|
-| 03 | Strong induction: predicates, ordinary vs strong, strengthening | [`companions/rec-03.html`](../companions/rec-03.html) |
+| Rec 03 | Strong induction: predicates, ordinary vs strong, strengthening | [`companions/rec-03.html`](../companions/rec-03.html) |
+| Lec 04 | State machines on tic-tac-toe: states, final states, invariant + reachability, potential function | [`companions/lec-04.html`](../companions/lec-04.html) |
 
 Add a row when you build one.

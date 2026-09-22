@@ -35,6 +35,30 @@ lectures/        Source PDFs — present locally, gitignored (~25 MB, staff mate
 .claude/skills/  Task-specific skills
 ```
 
+## Companions
+
+One self-contained HTML file per companion, named by what it accompanies — the
+number only, no topic slug:
+
+| File | For | Published at |
+|---|---|---|
+| `companions/rec-03.html` | Recitation 03 — strong induction | — |
+| `companions/lec-04.html` | Lecture 04 — state machines, via tic-tac-toe | https://claude.ai/artifact/Gw4pLqrRhrVGznhiZzbJGL |
+
+- `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
+- Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.
+- When adding one, add a row here, in the `README.md` table, and in the table at
+  the bottom of `course/COURSE-MAP.md`.
+- When editing one that has been published, republish to its existing URL
+  rather than creating a new artifact, so shared links keep working.
+
+`lec-04.html` settled a few conventions worth reusing for later state-machine
+material: a state is written `(b, p)` with the board as a 3×3 tuple and `–` for
+an empty cell (not `·`); cells are addressed `(row, col)`; a state with no
+outgoing transitions is a **final state** (not "stuck" or "terminal"); and the
+termination argument is phrased as a **potential function** (also called a
+derived variable), laid out as define / strictly decreases / conclude.
+
 ## Skills
 
 | Skill | Use it for |

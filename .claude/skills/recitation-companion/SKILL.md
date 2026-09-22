@@ -151,7 +151,8 @@ open companions/rec-NN.html
 - [ ] Footer says the right recitation number.
 - [ ] Add a row to the table at the bottom of `COURSE-MAP.md`.
 
-Save as `companions/rec-NN.html`, matching the recitation number.
+Save as `companions/rec-NN.html`, matching the recitation number — or `companions/lec-NN.html` when the
+companion is built for a lecture topic rather than a recitation. Two-digit number, nothing else in the name.
 
 ## Rules
 

@@ -3,17 +3,18 @@
 Pedagogical tools and companions for **6.1200J / 18.062J — Mathematics for
 Computer Science** (MIT, Fall 2026).
 
-Interactive review pages for recitations, plus the reference material that keeps
-them faithful to the course's notation, vocabulary, and examples.
+Interactive review pages for recitations and lectures, plus the reference material
+that keeps them faithful to the course's notation, vocabulary, and examples.
 
 ## Companions
 
 Each is a single self-contained HTML file — no build step, no dependencies
 beyond a webfont. Open one in a browser.
 
-| Recitation | Topic |
+| For | Topic |
 |---|---|
-| 03 | [Strong induction — predicates, ordinary vs. strong, strengthening](companions/rec-03.html) |
+| Rec 03 | [Strong induction — predicates, ordinary vs. strong, strengthening](companions/rec-03.html) |
+| Lec 04 | [State machines — tic-tac-toe: states, invariants and reachability, potential functions](companions/lec-04.html) |
 
 ## Reference
 
