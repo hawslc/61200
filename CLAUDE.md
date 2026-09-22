@@ -40,10 +40,10 @@ lectures/        Source PDFs — present locally, gitignored (~25 MB, staff mate
 One self-contained HTML file per companion, named by what it accompanies — the
 number only, no topic slug:
 
-| File | For | Published at |
-|---|---|---|
-| `companions/rec-03.html` | Recitation 03 — strong induction | — |
-| `companions/lec-04.html` | Lecture 04 — state machines, via tic-tac-toe | https://claude.ai/artifact/Gw4pLqrRhrVGznhiZzbJGL |
+| File | For |
+|---|---|
+| `companions/rec-03.html` | Recitation 03 — strong induction |
+| `companions/lec-04.html` | Lecture 04 — state machines, via tic-tac-toe |
 
 - `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
 - Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.
