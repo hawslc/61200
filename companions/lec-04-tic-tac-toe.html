@@ -525,15 +525,15 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       <p style="margin-top:0; font-size:14.8px">States are pairs <span class="mm">(<span class="m">x</span>,
         <span class="m">y</span>)</span> of natural numbers. Two kinds of transition:
         <span class="mm nw">(<span class="m">x</span>, <span class="m">y</span>) ↦ (<span class="m">x</span> − 1,
-        <span class="m">y</span> + 5)</span> when <span class="mm"><span class="m">x</span> &gt; 0</span>, and
+        <span class="m">y</span> + 1)</span> when <span class="mm"><span class="m">x</span> &gt; 0</span>, and
         <span class="mm nw">(<span class="m">x</span>, <span class="m">y</span>) ↦ (<span class="m">x</span>,
         <span class="m">y</span> − 1)</span> when <span class="mm"><span class="m">y</span> &gt; 0</span>. Which
-        potential function proves the machine terminates?</p>
+        potential function proves the machine terminates? Try each one on both transitions.</p>
       <div class="opts" id="qg3">
         <button class="opt" data-c="0"><span class="mk">A</span><span><span class="mm"><span class="m">x</span> +
           <span class="m">y</span></span></span></button>
-        <button class="opt" data-c="0"><span class="mk">B</span><span><span class="mm"><span class="m">x</span></span></span></button>
-        <button class="opt" data-c="1"><span class="mk">C</span><span><span class="mm">6<span class="m">x</span> +
+        <button class="opt" data-c="0"><span class="mk">B</span><span><span class="mm"><span class="m">y</span></span></span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span><span class="mm">2<span class="m">x</span> +
           <span class="m">y</span></span></span></button>
       </div>
       <div class="fb" id="qg3fb"></div>
@@ -867,11 +867,11 @@ var MCQ={
        bad:"<strong>Not quite.</strong> A gets the asymmetry backwards: ruling things out is exactly what an "+
            "invariant does, and (0, 4) is being ruled out. C mistakes room for reachability — every move keeps "+
            "both amounts multiples of 3, so 4 never appears. (Answer: B.)"},
-  qg3:{good:"<strong>Yes.</strong> The first transition gives 6(x−1) + (y+5) = 6x + y − 1, and the second lowers y "+
-           "by 1, so 6x + y drops by exactly 1 either way, and it stays in ℕ. The weight 6 is there to outweigh the +5.",
-       bad:"<strong>Not quite.</strong> x + y goes <em>up</em> by 4 on the first transition. x only weakly "+
-           "decreases, since the second transition leaves it alone. You need a weight on x that beats the +5: "+
-           "6x + y drops by 1 on both. (Answer: C.)"},
+  qg3:{good:"<strong>Yes.</strong> The first transition gives 2(x−1) + (y+1) = 2x + y − 1, and the second lowers y "+
+           "by 1, so 2x + y drops by exactly 1 either way, and it stays in ℕ. Counting x twice is what outweighs the +1.",
+       bad:"<strong>Not quite.</strong> x + y stays the same on the first transition — only weakly decreasing, just "+
+           "like e under the place-on-top rule. y goes <em>up</em> on the first transition. 2x + y drops by 1 on "+
+           "both. (Answer: C.)"},
   qa:{good:"<strong>Yes.</strong> The state is only the board and whose turn it is. Order and last move are history, "+
           "and the machine doesn’t keep history — two different plays can land in the same state.",
       bad:"<strong>Not quite.</strong> Order and last move are history, and the state doesn’t record history. Both "+
