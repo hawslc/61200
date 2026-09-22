@@ -173,7 +173,7 @@ hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
 
 /* ---- derived variable chart ---- */
 .chartwrap{margin-top:14px; background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px}
-.chart{display:flex; align-items:flex-end; gap:5px; height:150px; border-bottom:2px solid var(--rule-2);
+.chart{display:flex; align-items:flex-end; gap:5px; height:96px; margin-top:16px; border-bottom:2px solid var(--rule-2);
   border-left:2px solid var(--rule-2); padding:0 4px 0 6px}
 .col{flex:1; min-width:10px; background:var(--teal); border-radius:4px 4px 0 0; position:relative;
   transition:height .22s; display:flex; align-items:flex-start; justify-content:center}
@@ -182,6 +182,13 @@ hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
 .axis{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--ink-3);
   margin-top:7px}
 .status{margin-top:11px; font-size:14.4px; line-height:1.5}
+.pot{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:12px 14px}
+.potlbl{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
+.potv{font-family:var(--disp); font-size:46px; font-weight:700; color:var(--teal); line-height:1.1; transition:color .2s}
+.potv.flat{color:var(--bad)}
+.lastmv{margin-top:11px; font-size:14.2px; line-height:1.55; min-height:3em}
+.sq.sel{outline:3px dashed var(--warn); outline-offset:2px}
+.sq.tgt{border-style:dashed; border-color:var(--warn)}
 
 /* ---- mcq ---- */
 .opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
@@ -281,6 +288,33 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
       transition relation stops being well defined — you’d have to look at the history to know whose mark goes down
       next, and a state machine is not allowed to look at history. Everything it knows, it knows because the state
       says so.</div>
+
+    <div class="card">
+      <span class="tag">Check</span>
+      <h4>Two plays, one board</h4>
+      <p style="margin-top:0; font-size:14.8px">Play A goes X(1,1), O(2,2), X(3,3). Play B goes X(3,3), O(2,2), X(1,1).
+        Do they end in the same state?</p>
+      <div class="opts" id="qa">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>No — the moves happened in a different order.</span></button>
+        <button class="opt" data-c="0"><span class="mk">B</span><span>No — the last move was different: (3,3) in one, (1,1) in the other.</span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span>Yes — both give the same board with O to move, and
+          that pair is the whole state.</span></button>
+      </div>
+      <div class="fb" id="qafb"></div>
+    </div>
+
+    <div class="card">
+      <span class="tag">Check</span>
+      <h4>Counting transitions out</h4>
+      <p style="margin-top:0; font-size:14.8px">How many outgoing transitions does this state have?
+        <span class="ex" style="margin-left:6px">( <span class="mat"><span class="bx">X</span><span class="bx">X</span><span class="bx">X</span><span class="bo">O</span><span class="bo">O</span><span class="be">–</span><span class="be">–</span><span class="be">–</span><span class="be">–</span></span> , O )</span></p>
+      <div class="opts" id="qb">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>4 — one for each empty cell O could play.</span></button>
+        <button class="opt" data-c="0"><span class="mk">B</span><span>1 — O has to block, so there is only one sensible move.</span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span>0 — it’s a final state.</span></button>
+      </div>
+      <div class="fb" id="qbfb"></div>
+    </div>
   </div>
   <hr class="soft">
 </section>
@@ -375,13 +409,24 @@ footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px
           <button data-k="place" aria-pressed="true">Place a mark</button>
           <button data-k="slide" aria-pressed="false">Place <em>or</em> slide</button>
         </div>
-        <button class="btn" id="stepbtn">Take a transition</button>
-        <button class="btn" id="stepreset">Reset</button>
+        <button class="btn" id="autob">Auto transition</button>
+        <button class="btn" id="stepreset">Back to q₀</button>
       </div>
       <p style="margin-top:10px; font-size:14.6px; color:var(--ink-2)" id="ruledesc"></p>
+      <div class="play">
+        <div class="board" id="tbd"></div>
+        <div>
+          <div class="pot">
+            <div class="potlbl">potential e(s) = empty cells</div>
+            <div class="potv" id="potv">9</div>
+            <div class="pips" id="potpips"></div>
+          </div>
+          <div class="lastmv" id="lastmv"></div>
+        </div>
+      </div>
       <div class="chartwrap">
         <div class="chart" id="chart"></div>
-        <div class="axis"><span>q₀</span><span>potential e(s) after each transition</span></div>
+        <div class="axis"><span id="axl">q₀</span><span>e(s) after each transition</span></div>
         <div class="status" id="chartstatus"></div>
       </div>
     </div>
@@ -629,81 +674,152 @@ var CANDS=[
   });
 })();
 
-/* ---------- §3 derived variable ---------- */
+/* ---------- §3 potential function on a real board ---------- */
 (function(){
-  var seg=document.getElementById("ruleseg"), chart=document.getElementById("chart"),
-      stat=document.getElementById("chartstatus"), stepb=document.getElementById("stepbtn"),
-      resetb=document.getElementById("stepreset"), desc=document.getElementById("ruledesc");
-  if(!seg) return;
-
-  var kind="place", series=[9];
+  var seg=document.getElementById("ruleseg"), bd=document.getElementById("tbd"), chart=document.getElementById("chart"),
+      stat=document.getElementById("chartstatus"), autob=document.getElementById("autob"),
+      resetb=document.getElementById("stepreset"), desc=document.getElementById("ruledesc"),
+      potv=document.getElementById("potv"), potpips=document.getElementById("potpips"),
+      lastmv=document.getElementById("lastmv"), axl=document.getElementById("axl");
+  if(!seg || !bd) return;
 
   var TEXT={
-    place:"The real machine. Every transition writes a mark on an empty square, so e drops by exactly 1.",
-    slide:"A variant: once you have three marks down, a move may instead <em>slide</em> one of your own marks to an "+
-           "empty square. Legal game, different machine — and a sliding move leaves e unchanged."
+    place:"The real machine. Click an empty cell to place the next mark, or press Auto. Every transition fills one "+
+          "empty cell, so e drops by exactly 1.",
+    slide:"A variant: once you have three marks on the board, you may <em>slide</em> one instead — click your mark, "+
+          "then any empty cell. A slide empties one cell and fills another, so e doesn’t change."
   };
+  var kind="place", b, turn, sel, series, cells=[], pips=[];
 
-  function nextVal(){
-    var e=series[series.length-1];
-    if(kind==="place") return e-1;
-    /* three marks each go down first, then sliding forever */
-    if(series.length<=6) return e-1;
-    return e;
+  for(var i=0;i<9;i++){
+    (function(i){
+      var c=document.createElement("button"); c.className="sq";
+      c.innerHTML='<span class="idx">'+rc(i)+'</span><span class="mk"></span>';
+      c.addEventListener("click",function(){ clickCell(i); });
+      bd.appendChild(c); cells.push(c);
+    })(i);
+    var pp=document.createElement("span"); pp.className="pip"; potpips.appendChild(pp); pips.push(pp);
   }
-  function done(){ return kind==="place" && series[series.length-1]===0; }
 
-  function render(){
+  function e(){ return count(b,"."); }
+  function isFinal(){ return !!winline(b) || e()===0; }
+  function canSlide(){ return kind==="slide" && count(b,turn)>=3; }
+  function fresh(){
+    b=".........".split(""); turn="X"; sel=-1; series=[9];
+    lastmv.innerHTML="At q₀: empty board, X to move.";
+  }
+
+  function record(txt,before){
+    var after=e(), dec=after<before;
+    series.push(after); turn=(turn==="X")?"O":"X"; sel=-1;
+    lastmv.innerHTML='<span class="pill '+(dec?"ok":"bad")+'">e: '+before+" → "+after+(dec?"":" — no decrease")+
+      "</span>&nbsp; "+txt+".";
+    draw();
+  }
+  function place(i){ var bf=e(); b[i]=turn; record(turn+" places at ("+rc(i)+")", bf); }
+  function slide(f,t){ var bf=e(); b[t]=turn; b[f]="."; record(turn+" slides ("+rc(f)+") → ("+rc(t)+")", bf); }
+
+  function clickCell(i){
+    if(isFinal()) return;
+    if(b[i]==="."){ if(sel>=0) slide(sel,i); else place(i); return; }
+    if(b[i]===turn && canSlide()){ sel=(sel===i)?-1:i; draw(); }
+  }
+
+  function moves(){
+    var ms=[], es=empties(b);
+    es.forEach(function(i){ ms.push({f:-1,t:i}); });
+    if(canSlide()) for(var f=0;f<9;f++) if(b[f]===turn) es.forEach(function(i){ ms.push({f:f,t:i}); });
+    return ms;
+  }
+  function safe(m){
+    var c=b.slice(); c[m.t]=turn; if(m.f>=0) c[m.f]="."; return !winline(c);
+  }
+  autob.addEventListener("click",function(){
+    if(isFinal()) return;
+    var ms=moves(), pool=null;
+    if(kind==="slide"){ var sl=ms.filter(function(m){ return m.f>=0 && safe(m); }); if(sl.length) pool=sl; }
+    if(!pool){ var sf=ms.filter(safe); pool=sf.length?sf:ms; }
+    var m=pool[Math.floor(Math.random()*pool.length)];
+    sel=-1; if(m.f>=0) slide(m.f,m.t); else place(m.t);
+  });
+
+  function draw(){
+    var w=winline(b), fin=isFinal(), cs=canSlide();
     desc.innerHTML=TEXT[kind];
+    for(var i=0;i<9;i++){
+      var cl="sq"+(b[i]==="X"?" x":b[i]==="O"?" o":"");
+      if(w && w.indexOf(i)>=0) cl+=" win";
+      if(i===sel) cl+=" sel";
+      if(sel>=0 && b[i]===".") cl+=" tgt";
+      cells[i].className=cl;
+      cells[i].querySelector(".mk").textContent = b[i]==="." ? "" : b[i];
+      cells[i].disabled = fin || (b[i]!=="." && !(b[i]===turn && cs));
+    }
+    var ev=e(), n=series.length-1, flat = n>0 && series[n]===series[n-1];
+    potv.textContent=ev; potv.className="potv"+(flat?" flat":"");
+    pips.forEach(function(pp,k){ pp.className="pip"+(k<ev?" on":""); });
+
+    var off=Math.max(0, series.length-24);
+    axl.textContent = off ? "… "+off+" earlier" : "q₀";
     chart.innerHTML="";
-    series.forEach(function(v,i){
-      var col=document.createElement("div");
-      var flat = i>0 && v===series[i-1];
-      col.className="col"+(flat?" flat":"");
-      col.style.height = (v===0 ? 3 : (v/9)*100) + "%";
+    for(var k=off;k<series.length;k++){
+      var col=document.createElement("div"), v=series[k];
+      col.className="col"+(k>0 && v===series[k-1] ? " flat" : "");
+      col.style.height=(v===0?3:(v/9)*100)+"%";
       col.innerHTML='<span class="cv">'+v+"</span>";
       chart.appendChild(col);
-    });
-    var n=series.length-1;
-    if(kind==="place"){
-      if(done()){
-        stat.innerHTML='<span class="pill ok">final state</span> &nbsp; e reached 0 after '+n+
-          " transitions. Nine strict decreases from e(q₀) = 9, and there was never room for a tenth.";
-        stepb.disabled=true;
-      } else {
-        stat.innerHTML="e(s) = "+series[n]+" after "+n+" transition"+(n===1?"":"s")+
-          ". Strictly decreasing, ℕ-valued — at most "+series[n]+" transitions left, no matter who plays what.";
-        stepb.disabled=false;
-      }
-    } else {
-      if(n>=6){
-        stat.innerHTML='<span class="pill bad">no bound</span> &nbsp; e has been flat for '+(n-5)+
-          " transition"+(n-5===1?"":"s")+" and can stay flat forever. Weakly decreasing bounds nothing; "+
-          "this run has no reason to stop.";
-      } else {
-        stat.innerHTML="e(s) = "+series[n]+" after "+n+" transition"+(n===1?"":"s")+
-          ". Still dropping — the marks are still going down. Keep clicking.";
-      }
-      stepb.disabled = series.length>=16;
     }
+
+    var flats=0; for(var j=1;j<series.length;j++) if(series[j]===series[j-1]) flats++;
+    if(fin){
+      stat.innerHTML='<span class="pill ok">final state</span>&nbsp; '+
+        (w ? b[w[0]]+" has three in a row" : "Board full, no line — a draw")+", after "+n+" transition"+(n===1?"":"s")+
+        (kind==="place" ? ". e fell by exactly 1 every time, just as step 2 of the proof says." :
+         flats ? ". This play happened to end — but nothing forced it to." : ".");
+    } else if(kind==="place"){
+      stat.innerHTML="e(s) = "+ev+", so at most "+ev+" more transition"+(ev===1?"":"s")+
+        ", whatever anyone plays.";
+    } else if(flats){
+      stat.innerHTML='<span class="pill bad">no bound</span>&nbsp; '+flats+" transition"+(flats===1?"":"s")+
+        " so far left e unchanged. A slide never lowers e, so nothing stops this play — keep pressing Auto.";
+    } else {
+      stat.innerHTML="Marks are still going down, so e is still falling. Once a player has three marks on the "+
+        "board, they can slide one instead.";
+    }
+    autob.disabled=fin;
   }
 
   seg.querySelectorAll("button").forEach(function(btn){
     btn.addEventListener("click",function(){
       seg.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed","false"); });
       btn.setAttribute("aria-pressed","true");
-      kind=btn.dataset.k; series=[9]; render();
+      kind=btn.dataset.k; fresh(); draw();
     });
   });
-  stepb.addEventListener("click",function(){ if(!done()){ series.push(nextVal()); render(); } });
-  resetb.addEventListener("click",function(){ series=[9]; render(); });
-  render();
+  resetb.addEventListener("click",function(){ fresh(); draw(); });
+  fresh(); draw();
 })();
 
-/* ---------- §3 check ---------- */
-(function(){
-  var opts=document.getElementById("q1"), fb=document.getElementById("q1fb");
-  if(!opts) return;
+/* ---------- checks (§1, §3) ---------- */
+var MCQ={
+  qa:{good:"<strong>Yes.</strong> The state is only the board and whose turn it is. Order and last move are history, "+
+          "and the machine doesn’t keep history — two different plays can land in the same state.",
+      bad:"<strong>Not quite.</strong> Order and last move are history, and the state doesn’t record history. Both "+
+          "plays leave X on (1,1) and (3,3), O on (2,2), O to move: one state. (Answer: C.)"},
+  qb:{good:"<strong>Yes.</strong> X has three in a row, and the transition rule only applies when nobody does. The "+
+          "empty cells and p = O are still part of the state; nothing uses them.",
+      bad:"<strong>Not quite.</strong> Check the rule before counting cells: transitions exist only when nobody has "+
+          "three in a row. X does, so this is a final state with 0 transitions out. (Answer: C.) “Sensible” "+
+          "moves don’t come into it either — the machine allows every legal move, good or bad."},
+  q1:{good:"<strong>Yes.</strong> Bounded isn’t enough and being ℕ-valued isn’t enough — it is the combination, plus "+
+          "<em>strict</em>, that forbids an infinite run.",
+      bad:"<strong>Not quite.</strong> A stays bounded below 9 forever without ever decreasing — boundedness alone "+
+          "rules nothing out. C assumes what you are trying to prove: “every play ends” is the conclusion, not a "+
+          "premise. (Answer: B.)"}
+};
+Object.keys(MCQ).forEach(function(id){
+  var opts=document.getElementById(id), fb=document.getElementById(id+"fb");
+  if(!opts || !fb) return;
   var done=false;
   opts.querySelectorAll(".opt").forEach(function(o){
     o.addEventListener("click",function(){
@@ -713,15 +829,10 @@ var CANDS=[
         if(+x.dataset.c===1) x.classList.add("correct");
         else if(x===o) x.classList.add("wrong"); else x.classList.add("dim"); });
       fb.className="fb show "+(ok?"good":"bad");
-      fb.innerHTML=ok
-        ? "<strong>Yes.</strong> Bounded isn’t enough and being ℕ-valued isn’t enough — it is the combination, plus "+
-          "<em>strict</em>, that forbids an infinite run."
-        : "<strong>Not quite.</strong> A stays bounded below 9 forever without ever decreasing — boundedness alone "+
-          "rules nothing out. C assumes what you are trying to prove: “every play ends” is the conclusion, not a "+
-          "premise. (Answer: B.)";
+      fb.innerHTML=ok ? MCQ[id].good : MCQ[id].bad;
     });
   });
-})();
+});
 
 })();
 </script>
