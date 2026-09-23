@@ -226,6 +226,10 @@ details.more summary::before{content:"▸"; font-size:12px; transition:transform
 details.more[open] summary::before{transform:rotate(90deg)}
 details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.55; color:var(--ink-2)}
 .card h4 .ex{font-weight:400}
+
+/* ---- Space = blank screen (presenting) ---- */
+#blank{position:fixed; inset:0; z-index:1000; background:var(--paper); display:none}
+#blank.on{display:block}
 </style>
 
 <header class="hero">
@@ -507,6 +511,8 @@ details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.55;
     </div>
   </div>
 </section>
+
+<div id="blank" aria-hidden="true"></div>
 
 <footer>
   <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 04, state machines, Fall 2026.</div>
@@ -831,6 +837,21 @@ Object.keys(MCQ).forEach(function(id){
     });
   });
 });
+
+
+/* ---------- Space toggles a blank screen; never scrolls ---------- */
+(function(){
+  var blank=document.getElementById("blank");
+  if(!blank) return;
+  document.addEventListener("keydown",function(ev){
+    if(ev.key!==" " && ev.code!=="Space") return;
+    var t=ev.target, tag=t && t.tagName;
+    if(tag==="INPUT" || tag==="TEXTAREA" || (t && t.isContentEditable)) return;
+    ev.preventDefault();
+    if(ev.repeat) return;
+    blank.classList.toggle("on");
+  });
+})();
 
 })();
 </script>
