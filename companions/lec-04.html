@@ -335,8 +335,7 @@ details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.55;
     <div class="defn">
       <div class="dl">
         <span class="dt">P(s)</span>
-        <span class="dd"><span class="mm">(#X = #O &nbsp;∧&nbsp; <span class="m">p</span> = X) &nbsp;∨&nbsp;
-          (#X = #O + 1 &nbsp;∧&nbsp; <span class="m">p</span> = O)</span></span>
+        <span class="dd">X has as many marks as O, or one more — one more exactly when it’s O’s turn.</span>
       </div>
     </div>
 
@@ -353,6 +352,10 @@ details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.55;
       If <span class="m">p</span> = O: <span class="mm">#X = #O + 1</span>, O is added, X is next →
       <span class="mm">#X = #O</span>, <span class="m">p</span> = X. Either way <span class="mm">P(t)</span>.
     </div></details>
+    <details class="more"><summary>Why not just “#X and #O differ by at most 1”?</summary><div class="body">
+      It’s true at every reachable state, but it isn’t <em>preserved</em>: a board with one O and no X, O to move, satisfies it,
+      and O’s move makes the gap 2. Preserved has to hold from every state where P is true, so P must mention whose
+      turn it is.</div></details>
 
     <div class="card">
       <span class="tag">Try it</span>
@@ -623,7 +626,7 @@ var CANDS=[
  {b:"XXOXO....", cand:"Three X, two O, no line.", ans:"yes", path:[0,2,1,4,3],
   fb:"<strong>Reachable</strong> — P holds, and a 5-move path exists. Trace it:"},
  {b:"XXXOO.X..", cand:"Four X, two O.", ans:"no", path:null,
-  fb:"<strong>Unreachable — P proves it.</strong> #X = #O + 2 satisfies neither case."},
+  fb:"<strong>Unreachable — P proves it.</strong> X is two marks ahead."},
  {b:"XXXOOO...", cand:"X’s top row and O’s middle row.", ans:"no", path:null,
   fb:"<strong>Unreachable, though P holds.</strong> X’s line made a final state, so O’s third mark could never come."},
  {b:"XOXXXOOXO", cand:"Full board, no line.", ans:"yes", path:[4,1,0,8,2,6,3,5,7],
