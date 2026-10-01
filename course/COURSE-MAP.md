@@ -49,7 +49,7 @@ Teaching notes:
 |---|---|---|---|
 | 05 | Sums | annuities, geometric series, **perturbation**, **ansatz**, double sums & exchanging order, **Integral Method** (3 theorems) | Rec 05 — incl. `Σ i·xⁱ = x/(1−x)²` (Problem 3) |
 | 06 | Asymptotics | block-stacking & `Hₙ`, Stirling, `∼`, `O Ω Θ o ω`, **"Induction and Asymptotics Don't Mix"**, abuses of notation | Rec 06 |
-| 07 | Recurrences | Towers of Hanoi, Merge Sort, **Plug and Chug**, **Master Theorem** and its gaps | Rec 07 |
+| 07 | Recurrences | Towers of Hanoi, Merge Sort, **Plug and Chug**, **Master Theorem** and its gaps | **Rec 07 — Master Theorem** ✅ companion exists |
 
 Teaching notes:
 - Lec 06's overhang result is a great cold open: to get 10 block-lengths of
@@ -148,5 +148,6 @@ Teaching notes:
 |---|---|---|
 | Rec 03 | Strong induction: predicates, ordinary vs strong, strengthening | [`companions/rec-03.html`](../companions/rec-03.html) |
 | Lec 04 | State machines on tic-tac-toe: states, final states, invariant + reachability, potential function | [`companions/lec-04.html`](../companions/lec-04.html) |
+| Rec 07 | Master Theorem: recursion-tree picture of the three cases, worked and self-check examples, the gaps (`n log n`, Hanoi) | [`companions/rec-07.html`](../companions/rec-07.html) |
 
 Add a row when you build one.

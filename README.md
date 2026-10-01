@@ -15,6 +15,7 @@ beyond a webfont. The links below open the live copy on GitHub Pages.
 |---|---|
 | Rec 03 | [Strong induction — predicates, ordinary vs. strong, strengthening](https://hawslc.github.io/61200/companions/rec-03.html) |
 | Lec 04 | [State machines — tic-tac-toe: states, invariants and reachability, potential functions](https://hawslc.github.io/61200/companions/lec-04.html) |
+| Rec 07 | [Master Theorem — the recursion tree behind the three cases, worked examples, and the gaps](https://hawslc.github.io/61200/companions/rec-07.html) |
 
 ## Reference
 

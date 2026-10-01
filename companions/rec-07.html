@@ -1,0 +1,1182 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Cases, One Tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+/* Layout: single 760px reading column; one interactive card per claim; case 1/2/3 colour-coded teal/indigo/amber throughout. */
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden; margin:0}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:var(--serif); font-style:italic; font-size:1.05em}
+.mm{font-family:var(--serif); font-size:1.05em}
+i{font-family:var(--serif); font-style:italic; font-size:1.05em}
+.mm i,.mm .m{font-size:1em}
+sup,sub{line-height:0; font-size:.72em}
+sup{white-space:nowrap}
+sup sub,sub sub{font-size:.85em}
+.nw{white-space:nowrap}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:34px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+.disp{font-family:var(--serif); font-size:1.14em; text-align:center; margin:16px 0 4px; line-height:1.7}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:12px 16px; margin-top:12px;
+  font-family:var(--serif); font-size:1.12em; line-height:1.7}
+.out .src{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:2px}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* case chips — colour = case, used everywhere on the page */
+.cchip{display:inline-block; font-family:var(--mono); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px;
+  white-space:nowrap; border:1px solid; letter-spacing:.02em; line-height:1.4}
+.cchip.c1{color:var(--teal); background:var(--teal-soft); border-color:var(--teal-line)}
+.cchip.c2{color:var(--acc); background:var(--acc-soft); border-color:var(--acc-line)}
+.cchip.c3{color:var(--warn); background:var(--warn-soft); border-color:var(--warn-line)}
+.cchip.c0{color:var(--bad); background:var(--bad-soft); border-color:var(--bad-line)}
+
+/* chip buttons (presets, example picker) */
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chipb{font-size:13.2px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel-2);
+  cursor:pointer; font-weight:600; transition:.12s; line-height:1.35}
+.chipb:hover{border-color:var(--acc); color:var(--acc)}
+.chipb[aria-pressed="true"]{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .chipb[aria-pressed="true"]{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .chipb[aria-pressed="true"]{color:#0B0D14}}
+.chipb .s{font-family:var(--mono); font-size:10px; letter-spacing:.06em; opacity:.75; margin-left:4px}
+.lbl{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:700}
+
+/* ---- §1 tree explorer ---- */
+.levels{margin-top:12px; display:flex; flex-direction:column; gap:6px}
+.lv{display:grid; grid-template-columns:58px minmax(0,1fr); column-gap:10px; row-gap:3px; align-items:center}
+.lv .li{grid-row:span 2; font-family:var(--mono); font-size:11px; color:var(--ink-3); line-height:1.25}
+.lv .li em{display:block; font-style:normal; font-size:10px; opacity:.85}
+.lv .lt{display:flex; justify-content:space-between; gap:8px; font-size:13.4px; color:var(--ink-2); min-width:0}
+.lv .lt b{font-family:var(--mono); font-weight:700; font-size:12.4px; color:var(--ink); font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+.lbar{height:11px; background:var(--panel-2); border-radius:4px; overflow:hidden}
+.lbar span{display:block; height:100%; min-width:2px; border-radius:4px; transition:width .25s, background .2s}
+.k1 .lbar span{background:var(--teal-line)} .k1 .lv.hot .lbar span{background:var(--teal)}
+.k2 .lbar span{background:var(--acc-line)} .k2 .lv.hot .lbar span{background:var(--acc)}
+.k3 .lbar span{background:var(--warn-line)} .k3 .lv.hot .lbar span{background:var(--warn)}
+.verdictline{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; font-size:14.8px}
+.verdictline .vt{font-family:var(--serif); font-size:17px}
+
+/* ---- theorem ---- */
+.thm{background:var(--panel); border:1px solid var(--rule-2); border-radius:13px; padding:18px 20px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.thm .th{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:700;
+  color:var(--acc)}
+.thm p{margin-top:9px; max-width:none; font-size:15.6px}
+.cases{list-style:none; padding:0; margin:12px 0 0; display:flex; flex-direction:column; gap:8px}
+.cases li{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:10px; align-items:start; padding:10px 12px;
+  background:var(--sunk); border:1px solid var(--rule); border-radius:9px; font-size:15.2px; line-height:1.6}
+.cases .cn{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); padding-top:3px}
+@media(max-width:560px){.cases li{grid-template-columns:auto minmax(0,1fr)} .cases .cchip{grid-column:2; justify-self:start}}
+.thm .thfoot{font-size:14.6px; color:var(--ink-2)}
+
+/* recipe */
+.recipe{counter-reset:s; list-style:none; padding-left:0; margin:14px 0 0}
+.recipe li{counter-increment:s; padding-left:38px; position:relative; margin:10px 0; line-height:1.55; font-size:15.4px;
+  max-width:64ch}
+.recipe li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+
+/* mode toggle */
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#0B0D14}}
+.chipb.solved::after{content:" ✓"; color:var(--ok)}
+.chipb.solved[aria-pressed="true"]::after{color:inherit}
+
+/* ---- §2 recipe runner: balance scale ---- */
+@property --t{syntax:"<angle>"; inherits:true; initial-value:0deg}
+.scale{position:relative; height:176px; margin-top:12px; --t:0deg; transition:--t .8s cubic-bezier(.34,1.5,.5,1), opacity .3s}
+.scale::after{content:""; position:absolute; left:calc(50% - 44px); width:88px; top:146px; height:6px; border-radius:3px;
+  background:var(--panel-3)}
+.fulcrum{position:absolute; left:50%; top:44px; width:0; height:0; transform:translateX(-50%);
+  border-left:20px solid transparent; border-right:20px solid transparent; border-bottom:102px solid var(--panel-3)}
+.beam{position:absolute; left:21%; right:21%; top:38px; height:6px; border-radius:3px; background:var(--ink-3);
+  transform:rotate(var(--t)); z-index:1}
+.beam::after{content:""; position:absolute; left:50%; top:50%; width:10px; height:10px; margin:-8px 0 0 -8px;
+  border-radius:50%; background:var(--panel); border:3px solid var(--ink-3)}
+.pan{position:absolute; top:3px; width:clamp(100px,46%,200px); transform-origin:50% 0;
+  transform:translateX(-50%) rotate(calc(-1 * var(--t)))}
+.pan.l{left:0} .pan.r{left:100%}
+.pan .str{display:block; width:2px; height:24px; margin:0 auto; background:var(--rule-2)}
+.dish{border:2px solid var(--rule-2); background:var(--panel); border-radius:5px 5px 16px 16px; padding:6px 8px 8px;
+  text-align:center; transition:background .3s, border-color .3s}
+.pan.l .dish{border-color:var(--warn-line)} .pan.r .dish{border-color:var(--teal-line)}
+.pl{font-size:11.5px; color:var(--ink-3); line-height:1.3}
+.pv{font-family:var(--serif); font-size:17px; line-height:1.45; min-height:1.45em}
+.scale.h-l .pan.l .dish{background:var(--warn-soft); border-color:var(--warn)}
+.scale.h-r .pan.r .dish{background:var(--teal-soft); border-color:var(--teal)}
+.scale.h-e .dish{background:var(--acc-soft)}
+.scale.h-e .pan .dish{border-color:var(--acc)}
+.scale.off{opacity:.3}
+.scale.wob{animation:wob 1.7s ease-in-out infinite}
+@keyframes wob{0%,100%{--t:-2deg} 50%{--t:-5deg}}
+.scap{text-align:center; font-size:14.4px; color:var(--ink-2); min-height:1.6em; line-height:1.6; margin-top:2px}
+.scap .cchip{margin-right:6px}
+
+/* ---- §2 recipe runner: steps ---- */
+.rsteps{margin-top:14px; display:flex; flex-direction:column; gap:8px}
+.rstep{border:1px solid var(--rule); border-radius:10px; background:var(--sunk); padding:10px 13px; min-width:0}
+.rstep.pending{opacity:.5}
+.rstep.current{border-color:var(--acc); background:var(--panel); box-shadow:0 0 0 3px var(--acc-soft)}
+.rstep.done{background:var(--ok-soft); border-color:var(--ok-line)}
+.rsh{display:flex; gap:6px 9px; align-items:baseline; flex-wrap:wrap}
+.rsn{font-family:var(--mono); font-size:11px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:5px; padding:1px 6px; line-height:1.4}
+.rstep.done .rsn{color:var(--ok); background:var(--panel); border-color:var(--ok-line)}
+.rst{font-weight:600; font-size:14.6px}
+.rsa{font-family:var(--serif); font-size:15.6px; margin-left:auto; text-align:right}
+.rsa .cchip{font-size:10.5px; vertical-align:1px}
+.rsq{margin-top:7px; font-size:14.8px}
+.rsopts{display:flex; flex-direction:column; gap:6px; margin-top:9px}
+.ropt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:8px; padding:8px 12px;
+  font-size:14.8px; cursor:pointer; line-height:1.5; transition:.12s}
+.ropt:hover:not(:disabled){border-color:var(--acc); background:var(--acc-soft)}
+.ropt.no{background:var(--bad-soft); border-color:var(--bad-line); cursor:default; opacity:.75}
+.rsfb{margin-top:8px; font-size:14.2px; line-height:1.55; padding:8px 11px; border-radius:8px;
+  background:var(--bad-soft); border:1px solid var(--bad-line)}
+.rswhy{margin-top:5px; font-size:13.9px; color:var(--ink-2); line-height:1.55}
+.rend{margin-top:12px; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:12px 14px;
+  border-radius:10px; background:var(--panel-2); border:1px solid var(--rule)}
+.rend:empty{display:none}
+.rend .rres{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:var(--serif); font-size:17px; min-width:0}
+.rend .rsc{font-size:13.6px; color:var(--ink-2); flex:1 1 180px; min-width:0}
+.rend .rafter{font-size:14.4px; color:var(--ink-2); flex-basis:100%}
+@media (prefers-reduced-motion:reduce){ .scale{transition:none} .scale.wob{animation:none; --t:-3deg} }
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:var(--serif); font-size:17px; margin-bottom:9px}
+.cand .src{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3);
+  margin-left:6px; font-style:normal}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.lk{cursor:default}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14.2px; line-height:1.6; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:16px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2); min-width:0}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px}
+.vcard .vr{font-family:var(--serif); font-size:16px; margin-top:4px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.55; color:var(--ink-2)}
+
+/* ϵ chart */
+.epsrow{display:flex; align-items:center; gap:12px; margin-top:4px}
+.epsrow input{flex:1; min-width:0}
+.epsv{font-family:var(--serif); font-size:17px; min-width:72px; white-space:nowrap}
+.legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:10px; font-size:13px; color:var(--ink-2)}
+.legend span::before{content:""; display:inline-block; width:18px; height:3px; border-radius:2px; vertical-align:middle;
+  margin-right:6px; background:currentColor}
+.legend .lg1{color:var(--ink-2)} .legend .lg2{color:var(--acc)} .legend .lg3::before{height:10px; background:var(--bad-soft);
+  border:1px solid var(--bad-line)}
+.chart{margin-top:8px}
+.chart svg{display:block; width:100%; height:auto; overflow:visible}
+.chart .ax{stroke:var(--rule-2); stroke-width:1; fill:none}
+.chart .gr{stroke:var(--rule); stroke-width:1; fill:none}
+.chart .tk{fill:var(--ink-3); font-family:var(--mono); font-size:11px}
+.chart .cap{fill:var(--ink-3); font-family:var(--mono); font-size:11px}
+.chart .c-log{stroke:var(--ink-2); stroke-width:2.2; fill:none}
+.chart .c-pow{stroke:var(--acc); stroke-width:2.6; fill:none}
+.chart .band{fill:var(--bad-soft); stroke:none}
+.chart .xline{stroke:var(--bad); stroke-width:1.4; stroke-dasharray:4 4; fill:none}
+.chart .xdot{fill:var(--bad); stroke:var(--panel); stroke-width:2}
+.chart .xlab{fill:var(--bad); font-family:var(--mono); font-size:11.5px; font-weight:700}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+.qtext{font-weight:600; font-size:15.6px}
+
+/* expandables */
+details.more{margin-top:10px; border:1px solid var(--rule); border-radius:9px; background:var(--panel)}
+details.more summary{cursor:pointer; padding:8px 13px 8px 32px; font-size:14.4px; font-weight:600; color:var(--acc);
+  list-style:none; display:block; position:relative}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"▸"; font-size:12px; transition:transform .15s; position:absolute; left:13px; top:10px}
+details.more[open] summary::before{transform:rotate(90deg)}
+details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.6; color:var(--ink-2)}
+details.more .body p{margin-top:8px}
+details.more .body p:first-child{margin-top:0}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+@media (max-width:420px){ .wrap{padding:0 16px} .card{padding:15px 14px} .thm{padding:16px 14px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none !important} }
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Recitation 07</div>
+    <h1>The Master Theorem is a contest between the root and the leaves</h1>
+    <p class="sub">You’ve matched recurrences to cases at the board. Here’s the picture that makes the three cases
+      obvious, the places where the theorem goes silent, and a pile of examples to check yourself against.</p>
+  </div>
+</header>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>Each case is about which end of the tree is heavier</h2></div>
+
+    <p>Lecture’s proof sketch is the whole intuition, so start there. Unroll
+      <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = <span class="m">a</span> ·
+      <span class="m">T</span>(⌊<span class="m">n</span>/<span class="m">b</span>⌋) + <span class="m">f</span>(<span class="m">n</span>)</span>
+      and you get the recursion tree: 1 node at <span class="m">n</span>, <span class="m">a</span> nodes at
+      <span class="mm"><span class="m">n</span>/<span class="m">b</span></span>, <span class="m">a</span>² nodes at
+      <span class="mm"><span class="m">n</span>/<span class="m">b</span>²</span>, and in general
+      <span class="mm"><span class="m">a</span><sup><span class="m">i</span></sup></span> nodes at
+      <span class="mm"><span class="m">n</span>/<span class="m">b</span><sup><span class="m">i</span></sup></span>, down to depth
+      <span class="mm"><span class="m">k</span> = log<sub><span class="m">b</span></sub> <span class="m">n</span></span>.</p>
+
+    <p>A node of size <span class="m">m</span> does <span class="mm"><span class="m">f</span>(<span class="m">m</span>)</span>
+      work itself, then hands the rest to its <span class="m">a</span> children. So level <span class="m">i</span> does
+      <span class="mm"><span class="m">a</span><sup><span class="m">i</span></sup> <span class="m">f</span>(<span class="m">n</span>/<span class="m">b</span><sup><span class="m">i</span></sup>)</span>
+      work in total, and <span class="mm"><span class="m">T</span>(<span class="m">n</span>)</span> adds up the levels:</p>
+
+    <div class="disp"><span class="m">T</span>(<span class="m">n</span>) ≈ <span class="m">f</span>(<span class="m">n</span>)
+      + <span class="m">a</span> <span class="m">f</span>(<span class="m">n</span>/<span class="m">b</span>)
+      + <span class="m">a</span>² <span class="m">f</span>(<span class="m">n</span>/<span class="m">b</span>²)
+      + ⋯ + <span class="m">a</span><sup><span class="m">k</span></sup> <span class="m">f</span>(<span class="m">n</span>/<span class="m">b</span><sup><span class="m">k</span></sup>)</div>
+
+    <p>Going down one level, two things happen at once: the number of nodes multiplies by <span class="m">a</span>, and
+      each node’s problem shrinks by a factor of <span class="m">b</span>. <strong>Which effect wins decides the
+      case.</strong></p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick a recurrence. See which level of the tree does the work.</h4>
+      <div class="chips" id="tpre" aria-label="Recurrences"></div>
+      <div class="out" id="trec"></div>
+      <div class="levels" id="tlev"></div>
+      <div class="verdictline" id="tverd"></div>
+      <div class="expl" id="texpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>Three shapes, three cases.</strong> Bars growing toward the bottom: the leaves win, and that’s
+      <span class="cchip c1">case 1</span>. Bars all equal: you pay one level’s work once per level, which is where the
+      extra log <span class="m">n</span> comes from — <span class="cchip c2">case 2</span>. Bars shrinking: the root
+      wins — <span class="cchip c3">case 3</span>.
+    </div>
+
+    <h3>Where <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span> comes from</h3>
+    <p>It’s the bottom row. The tree has depth <span class="mm"><span class="m">k</span> = log<sub><span class="m">b</span></sub> <span class="m">n</span></span>,
+      so the bottom row has <span class="mm"><span class="m">a</span><sup><span class="m">k</span></sup> =
+      <span class="m">a</span><sup>log<sub><span class="m">b</span></sub> <span class="m">n</span></sup> =
+      <span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span> nodes, each
+      doing a constant amount of work. So <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span>
+      is what the leaves cost, and <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> is what the root
+      costs. <strong>Every case compares the root’s work to the leaves’ work.</strong></p>
+
+    <details class="more"><summary>Why <span class="mm"><span class="m">a</span><sup>log<sub><span class="m">b</span></sub> <span class="m">n</span></sup> = <span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span></summary><div class="body">
+      Write <span class="mm"><span class="m">a</span> = <span class="m">b</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span>
+      and <span class="mm"><span class="m">n</span> = <span class="m">b</span><sup>log<sub><span class="m">b</span></sub> <span class="m">n</span></sup></span>.
+      Then both sides equal <span class="mm"><span class="m">b</span><sup>(log<sub><span class="m">b</span></sub> <span class="m">a</span>)(log<sub><span class="m">b</span></sub> <span class="m">n</span>)</sup></span>.
+      For <span class="mm">4<span class="m">T</span>(⌊<span class="m">n</span>/2⌋) + <span class="m">n</span></span>,
+      <span class="mm">4<sup>log<sub>2</sub> <span class="m">n</span></sup> = <span class="m">n</span><sup>log<sub>2</sub> 4</sup> = <span class="m">n</span>²</span>.
+    </div></details>
+
+    <details class="more"><summary>Why growing / flat / shrinking lines up with the theorem’s comparison</summary><div class="body">
+      <p>Take <span class="mm"><span class="m">f</span>(<span class="m">n</span>) = <span class="m">n</span><sup><span class="m">d</span></sup></span>.
+        Level <span class="m">i</span> does
+        <span class="mm"><span class="m">a</span><sup><span class="m">i</span></sup> (<span class="m">n</span>/<span class="m">b</span><sup><span class="m">i</span></sup>)<sup><span class="m">d</span></sup>
+        = <span class="m">n</span><sup><span class="m">d</span></sup> · (<span class="m">a</span>/<span class="m">b</span><sup><span class="m">d</span></sup>)<sup><span class="m">i</span></sup></span>
+        — a geometric sum with ratio <span class="mm"><span class="m">a</span>/<span class="m">b</span><sup><span class="m">d</span></sup></span>,
+        straight out of Lec 05. Ratio above 1: the last term dominates. Below 1: the first term dominates. Exactly 1:
+        all <span class="mm"><span class="m">k</span> + 1</span> terms are equal.</p>
+      <p>And <span class="mm"><span class="m">a</span>/<span class="m">b</span><sup><span class="m">d</span></sup> &gt; 1</span>
+        exactly when <span class="mm"><span class="m">d</span> &lt; log<sub><span class="m">b</span></sub> <span class="m">a</span></span>,
+        i.e. when <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> is polynomially smaller than
+        <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span>.
+        The theorem’s comparison and the ratio are the same test, asked two ways.</p>
+    </div></details>
+
+    <div class="note okb">
+      <strong>You’ve already done the flat case by hand.</strong> Plug and Chug on Mergesort produced
+      <span class="mm">(<span class="m">n</span> − 1) + (<span class="m">n</span> − 2) + (<span class="m">n</span> − 4) + ⋯</span>:
+      one term per level, each just under <span class="m">n</span>, for log₂ <span class="m">n</span> levels. Total:
+      <span class="mm"><span class="m">n</span> log₂ <span class="m">n</span> − <span class="m">n</span> + 1</span>.
+    </div>
+
+    <div class="card">
+      <span class="tag">Check</span>
+      <div class="qtext">In <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = 4<span class="m">T</span>(⌊<span class="m">n</span>/2⌋) + <span class="m">n</span></span>, which level of the tree does the most work?</div>
+      <div class="opts" id="q1">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>The root: it does <span class="m">n</span> work, more than any single node below it.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>The bottom row: four children per halving means each level does twice the work of the one above.</span></button>
+        <button class="opt" data-c="2"><span class="mk">C</span><span>Every level ties, because <span class="mm"><span class="m">f</span>(<span class="m">n</span>) = <span class="m">n</span></span> is linear, like Mergesort.</span></button>
+      </div>
+      <div class="fb" id="q1fb"></div>
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>Then it’s one comparison: <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> against <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span></h2></div>
+
+    <p>The theorem turns the picture into a checklist. Here it is as Lecture 07 states it.</p>
+
+    <div class="thm">
+      <div class="th">Theorem 1 (Master Theorem) · Lec 07</div>
+      <p>Let <span class="mm"><span class="m">a</span> ≥ 1</span> and <span class="mm"><span class="m">b</span> &gt; 1</span>
+        be constants, let <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> be a function, and let
+        <span class="mm"><span class="m">T</span>(<span class="m">n</span>)</span> be defined on the nonnegative integers by
+        the recurrence</p>
+      <div class="disp"><span class="m">T</span>(<span class="m">n</span>) = <span class="m">a</span> ·
+        <span class="m">T</span>(⌊<span class="m">n</span>/<span class="m">b</span>⌋) + <span class="m">f</span>(<span class="m">n</span>).</div>
+      <p>Then <span class="mm"><span class="m">T</span>(<span class="m">n</span>)</span> has the following asymptotic bounds:</p>
+      <ol class="cases">
+        <li><span class="cn">1.</span><div>If <span class="mm"><span class="m">f</span>(<span class="m">n</span>) ∈ O(<span class="m">n</span><sup>(log<sub><span class="m">b</span></sub> <span class="m">a</span>)−ϵ</sup>)</span>
+          for some constant <span class="mm">ϵ &gt; 0</span>, then
+          <span class="mm"><span class="m">T</span>(<span class="m">n</span>) ∈ Θ(<span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup>)</span>.</div>
+          <span class="cchip c1">leaves win</span></li>
+        <li><span class="cn">2.</span><div>If <span class="mm"><span class="m">f</span>(<span class="m">n</span>) ∈ Θ(<span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup>)</span>,
+          then <span class="mm"><span class="m">T</span>(<span class="m">n</span>) ∈ Θ(<span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup> log <span class="m">n</span>)</span>.</div>
+          <span class="cchip c2">every level ties</span></li>
+        <li><span class="cn">3.</span><div>If <span class="mm"><span class="m">f</span>(<span class="m">n</span>) ∈ Ω(<span class="m">n</span><sup>(log<sub><span class="m">b</span></sub> <span class="m">a</span>)+ϵ</sup>)</span>
+          for some constant <span class="mm">ϵ &gt; 0</span>, and if
+          <span class="mm nw"><span class="m">a</span> <span class="m">f</span>(⌊<span class="m">n</span>/<span class="m">b</span>⌋) ≤ <span class="m">c</span> <span class="m">f</span>(<span class="m">n</span>)</span>
+          for some constant <span class="mm"><span class="m">c</span> &lt; 1</span> and all sufficiently large
+          <span class="m">n</span>, then <span class="mm"><span class="m">T</span>(<span class="m">n</span>) ∈ Θ(<span class="m">f</span>(<span class="m">n</span>))</span>.</div>
+          <span class="cchip c3">root wins</span></li>
+      </ol>
+      <p class="thfoot">This theorem is also true if we replace ⌊<span class="m">n</span>/<span class="m">b</span>⌋ with
+        ⌈<span class="m">n</span>/<span class="m">b</span>⌉ everywhere.</p>
+    </div>
+
+    <details class="more"><summary>Your notes write <span class="mm"><span class="m">f</span>(<span class="m">n</span>) = O(…)</span>. Why ∈ here?</summary><div class="body">
+      Lecture 07 prints the theorem with <span class="mm">=</span>. Lecture 06 reads that <span class="mm">=</span> as
+      set membership — it calls the <span class="mm">=</span> form “ew, but most common” and prefers ∈ — and Lecture 07’s
+      own worked examples switch to ∈. Same theorem, same meaning.
+    </div></details>
+
+    <h3>The recipe</h3>
+    <ol class="recipe">
+      <li><strong>Match the form.</strong> Read off <span class="m">a</span>, <span class="m">b</span> and
+        <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span>. Check
+        <span class="mm"><span class="m">a</span> ≥ 1</span>, <span class="mm"><span class="m">b</span> &gt; 1</span>, and that
+        the recursive call is on ⌊<span class="m">n</span>/<span class="m">b</span>⌋ or ⌈<span class="m">n</span>/<span class="m">b</span>⌉.</li>
+      <li><strong>Compute <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span></strong>,
+        the cost of the bottom row.</li>
+      <li><strong>Compare <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> with it.</strong>
+        Smaller by a factor of <span class="m">n</span><sup>ϵ</sup>: <span class="cchip c1">case 1</span>. Same Θ:
+        <span class="cchip c2">case 2</span>. Bigger by a factor of <span class="m">n</span><sup>ϵ</sup>:
+        <span class="cchip c3">case 3</span>, once you’ve checked its second condition.</li>
+      <li><strong>Read off the Θ.</strong> If none of the three fits, the theorem says nothing at all.</li>
+    </ol>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Run the recipe yourself. Each right answer loads the scale.</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="rmode">
+          <button type="button" data-k="quiz" aria-pressed="true">Quiz me</button>
+          <button type="button" data-k="show" aria-pressed="false">Show me</button>
+        </div>
+      </div>
+      <div class="chips" id="rpick" style="margin-top:10px" aria-label="Recurrences"></div>
+      <div class="out" id="rrec"></div>
+      <div class="scale" id="rscale" aria-hidden="true">
+        <div class="fulcrum"></div>
+        <div class="beam">
+          <div class="pan l"><span class="str"></span><div class="dish"><div class="pl">root: <i>f</i>(<i>n</i>)</div><div class="pv" id="rpl">?</div></div></div>
+          <div class="pan r"><span class="str"></span><div class="dish"><div class="pl">leaves: <i>n</i><sup>log<sub><i>b</i></sub> <i>a</i></sup></div><div class="pv" id="rpr">?</div></div></div>
+        </div>
+      </div>
+      <div class="scap" id="rcap" aria-live="polite"></div>
+      <div class="rsteps" id="rsteps"></div>
+      <div class="rend" id="rend"></div>
+    </div>
+
+    <div class="note">
+      <strong>Keep the three <span class="mm">4<span class="m">T</span>(⌊<span class="m">n</span>/2⌋)</span> examples together.</strong>
+      Same tree, same <span class="m">n</span>² leaves. Changing only <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span>
+      from <span class="m">n</span> to <span class="m">n</span>² to <span class="m">n</span>³ walks you through
+      <span class="cchip c1">case 1</span> <span class="cchip c2">case 2</span> <span class="cchip c3">case 3</span> in turn.
+    </div>
+
+    <h3>Your turn</h3>
+    <p>Sort each one before you look. Every answer comes with its reasoning.</p>
+    <div class="card">
+      <div id="tri"></div>
+      <div class="expl" id="trisum"></div>
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>The theorem has gaps, and you should know where they are</h2></div>
+
+    <p>Lecture is upfront about it: the Master Theorem doesn’t cover every recurrence. There are two ways to fall out.</p>
+
+    <h3>“Bigger” has to mean bigger by <span class="m">n</span><sup>ϵ</sup></h3>
+    <p>Lecture’s example is <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = 2<span class="m">T</span>(<span class="m">n</span>/2) + <span class="m">n</span> log <span class="m">n</span></span>.
+      Here <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup> = <span class="m">n</span></span>,
+      and <span class="mm"><span class="m">n</span> log <span class="m">n</span></span> is bigger than <span class="m">n</span>.
+      Case 3, then? Case 3 asks for
+      <span class="mm"><span class="m">f</span>(<span class="m">n</span>) ∈ Ω(<span class="m">n</span><sup>1+ϵ</sup>)</span> for some
+      constant <span class="mm">ϵ &gt; 0</span>: bigger by a <em>polynomial</em> factor. Divide through by
+      <span class="m">n</span> and that’s <span class="mm">log <span class="m">n</span> ∈ Ω(<span class="m">n</span><sup>ϵ</sup>)</span>.
+      Try to find an ϵ that works.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Shrink ϵ. Find where <span class="m">n</span><sup>ϵ</sup> overtakes log₂ <span class="m">n</span>.</h4>
+      <div class="epsrow">
+        <span class="epsv" id="epsv"></span>
+        <input type="range" id="eps" min="0" max="6" step="1" value="3" aria-label="epsilon">
+      </div>
+      <div class="legend"><span class="lg1">log₂ <i>n</i></span><span class="lg2"><i>n</i><sup>ϵ</sup></span><span class="lg3">log₂ <i>n</i> ahead</span></div>
+      <div class="chart" id="ech"></div>
+      <div class="expl" id="eexpl"></div>
+    </div>
+
+    <div class="note warnb">
+      <strong>No ϵ works.</strong> Every <span class="m">n</span><sup>ϵ</sup> overtakes log <span class="m">n</span>
+      eventually, so <span class="mm">log <span class="m">n</span> ∉ Ω(<span class="m">n</span><sup>ϵ</sup>)</span> and case 3 is
+      out. Case 2 is out too: <span class="mm"><span class="m">n</span> log <span class="m">n</span> ∉ Θ(<span class="m">n</span>)</span>,
+      since the ratio log <span class="m">n</span> is unbounded. The theorem is silent. Lecture’s advice: a more careful
+      recursion-tree analysis, or induction.
+    </div>
+
+    <details class="more"><summary>Where the careful analysis starts</summary><div class="body">
+      Use the tree from §1. Level <span class="m">i</span> has 2<sup><span class="m">i</span></sup> nodes of size
+      <span class="mm"><span class="m">n</span>/2<sup><span class="m">i</span></sup></span>, each doing
+      <span class="mm">(<span class="m">n</span>/2<sup><span class="m">i</span></sup>) log₂(<span class="m">n</span>/2<sup><span class="m">i</span></sup>)</span>,
+      so the whole level does <span class="mm"><span class="m">n</span>(log₂ <span class="m">n</span> − <span class="m">i</span>)</span>.
+      The levels do shrink, but by subtracting <span class="m">n</span> each time instead of by a constant factor, so this
+      is not a geometric sum. Adding it up is a Lec 05 exercise.
+    </div></details>
+    <details class="more"><summary>The same gap, from below</summary><div class="body">
+      <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = 2<span class="m">T</span>(⌊<span class="m">n</span>/2⌋) + <span class="m">n</span> / log <span class="m">n</span></span>.
+      Now <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> is smaller than <span class="m">n</span>, but
+      again only by a log factor. Case 2 needs <span class="mm">Θ(<span class="m">n</span>)</span>; case 1 needs
+      <span class="mm">O(<span class="m">n</span><sup>1−ϵ</sup>)</span>. Neither holds.
+    </div></details>
+
+    <h3>The recurrence has to divide</h3>
+    <p>Towers of Hanoi: <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = 2<span class="m">T</span>(<span class="m">n</span> − 1) + 1</span>.
+      Two recursive calls plus constant work looks like the right shape, but <span class="mm"><span class="m">n</span> − 1</span>
+      isn’t ⌊<span class="m">n</span>/<span class="m">b</span>⌋ for any <span class="mm"><span class="m">b</span> &gt; 1</span>.
+      Compare the trees at the legend’s 64 discs:</p>
+
+    <div class="pair">
+      <div class="vcard yes">
+        <div class="vt">✓ Divide · Mergesort</div>
+        <div class="vr"><span class="m">T</span>(<span class="m">n</span>) = 2<span class="m">T</span>(⌈<span class="m">n</span>/2⌉) + <span class="m">n</span> − 1</div>
+        <div class="vw">At <span class="mm"><span class="m">n</span> = 64</span> the size halves each level: depth
+          log₂ 64 = 6, and the bottom row has 2⁶ = 64 leaves. Log depth, polynomially many nodes.</div>
+      </div>
+      <div class="vcard no">
+        <div class="vt">✗ Subtract · Hanoi</div>
+        <div class="vr"><span class="m">T</span>(<span class="m">n</span>) = 2<span class="m">T</span>(<span class="m">n</span> − 1) + 1</div>
+        <div class="vw">At <span class="mm"><span class="m">n</span> = 64</span> the size drops by 1 each level: depth 63,
+          and the bottom row has 2⁶³ nodes. <span class="mm"><span class="m">T</span>(64) = 2⁶⁴ − 1</span> moves, about half a
+          trillion years at one per second.</div>
+      </div>
+    </div>
+
+    <div class="note">
+      Linear depth means exponentially many nodes, which is why Hanoi’s answer is exponential. Lecture solves it with
+      Guess and Check: <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = 2<sup><span class="m">n</span></sup> − 1</span>.
+      Selection Sort’s <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = <span class="m">n</span> − 1 + <span class="m">T</span>(<span class="m">n</span> − 1)</span>
+      falls out the same way; summing directly gives <span class="mm">(<span class="m">n</span> − 1)<span class="m">n</span>/2</span>.
+    </div>
+
+    <details class="more"><summary>And case 3’s second condition?</summary><div class="body">
+      <p><span class="mm"><span class="m">a</span> <span class="m">f</span>(⌊<span class="m">n</span>/<span class="m">b</span>⌋) ≤ <span class="m">c</span> <span class="m">f</span>(<span class="m">n</span>)</span>
+        with <span class="mm"><span class="m">c</span> &lt; 1</span> says the level below the root does at most a
+        <span class="m">c</span> fraction of the root’s work — the shrinking-bars shape from §1, demanded outright.</p>
+      <p>For <span class="mm"><span class="m">f</span>(<span class="m">n</span>) = <span class="m">n</span><sup><span class="m">d</span></sup></span> it
+        holds automatically: <span class="mm"><span class="m">a</span>⌊<span class="m">n</span>/<span class="m">b</span>⌋<sup><span class="m">d</span></sup>
+        ≤ (<span class="m">a</span>/<span class="m">b</span><sup><span class="m">d</span></sup>) <span class="m">n</span><sup><span class="m">d</span></sup></span>,
+        and <span class="mm"><span class="m">a</span>/<span class="m">b</span><sup><span class="m">d</span></sup> &lt; 1</span> is exactly
+        what case 3’s first condition gives you. It is still part of the check, so write it down.</p>
+    </div></details>
+
+    <div class="card">
+      <span class="tag">Check</span>
+      <div class="qtext">Lecture’s <span class="mm"><span class="m">T</span>(<span class="m">n</span>) = 2<span class="m">T</span>(<span class="m">n</span>/2) + <span class="m">n</span> log <span class="m">n</span></span> falls under which case?</div>
+      <div class="opts" id="q2">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Case 2: log <span class="m">n</span> grows so slowly that <span class="mm"><span class="m">n</span> log <span class="m">n</span></span> is basically <span class="m">n</span>.</span></button>
+        <button class="opt" data-c="2"><span class="mk">B</span><span>Case 3: <span class="mm"><span class="m">n</span> log <span class="m">n</span> ∈ Ω(<span class="m">n</span>)</span>, and the second condition holds with <span class="mm"><span class="m">c</span> = 1</span>.</span></button>
+        <button class="opt" data-c="1"><span class="mk">C</span><span>None: <span class="mm"><span class="m">n</span> log <span class="m">n</span></span> beats <span class="m">n</span> only by a log factor, and case 3 needs a factor of <span class="m">n</span><sup>ϵ</sup>.</span></button>
+      </div>
+      <div class="fb" id="q2fb"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="take">
+      <h3 style="font-size:19px">The short version</h3>
+      <ol>
+        <li><strong>Draw the tree before you pick a case.</strong> Level <span class="m">i</span> does
+          <span class="mm"><span class="m">a</span><sup><span class="m">i</span></sup> <span class="m">f</span>(<span class="m">n</span>/<span class="m">b</span><sup><span class="m">i</span></sup>)</span>
+          work, and the case is just which end of the tree is heavier.</li>
+        <li><strong>Compare <span class="mm"><span class="m">f</span>(<span class="m">n</span>)</span> with
+          <span class="mm"><span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup></span>.</strong>
+          That’s root against leaves. Leaves heavier: <span class="mm">Θ(<span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup>)</span>.
+          A tie: <span class="mm">Θ(<span class="m">n</span><sup>log<sub><span class="m">b</span></sub> <span class="m">a</span></sup> log <span class="m">n</span>)</span>,
+          one log for the number of levels. Root heavier: <span class="mm">Θ(<span class="m">f</span>(<span class="m">n</span>))</span>.</li>
+        <li><strong>Heavier means heavier by a factor of <span class="m">n</span><sup>ϵ</sup>.</strong> A log factor isn’t
+          enough, which is why <span class="mm">2<span class="m">T</span>(<span class="m">n</span>/2) + <span class="m">n</span> log <span class="m">n</span></span>
+          fits no case.</li>
+        <li><strong>In case 3, check the second condition.</strong>
+          <span class="mm"><span class="m">a</span> <span class="m">f</span>(⌊<span class="m">n</span>/<span class="m">b</span>⌋) ≤ <span class="m">c</span> <span class="m">f</span>(<span class="m">n</span>)</span>
+          for some <span class="mm"><span class="m">c</span> &lt; 1</span>. It’s automatic for powers of <span class="m">n</span>, but say so.</li>
+        <li><strong>Check the form first.</strong> <span class="mm"><span class="m">T</span>(<span class="m">n</span> − 1)</span> isn’t
+          <span class="mm"><span class="m">T</span>(⌊<span class="m">n</span>/<span class="m">b</span>⌋)</span>. Hanoi and Selection Sort need
+          other tools.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Recitation 07, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- shared helpers ---------- */
+function group(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+function supNum(e){ return '<sup>'+e+'</sup>'; }
+function fmt(x){
+  if(x===0) return '0';
+  var r=Math.round(x);
+  if(x<1e6 && Math.abs(x-r)<1e-9) return group(r);
+  if(x<1e6) return String(+x.toPrecision(3));
+  var e=Math.floor(Math.log(x)/Math.LN10), m=x/Math.pow(10,e);
+  if(m>=9.95){ m/=10; e+=1; }
+  return m.toFixed(1)+'×10'+supNum(e);
+}
+function trim(x,p){ return String(+x.toFixed(p)); }
+function label(nm){                    /* "4T(⌊n/2⌋) + n²" → math-styled HTML */
+  return nm.replace(/(\d?)T\(/g,'$1<i>T</i>(').replace(/\bn\b/g,'<i>n</i>');
+}
+var CASECHIP={1:'<span class="cchip c1">case 1 · leaves win</span>',
+              2:'<span class="cchip c2">case 2 · every level ties</span>',
+              3:'<span class="cchip c3">case 3 · root wins</span>',
+              0:'<span class="cchip c0">no case applies</span>'};
+function pressOnly(host,btn){
+  host.querySelectorAll('[aria-pressed]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+  btn.setAttribute('aria-pressed','true');
+}
+
+/* ---------- §1 recursion-tree explorer ---------- */
+(function(){
+  var pre=document.getElementById('tpre'), lev=document.getElementById('tlev');
+  if(!pre||!lev) return;
+  var rec=document.getElementById('trec'), verd=document.getElementById('tverd'), expl=document.getElementById('texpl');
+  var K=6;                               /* every example halves, so draw them all at n = 2⁶ = 64 */
+  var PRE=[
+    {nm:'Mergesort', a:2, d:1, f:'<i>n</i>', bot:'<i>n</i>', note:'Lecture’s Mergesort is 2<i>T</i>(⌈<i>n</i>/2⌉) + <i>n</i> − 1; with <i>f</i>(<i>n</i>) = <i>n</i> the tree is the same up to Θ.'},
+    {nm:'Binary Search', a:1, d:0, f:'1', bot:'1', note:'One call per level: a chain, not a bush.'},
+    {nm:'4T(⌊n/2⌋) + n', a:4, d:1, f:'<i>n</i>', bot:'<i>n</i>²', note:''},
+    {nm:'4T(⌊n/2⌋) + n²', a:4, d:2, f:'<i>n</i>²', bot:'<i>n</i>²', note:''},
+    {nm:'4T(⌊n/2⌋) + n³', a:4, d:3, f:'<i>n</i>³', bot:'<i>n</i>²', note:''},
+    {nm:'T(⌊n/2⌋) + n', a:1, d:1, f:'<i>n</i>', bot:'1', note:'A single chain of calls, each half the size of the last.'}
+  ];
+  function times(r){ return r===2?'twice':r===.5?'half':trim(r,3)+'×'; }
+  function draw(p){
+    var a=p.a, d=p.d, r=a/Math.pow(2,d), cs=r===1?2:(r>1?1:3);
+    rec.innerHTML='<i>T</i>(<i>n</i>) = '+(a===1?'':a)+'<i>T</i>(⌊<i>n</i>/2⌋) + '+p.f+
+      '<span class="expl" style="display:block;margin-top:2px">drawn at <i>n</i> = 2⁶ = 64, so levels <i>i</i> = 0 to log₂ <i>n</i> = 6</span>';
+    var W=[],mx=0,i;
+    for(i=0;i<=K;i++){ var w=Math.pow(a,i)*Math.pow(Math.pow(2,K-i),d); W.push(w); if(w>mx) mx=w; }
+    var html='';
+    for(i=0;i<=K;i++){
+      var nodes=Math.pow(a,i), sz=Math.pow(2,K-i), hot=W[i]>=mx*(1-1e-9);
+      html+='<div class="lv'+(hot?' hot':'')+'"><span class="li">i = '+i+(i===0?'<em>root</em>':i===K?'<em>leaves</em>':'')+'</span>'+
+        '<div class="lt"><span>'+fmt(nodes)+' node'+(nodes===1?'':'s')+' × <i>f</i>('+sz+')</span><b>'+fmt(W[i])+'</b></div>'+
+        '<div class="lbar"><span style="width:'+(100*W[i]/mx).toFixed(2)+'%"></span></div></div>';
+    }
+    lev.className='levels k'+cs; lev.innerHTML=html;
+    var th = cs===1 ? 'Θ('+p.bot+')' : cs===2 ? (p.bot==='1' ? 'Θ(log <i>n</i>)' : 'Θ('+p.bot+' log <i>n</i>)') : 'Θ('+p.f+')';
+    verd.innerHTML=CASECHIP[cs]+'<span class="vt"><i>T</i>(<i>n</i>) ∈ '+th+'</span>';
+    var why = cs===1 ? 'Each level down does '+times(r)+' the work of the one above, so the bottom row of '+
+                       '<i>n</i><sup>log<sub>2</sub> '+a+'</sup> = '+p.bot+' leaves carries the sum.'
+            : cs===2 ? 'Every level does the same work, so you pay it once per level: log₂ <i>n</i> + 1 times.'
+            : 'Each level down does '+times(r)+' the work of the one above, so the root’s <i>f</i>(<i>n</i>) = '+p.f+' carries the sum.';
+    expl.innerHTML=why+(p.note?' <span style="color:var(--ink-3)">'+p.note+'</span>':'');
+  }
+  PRE.forEach(function(p,i){
+    var btn=document.createElement('button'); btn.type='button'; btn.className='chipb';
+    btn.innerHTML=/T\(/.test(p.nm)?label(p.nm):p.nm;
+    btn.setAttribute('aria-pressed', i===2?'true':'false');
+    btn.addEventListener('click',function(){ pressOnly(pre,btn); draw(p); });
+    pre.appendChild(btn);
+  });
+  draw(PRE[2]);
+})();
+
+/* ---------- §2 recipe runner ---------- */
+function AB(a,b,f){ return '<i>a</i> = '+a+', &nbsp;<i>b</i> = '+b+', &nbsp;<i>f</i>(<i>n</i>) = '+f; }
+function LG(b,a){ return '<i>n</i><sup>log<sub>'+b+'</sub> '+a+'</sup>'; }
+var NLOG=LG('<i>b</i>','<i>a</i>');
+var SWAP='Swapped. <i>a</i> counts the recursive calls (the number in front of <i>T</i>); <i>b</i> is what <i>n</i> is divided by.';
+var INFORM='It is of the form: ';
+var FLOG='<i>f</i>(<i>n</i>) is everything outside the recursive calls, log included.';
+/* each option: [html, correct?, feedback-if-picked-wrongly] */
+var RUN=[
+ {nm:'Mergesort', src:'Lec 07', rec:'<i>T</i>(<i>n</i>) = 2<i>T</i>(⌈<i>n</i>/2⌉) + <i>n</i> − 1',
+  f:'<i>n</i> − 1', fT:'<i>n</i>', bot:'<i>n</i>', cs:2, cmp:'e',
+  s1:[[AB(2,2,'<i>n</i> − 1'),1],
+      ['Not of the form: the call is on ⌈<i>n</i>/2⌉, not ⌊<i>n</i>/2⌋',0,'Ceilings are fine. Lecture: the theorem is also true if we replace ⌊<i>n</i>/<i>b</i>⌋ with ⌈<i>n</i>/<i>b</i>⌉ everywhere.'],
+      [AB(1,2,'<i>n</i> − 1'),0,'<i>a</i> counts the recursive calls, and 2<i>T</i>(…) is two of them.']],
+  s1why:'Two calls, each on half the list, plus <i>n</i> − 1 comparisons to merge. The ceiling is fine.',
+  s2:[[LG(2,2)+' = <i>n</i>²',0,'log₂ 2 = 1, not 2, since 2¹ = 2.'],
+      [LG(2,2)+' = <i>n</i>',1],
+      [LG(2,2)+' = <i>n</i><sup>0</sup> = 1',0,'That’s what one call per level (<i>a</i> = 1) would give. Here log₂ 2 = 1.']],
+  s2why:'About <i>n</i> leaves, one per list element.',
+  cmpWhy:'<i>n</i> − 1 ∈ Θ(<i>n</i>): the −1 is a lower-order term.',
+  ansWhy:'Every level does about <i>n</i> work, for log₂ <i>n</i> levels. Plug and Chug gave exactly <i>n</i> log₂ <i>n</i> − <i>n</i> + 1 for powers of 2.'},
+
+ {nm:'Binary Search', src:'Lec 07', rec:'<i>T</i>(<i>n</i>) = <i>T</i>(⌈<i>n</i>/2⌉) + 1',
+  f:'1', bot:'1', cs:2, cmp:'e',
+  s1:[['Not of the form: the theorem needs <i>a</i> ≥ 2',0,'It needs <i>a</i> ≥ 1. One recursive call is fine.'],
+      [AB(1,2,'1'),1],
+      [AB(2,1,'1'),0,'<i>b</i> is what <i>n</i> is divided by, here 2. And <i>b</i> = 1 is never allowed: the theorem needs <i>b</i> &gt; 1.']],
+  s1why:'One call on half the range, plus one comparison.',
+  s2:[[LG(2,1)+' = <i>n</i>',0,'log₂ 1 = 0, since 2⁰ = 1.'],
+      [LG(2,1)+' = <i>n</i><sup>1/2</sup>',0,'That’s <i>a</i>/<i>b</i> = ½ used as the exponent. The exponent is log<sub><i>b</i></sub> <i>a</i> = log₂ 1 = 0.'],
+      [LG(2,1)+' = <i>n</i><sup>0</sup> = 1',1]],
+  s2why:'One call per level means the bottom row is a single node.',
+  cmpWhy:'<i>f</i>(<i>n</i>) = 1 ∈ Θ(1) = Θ(<i>n</i><sup>0</sup>).',
+  ansWhy:'Each of the log₂ <i>n</i> levels does one unit of work. Case 2 is where the log comes from, even when the bottom row is a single node.'},
+
+ {nm:'4T(⌊n/2⌋) + n', rec:'<i>T</i>(<i>n</i>) = 4<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>',
+  f:'<i>n</i>', bot:'<i>n</i>²', cs:1, cmp:'s',
+  s1:[[AB(2,4,'<i>n</i>'),0,SWAP],
+      [AB(4,2,'<i>n</i>'),1],
+      ['Not of the form',0,INFORM+'four calls, each on ⌊<i>n</i>/2⌋, plus <i>f</i>(<i>n</i>) = <i>n</i>.']],
+  s1why:'Four calls, each on half the input.',
+  s2:[[LG(2,4)+' = <i>n</i>²',1],
+      [LG(4,2)+' = √<i>n</i>',0,'That’s log<sub><i>a</i></sub> <i>b</i>, the logarithm upside down. The base is <i>b</i> = 2 and the argument is <i>a</i> = 4.'],
+      [LG(2,4)+' = <i>n</i>',0,'That’s Mergesort’s tree. With 4 calls instead of 2, log₂ 4 = 2.']],
+  s2why:'4 = 2², so the bottom row has <i>n</i>² leaves.',
+  cmpWhy:'<i>n</i> ∈ O(<i>n</i><sup>2−ϵ</sup>) with ϵ = 1: smaller by a whole factor of <i>n</i>.',
+  ansWhy:'Level <i>i</i> does 4<sup><i>i</i></sup> · <i>n</i>/2<sup><i>i</i></sup> = 2<sup><i>i</i></sup><i>n</i>: doubling every level down, so the leaves carry the sum.'},
+
+ {nm:'4T(⌊n/2⌋) + n²', rec:'<i>T</i>(<i>n</i>) = 4<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>²',
+  f:'<i>n</i>²', bot:'<i>n</i>²', cs:2, cmp:'e',
+  s1:[[AB(4,2,'<i>n</i>²'),1],
+      ['Not of the form',0,INFORM+'four calls, each on ⌊<i>n</i>/2⌋, plus <i>f</i>(<i>n</i>) = <i>n</i>².'],
+      [AB(2,4,'<i>n</i>²'),0,SWAP]],
+  s1why:'Same tree as 4<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>. Only <i>f</i> changed.',
+  s2:[[LG(4,2)+' = √<i>n</i>',0,'That’s log<sub><i>a</i></sub> <i>b</i>, the logarithm upside down. The base is <i>b</i> = 2.'],
+      [LG(2,4)+' = <i>n</i>²',1],
+      [LG(2,4)+' = <i>n</i>⁴',0,'log₂ 4 = 2, since 2² = 4.']],
+  s2why:'<i>n</i>² leaves, as before.',
+  cmpWhy:'<i>n</i>² ∈ Θ(<i>n</i>²): an exact tie.',
+  ansWhy:'Level <i>i</i> does 4<sup><i>i</i></sup>(<i>n</i>/2<sup><i>i</i></sup>)² = <i>n</i>², the same at every level, for log₂ <i>n</i> + 1 levels.'},
+
+ {nm:'4T(⌊n/2⌋) + n³', rec:'<i>T</i>(<i>n</i>) = 4<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>³',
+  f:'<i>n</i>³', bot:'<i>n</i>²', cs:3, cmp:'b',
+  s1:[['Not of the form',0,INFORM+'four calls, each on ⌊<i>n</i>/2⌋, plus <i>f</i>(<i>n</i>) = <i>n</i>³.'],
+      [AB(2,4,'<i>n</i>³'),0,SWAP],
+      [AB(4,2,'<i>n</i>³'),1]],
+  s1why:'Same tree again. Only <i>f</i> changed.',
+  s2:[[LG(2,4)+' = <i>n</i>²',1],
+      [LG(2,4)+' = <i>n</i>³',0,'That’s <i>f</i>(<i>n</i>). The bottom row depends only on <i>a</i> and <i>b</i>: log₂ 4 = 2.'],
+      [LG(4,2)+' = √<i>n</i>',0,'That’s log<sub><i>a</i></sub> <i>b</i>, the logarithm upside down. The base is <i>b</i> = 2.']],
+  s2why:'<i>n</i>² leaves, as before.',
+  cmpWhy:'<i>n</i>³ ∈ Ω(<i>n</i><sup>2+ϵ</sup>) with ϵ = 1: bigger by a whole factor of <i>n</i>.',
+  s4:[['<i>c</i> = 4, one for each call',0,'Each of the 4 calls costs only (<i>n</i>/2)³ = <i>n</i>³/8 at the top. Together: 4 · <i>n</i>³/8 = ½ <i>n</i>³.'],
+      ['<i>c</i> = ½, since 4(<i>n</i>/2)³ = ½ <i>n</i>³',1],
+      ['<i>c</i> = 1, since 4(<i>n</i>/2)³ ≤ <i>n</i>³',0,'The inequality is true, but the theorem needs <i>c</i> &lt; 1. Work out 4(<i>n</i>/2)³ exactly.']],
+  s4why:'4⌊<i>n</i>/2⌋³ ≤ 4(<i>n</i>/2)³ = ½ <i>n</i>³ for every <i>n</i>: the level below the root does at most half the root’s work.',
+  ansWhy:'The root dominates: <i>n</i>³(1 + ½ + ¼ + ⋯) ≤ 2<i>n</i>³.'},
+
+ {nm:'T(⌊n/2⌋) + n', rec:'<i>T</i>(<i>n</i>) = <i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>',
+  f:'<i>n</i>', bot:'1', cs:3, cmp:'b',
+  s1:[[AB(1,2,'<i>n</i>'),1],
+      [AB(2,1,'<i>n</i>'),0,'<i>b</i> is the divisor, 2. <i>a</i> counts the calls, and <i>T</i>(…) appears once.'],
+      ['Not of the form: the theorem needs <i>a</i> ≥ 2',0,'It needs <i>a</i> ≥ 1. One call is fine.']],
+  s1why:'One call on half the input, plus <i>n</i> work.',
+  s2:[[LG(2,1)+' = <i>n</i>',0,'log₂ 1 = 0. One call per level means one leaf.'],
+      [LG(2,1)+' = <i>n</i><sup>0</sup> = 1',1],
+      [LG(2,1)+' = <i>n</i><sup>1/2</sup>',0,'<i>a</i>/<i>b</i> isn’t the exponent; log<sub><i>b</i></sub> <i>a</i> = log₂ 1 = 0 is.']],
+  s2why:'A single chain of calls ends in a single leaf.',
+  cmpWhy:'<i>n</i> ∈ Ω(<i>n</i><sup>0+ϵ</sup>) with ϵ = 1: polynomially bigger than 1.',
+  s4:[['<i>c</i> = 1, since ⌊<i>n</i>/2⌋ ≤ <i>n</i>',0,'True, but <i>c</i> must be strictly less than 1.'],
+      ['It fails, so no case applies',0,'It holds: ⌊<i>n</i>/2⌋ ≤ ½ <i>n</i> for every <i>n</i>.'],
+      ['<i>c</i> = ½, since ⌊<i>n</i>/2⌋ ≤ ½ <i>n</i>',1]],
+  s4why:'1 · <i>f</i>(⌊<i>n</i>/2⌋) = ⌊<i>n</i>/2⌋ ≤ ½ <i>n</i>.',
+  ansWhy:'<i>n</i> + <i>n</i>/2 + <i>n</i>/4 + ⋯ &lt; 2<i>n</i>, the geometric sum from Lec 05. The whole chain costs less than twice its first call.'},
+
+ {nm:'2T(⌊n/4⌋) + √n', rec:'<i>T</i>(<i>n</i>) = 2<i>T</i>(⌊<i>n</i>/4⌋) + √<i>n</i>',
+  f:'√<i>n</i>', bot:'<i>n</i><sup>1/2</sup>', botT:'√<i>n</i>', cs:2, cmp:'e',
+  s1:[[AB(4,2,'√<i>n</i>'),0,SWAP],
+      [AB(2,4,'√<i>n</i>'),1],
+      ['Not of the form',0,INFORM+'two calls, each on ⌊<i>n</i>/4⌋, plus √<i>n</i>.']],
+  s1why:'Two calls, each on a quarter of the input.',
+  s2:[[LG(4,2)+' = <i>n</i><sup>1/2</sup>',1],
+      [LG(2,4)+' = <i>n</i>²',0,'That’s log<sub><i>a</i></sub> <i>b</i>, the logarithm upside down. The base is <i>b</i> = 4 and the argument is <i>a</i> = 2.'],
+      [LG(4,2)+' = <i>n</i>',0,'4¹ = 4, not 2. Since 4<sup>1/2</sup> = 2, log₄ 2 = ½.']],
+  s2why:'4<sup>1/2</sup> = 2, so log₄ 2 = ½: about √<i>n</i> leaves.',
+  cmpWhy:'√<i>n</i> = <i>n</i><sup>1/2</sup>: an exact tie. Exponents don’t have to be whole numbers to match.',
+  ansWhy:'Every level does about √<i>n</i> work, for log₄ <i>n</i> + 1 levels. Inside Θ the base of the log doesn’t matter.'},
+
+ {nm:'3T(⌊n/4⌋) + n log n', rec:'<i>T</i>(<i>n</i>) = 3<i>T</i>(⌊<i>n</i>/4⌋) + <i>n</i> log <i>n</i>',
+  f:'<i>n</i> log <i>n</i>', bot:LG(4,3), cs:3, cmp:'b',
+  s1:[[AB(3,4,'<i>n</i>'),0,FLOG],
+      [AB(4,3,'<i>n</i> log <i>n</i>'),0,SWAP],
+      [AB(3,4,'<i>n</i> log <i>n</i>'),1]],
+  s1why:'Three calls, each on a quarter of the input, plus <i>n</i> log <i>n</i> work.',
+  s2:[[LG(3,4)+' ≈ <i>n</i><sup>1.26</sup>',0,'That’s log<sub><i>a</i></sub> <i>b</i>, the logarithm upside down. The base is <i>b</i> = 4; since 3 &lt; 4 the exponent is below 1.'],
+      [LG(4,3)+' ≈ <i>n</i><sup>0.79</sup>',1],
+      ['<i>n</i><sup>3/4</sup>',0,'<i>a</i>/<i>b</i> = ¾ isn’t the exponent. It’s close here (0.75 against 0.79), but only by coincidence.']],
+  s2why:'4<sup>0.79</sup> ≈ 3. The exponent is below 1 because there are fewer calls than the shrink factor.',
+  cmpWhy:'<i>n</i> log₂ <i>n</i> ≥ <i>n</i> ≥ <i>n</i><sup>0.99</sup> for <i>n</i> ≥ 2, so <i>f</i>(<i>n</i>) ∈ Ω(<i>n</i><sup>(log<sub>4</sub> 3)+ϵ</sup>) with ϵ = 0.2. The log doesn’t matter: <i>n</i> alone already beats <i>n</i><sup>0.79</sup> by a polynomial factor.',
+  cmpBad:{g:'The log isn’t the only difference here. Ignore it, and <i>n</i> against <i>n</i><sup>0.79</sup> is already a polynomial gap.'},
+  s4:[['<i>c</i> = ¾, since 3(<i>n</i>/4) log <i>n</i> = ¾ <i>n</i> log <i>n</i>',1],
+      ['It fails: the log ruins it',0,'Shrinking the argument only shrinks the log: log⌊<i>n</i>/4⌋ ≤ log <i>n</i>.'],
+      ['<i>c</i> = 3, one for each call',0,'Each call works on only a quarter of the input: 3 · (<i>n</i>/4) log(<i>n</i>/4) ≤ ¾ <i>n</i> log <i>n</i>.']],
+  s4why:'3⌊<i>n</i>/4⌋ log⌊<i>n</i>/4⌋ ≤ 3(<i>n</i>/4) log <i>n</i> = ¾ <i>f</i>(<i>n</i>).',
+  ansWhy:'The root’s work dominates.'},
+
+ {nm:'Hanoi', src:'Lec 07', rec:'<i>T</i>(<i>n</i>) = 2<i>T</i>(<i>n</i> − 1) + 1', cs:0,
+  s1:[[AB(2,1,'1'),0,'⌊<i>n</i>/1⌋ = <i>n</i>, not <i>n</i> − 1. And the theorem needs <i>b</i> &gt; 1 anyway.'],
+      ['Not of the form: the call is on <i>n</i> − 1',1],
+      [AB(2,2,'1'),0,'That would be 2<i>T</i>(⌊<i>n</i>/2⌋) + 1. Subtracting 1 isn’t dividing by 2.']],
+  s1why:'<i>n</i> − 1 isn’t ⌊<i>n</i>/<i>b</i>⌋ for any constant <i>b</i> &gt; 1. That isn’t a gap between the cases; the recurrence isn’t of the right form at all.',
+  after:'Stop here. Lecture solves it with Guess and Check: <i>T</i>(<i>n</i>) = 2<sup><i>n</i></sup> − 1. §3 shows why its tree is so much bigger.'},
+
+ {nm:'2T(n/2) + n log n', src:'Lec 07', rec:'<i>T</i>(<i>n</i>) = 2<i>T</i>(<i>n</i>/2) + <i>n</i> log <i>n</i>',
+  f:'<i>n</i> log <i>n</i>', bot:'<i>n</i>', cs:'g', cmp:'g',
+  s1:[[AB(2,2,'<i>n</i> log <i>n</i>'),1],
+      ['Not of the form',0,'The form is fine. The trouble comes at step 3.'],
+      [AB(2,2,'<i>n</i>'),0,FLOG]],
+  s1why:'Mergesort’s tree, with a heavier root.',
+  s2:[[LG(2,2)+' = <i>n</i> log <i>n</i>',0,'The bottom row depends only on <i>a</i> and <i>b</i>, not on <i>f</i>.'],
+      [LG(2,2)+' = 1',0,'log₂ 2 = 1, so it’s <i>n</i><sup>1</sup>.'],
+      [LG(2,2)+' = <i>n</i>',1]],
+  s2why:'Same tree as Mergesort: <i>n</i> leaves.',
+  cmpWhy:'(<i>n</i> log <i>n</i>)/<i>n</i> = log <i>n</i> is unbounded, so it’s not Θ(<i>n</i>). But log <i>n</i> ∉ Ω(<i>n</i><sup>ϵ</sup>) for any ϵ &gt; 0, so it isn’t case 3 either.',
+  ansWhy:'No case applies, so the theorem gives no answer. Lecture: fall back on a more careful recursion-tree analysis, or induction. §3 shows why no ϵ works.'}
+];
+var CMPL={s:'<i>f</i>(<i>n</i>) is smaller, by a factor of at least <i>n</i><sup>ϵ</sup>',
+          e:'Same Θ',
+          b:'<i>f</i>(<i>n</i>) is bigger, by a factor of at least <i>n</i><sup>ϵ</sup>',
+          g:'They differ, but only by a log factor'};
+var CMPS={s:'polynomially smaller → <span class="cchip c1">case 1</span>',
+          e:'same Θ → <span class="cchip c2">case 2</span>',
+          b:'polynomially bigger → <span class="cchip c3">case 3</span>',
+          g:'only a log factor apart → <span class="cchip c0">no case</span>'};
+var RATIO='<i>f</i>(<i>n</i>) / '+NLOG;
+function cmpFb(p,c){
+  if(c==='e') return p==='g' ? 'They don’t differ at all, up to Θ.'
+    : 'They grow at the same rate: '+RATIO+' stays between two positive constants, so there’s no factor of <i>n</i><sup>ϵ</sup> either way.';
+  if(c==='s') return p==='b' ? 'Other way round: <i>f</i>(<i>n</i>) is the smaller one.'
+    : p==='e' ? 'Not the same Θ: '+RATIO+' goes to 0.' : 'The gap is bigger than a log factor. It’s polynomial.';
+  if(c==='b') return p==='s' ? 'Other way round: <i>f</i>(<i>n</i>) is the bigger one.'
+    : p==='e' ? 'Not the same Θ: '+RATIO+' is unbounded.' : 'The gap is bigger than a log factor. It’s polynomial.';
+  /* c === 'g' */
+  return p==='b' ? 'Bigger, yes. But by how much? The ratio is only log <i>n</i>, and case 3 needs a factor of <i>n</i><sup>ϵ</sup>. §3 shows that no ϵ works.'
+    : p==='e' ? 'Not the same Θ: the ratio is log <i>n</i>, which is unbounded.'
+    : '<i>f</i>(<i>n</i>) is the bigger one here, though only by a log factor.';
+}
+function ansOpts(ex){
+  var bT=ex.botT||ex.bot, fT=ex.fT||ex.f, pre='<i>T</i>(<i>n</i>) ∈ ';
+  var L=[{h:pre+'Θ('+bT+')',k:'1'},
+         {h:pre+(bT==='1'?'Θ(log <i>n</i>)':'Θ('+bT+' log <i>n</i>)'),k:'2'},
+         {h:pre+'Θ('+fT+')',k:'3'},
+         {h:'The theorem gives no answer',k:'g'}];
+  for(var i=0;i<L.length;i++) for(var j=i+1;j<L.length;j++)
+    if(L[i].h===L[j].h){ L[i].k+=L[j].k; L.splice(j,1); j--; }
+  var FB={'1':'That’s case 1’s answer, right when the leaves win.',
+          '2':'That’s case 2’s answer, right when every level ties.',
+          '3':'That’s case 3’s answer, right when the root wins.',
+          '13':'That would be right if one end of the tree won outright. In a tie every level costs the same, so you pay that cost once per level.',
+          '23':'That’s what case 2 or case 3 would give, but step 3 ruled both out.',
+          'g':'Step 3 put you in a case, so the theorem does give an answer.'};
+  return L.map(function(o){
+    var ok=o.k.indexOf(String(ex.cs))>=0;
+    var fb=ex.cs==='g'&&o.k!=='g' ? (FB[o.k]&&o.k.length>1?FB[o.k]:'Step 3 ruled out all three cases, so none of their answers is licensed.') : FB[o.k];
+    return {h:o.h, ok:ok, fb:fb};
+  });
+}
+(function(){
+  var pick=document.getElementById('rpick'), stepsEl=document.getElementById('rsteps');
+  if(!pick||!stepsEl) return;
+  var recEl=document.getElementById('rrec'), scale=document.getElementById('rscale'), cap=document.getElementById('rcap'),
+      endEl=document.getElementById('rend'), modeSeg=document.getElementById('rmode'),
+      pl=document.getElementById('rpl'), pr=document.getElementById('rpr');
+  var cur=0, mode='quiz', idx=0, wrong=[], lastFb='', firstTry=0, steps=[], solved={};
+
+  function three(arr){ return arr.map(function(o){ return {h:o[0], ok:!!o[1], fb:o[2]||''}; }); }
+  function build(ex){
+    var L=[{k:'s1',n:1,t:'Match the form',q:'Read off <i>a</i>, <i>b</i> and <i>f</i>(<i>n</i>).',o:three(ex.s1),why:ex.s1why}];
+    if(ex.cs===0) return L;
+    L.push({k:'s2',n:2,t:'Compute '+NLOG,q:'What is '+NLOG+', the size of the bottom row?',o:three(ex.s2),why:ex.s2why});
+    L.push({k:'s3',n:3,t:'Compare',q:'How does <i>f</i>(<i>n</i>) = '+ex.f+' compare with '+ex.bot+'?',
+      o:['s','e','b','g'].map(function(k){
+        return {h:CMPL[k], ok:k===ex.cmp, fb:(ex.cmpBad&&ex.cmpBad[k])||cmpFb(k,ex.cmp), done:CMPS[k]}; }),
+      why:ex.cmpWhy});
+    if(ex.cs===3) L.push({k:'s3b',n:3,t:'Case 3’s second condition',
+      q:'Which <i>c</i> makes <i>a</i> <i>f</i>(⌊<i>n</i>/<i>b</i>⌋) ≤ <i>c</i> <i>f</i>(<i>n</i>) hold, with <i>c</i> &lt; 1?',o:three(ex.s4),why:ex.s4why});
+    L.push({k:'s4',n:4,t:'Read off the Θ',q:'So what does the theorem give?',o:ansOpts(ex),why:ex.ansWhy});
+    return L;
+  }
+  function correct(s){ for(var j=0;j<s.o.length;j++) if(s.o[j].ok) return s.o[j]; }
+  function has(k){ for(var i=0;i<idx&&i<steps.length;i++) if(steps[i].k===k) return true; return false; }
+
+  function load(i){
+    cur=i; steps=build(RUN[i]); idx=mode==='show'?steps.length:0;
+    wrong=[]; lastFb=''; firstTry=0; render();
+  }
+  function choose(j,kb){
+    var o=steps[idx].o[j];
+    if(o.ok){
+      if(!wrong.length) firstTry++;
+      idx++; wrong=[]; lastFb='';
+      if(idx===steps.length) solved[cur]=true;
+    } else { if(wrong.indexOf(j)<0) wrong.push(j); lastFb=o.fb; }
+    render();
+    if(!kb) return;                     /* keyboard users keep their place; mouse users get no stray focus ring */
+    var nx=stepsEl.querySelector('.rstep.current .ropt:not(:disabled)') || endEl.querySelector('button');
+    if(nx) nx.focus({preventScroll:true});
+  }
+  function drawScale(ex){
+    var t=0, c='', cls='scale';
+    pl.innerHTML=(ex.cs!==0&&has('s1'))?ex.f:'?';
+    pr.innerHTML=has('s2')?ex.bot:'?';
+    if(ex.cs===0){
+      if(has('s1')){ cls+=' off'; c='Nothing to weigh: the recurrence isn’t of the form.'; }
+      else c='The pans fill in as you answer.';
+    }
+    else if(!has('s1')) c='The pans fill in as you answer.';
+    else if(!has('s2')) c='Root loaded. Now the bottom row.';
+    else if(!has('s3')) c='Both pans loaded. Which way does it tip?';
+    else if(ex.cmp==='s'){ t=9;  cls+=' h-r'; c='<span class="cchip c1">case 1</span>Leaves heavier, by a polynomial factor.'; }
+    else if(ex.cmp==='e'){ cls+=' h-e'; c='<span class="cchip c2">case 2</span>Balanced: every level does the same work.'; }
+    else if(ex.cmp==='b'){ t=-9; cls+=' h-l'; c='<span class="cchip c3">case 3</span>Root heavier, by a polynomial factor.'; }
+    else { t=-3; cls+=' h-l wob'; c='<span class="cchip c0">no case</span>Root heavier, but only by log <i>n</i>: too much for case 2, not enough for case 3.'; }
+    scale.className=cls; scale.style.setProperty('--t',t+'deg'); cap.innerHTML=c;
+  }
+  function render(){
+    var ex=RUN[cur];
+    pick.querySelectorAll('button').forEach(function(b,i){
+      b.setAttribute('aria-pressed', i===cur?'true':'false'); b.classList.toggle('solved', !!solved[i]); });
+    recEl.innerHTML=(ex.src?'<span class="src">'+ex.src+(/T\(/.test(ex.nm)?'':' · '+ex.nm)+'</span>':'')+ex.rec;
+    var html='';
+    steps.forEach(function(s,i){
+      var st=i<idx?'done':i===idx?'current':'pending', ok=correct(s);
+      html+='<div class="rstep '+st+'"><div class="rsh"><span class="rsn">'+s.n+'</span><span class="rst">'+s.t+'</span>'+
+        (st==='done'?'<span class="rsa">'+(ok.done||ok.h)+'</span>':'')+'</div>';
+      if(st==='current'){
+        html+='<div class="rsq">'+s.q+'</div><div class="rsopts">'+s.o.map(function(o,j){
+          var w=wrong.indexOf(j)>=0;
+          return '<button type="button" class="ropt'+(w?' no':'')+'" data-j="'+j+'"'+(w?' disabled':'')+'>'+o.h+'</button>';
+        }).join('')+'</div>'+(lastFb?'<div class="rsfb">'+lastFb+'</div>':'');
+      }
+      if(st==='done'&&s.why) html+='<div class="rswhy">'+s.why+'</div>';
+      html+='</div>';
+    });
+    stepsEl.innerHTML=html;
+    stepsEl.querySelectorAll('.ropt').forEach(function(b){ b.addEventListener('click',function(e){ choose(+b.dataset.j, e.detail===0); }); });
+    drawScale(ex);
+
+    if(idx>=steps.length){
+      var last=correct(steps[steps.length-1]);
+      var res = ex.cs===0 ? '<span class="cchip c0">not of the form</span>'
+              : ex.cs==='g' ? '<span class="cchip c0">no case applies</span><span>the theorem is silent</span>'
+              : CASECHIP[ex.cs]+'<span>'+last.h+'</span>';
+      var score = mode==='quiz' ? firstTry+' of '+steps.length+' step'+(steps.length===1?'':'s')+' right first time.'
+                                : 'Switch to Quiz me to try it yourself.';
+      endEl.innerHTML='<div class="rres">'+res+'</div><div class="rsc">'+score+'</div>'+
+        '<button type="button" class="btn pri" id="rnext">Next example →</button>'+
+        (ex.after?'<div class="rafter">'+ex.after+'</div>':'');
+      document.getElementById('rnext').addEventListener('click',function(){ load((cur+1)%RUN.length); });
+    } else endEl.innerHTML='';
+  }
+
+  RUN.forEach(function(ex,i){
+    var b=document.createElement('button'); b.type='button'; b.className='chipb';
+    b.innerHTML=(/T\(/.test(ex.nm)?label(ex.nm):ex.nm)+(ex.src?'<span class="s">'+ex.src+'</span>':'');
+    b.addEventListener('click',function(){ load(i); });
+    pick.appendChild(b);
+  });
+  modeSeg.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ pressOnly(modeSeg,b); mode=b.dataset.k; load(cur); });
+  });
+  load(0);
+})();
+
+/* ---------- §2 triage ---------- */
+var TRI=[
+ {t:'<i>T</i>(<i>n</i>) = 2<i>T</i>(⌊<i>n</i>/2⌋) + 1', a:1,
+  w:'<i>n</i><sup>log<sub>2</sub> 2</sup> = <i>n</i>, and <i>f</i>(<i>n</i>) = 1 ∈ O(<i>n</i><sup>1−ϵ</sup>) with ϵ = 1. Case 1: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>). The tree has about 2<i>n</i> nodes, each doing constant work, so you’re just counting nodes.'},
+ {t:'<i>T</i>(<i>n</i>) = 3<i>T</i>(⌊<i>n</i>/3⌋) + <i>n</i>', a:2,
+  w:'<i>n</i><sup>log<sub>3</sub> 3</sup> = <i>n</i> = <i>f</i>(<i>n</i>). Case 2: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i> log <i>n</i>). It’s Mergesort split three ways instead of two.'},
+ {t:'<i>T</i>(<i>n</i>) = 2<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>²', a:3,
+  w:'<i>n</i><sup>log<sub>2</sub> 2</sup> = <i>n</i>, and <i>n</i>² ∈ Ω(<i>n</i><sup>1+ϵ</sup>) with ϵ = 1. Second condition: 2⌊<i>n</i>/2⌋² ≤ ½ <i>n</i>², so <i>c</i> = ½. Case 3: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>²).'},
+ {t:'<i>T</i>(<i>n</i>) = 8<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>²', a:1,
+  w:'<i>n</i><sup>log<sub>2</sub> 8</sup> = <i>n</i>³, and <i>n</i>² ∈ O(<i>n</i><sup>3−ϵ</sup>) with ϵ = 1. Case 1: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>³). Eight half-size calls: the node count grows faster than the work per node shrinks.'},
+ {t:'<i>T</i>(<i>n</i>) = <i>n</i> − 1 + <i>T</i>(<i>n</i> − 1)', src:'Selection Sort · Lec 07', a:0,
+  w:'The call is on <i>n</i> − 1, so this isn’t of the form <i>a</i> · <i>T</i>(⌊<i>n</i>/<i>b</i>⌋) + <i>f</i>(<i>n</i>). Lecture sums it directly: (<i>n</i> − 1) + (<i>n</i> − 2) + ⋯ + 1 = (<i>n</i> − 1)<i>n</i>/2 ∈ Θ(<i>n</i>²).'},
+ {t:'<i>T</i>(<i>n</i>) = 16<i>T</i>(⌊<i>n</i>/4⌋) + <i>n</i>²', a:2,
+  w:'<i>n</i><sup>log<sub>4</sub> 16</sup> = <i>n</i>² = <i>f</i>(<i>n</i>). Case 2: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>² log <i>n</i>).'},
+ {t:'<i>T</i>(<i>n</i>) = 4<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i> log <i>n</i>', a:1,
+  w:'<i>n</i><sup>log<sub>2</sub> 4</sup> = <i>n</i>². <i>f</i>(<i>n</i>) = <i>n</i> log <i>n</i> ∈ O(<i>n</i><sup>2−ϵ</sup>) with ϵ = ½, because log <i>n</i> ∈ O(<i>n</i><sup>1/2</sup>). Case 1: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>²). A log factor only causes trouble when it’s the <em>only</em> difference.'},
+ {t:'<i>T</i>(<i>n</i>) = <i>T</i>(⌊<i>n</i>/3⌋) + 1', a:2,
+  w:'<i>n</i><sup>log<sub>3</sub> 1</sup> = <i>n</i><sup>0</sup> = 1 = <i>f</i>(<i>n</i>). Case 2: <i>T</i>(<i>n</i>) ∈ Θ(log <i>n</i>). Binary Search, cutting into thirds.'},
+ {t:'<i>T</i>(<i>n</i>) = 2<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i> / log <i>n</i>', a:0,
+  w:'<i>n</i><sup>log<sub>2</sub> 2</sup> = <i>n</i>. <i>f</i>(<i>n</i>) = <i>n</i> / log <i>n</i> is smaller than <i>n</i>, so not case 2 or 3. But it’s smaller only by a log factor, and case 1 needs O(<i>n</i><sup>1−ϵ</sup>). This is the gap from below.'},
+ {t:'<i>T</i>(<i>n</i>) = 2<i>T</i>(⌊<i>n</i>/4⌋) + <i>n</i>', a:3,
+  w:'<i>n</i><sup>log<sub>4</sub> 2</sup> = <i>n</i><sup>1/2</sup>, and <i>n</i> ∈ Ω(<i>n</i><sup>1/2+ϵ</sup>) with ϵ = ½. Second condition: 2⌊<i>n</i>/4⌋ ≤ ½ <i>n</i>, so <i>c</i> = ½. Case 3: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>).'},
+ {t:'<i>T</i>(<i>n</i>) = 7<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>²', a:1,
+  w:'<i>n</i><sup>log<sub>2</sub> 7</sup> ≈ <i>n</i><sup>2.807</sup>, and <i>n</i>² ∈ O(<i>n</i><sup>(log<sub>2</sub> 7)−ϵ</sup>) with ϵ = 0.5. Case 1: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i><sup>log<sub>2</sub> 7</sup>). One call fewer than 8<i>T</i>(⌊<i>n</i>/2⌋) + <i>n</i>² knocks the exponent below 3.'}
+];
+var TLBL=[[1,'Case 1'],[2,'Case 2'],[3,'Case 3'],[0,'No case']];
+(function(){
+  var host=document.getElementById('tri'), sum=document.getElementById('trisum');
+  if(!host) return;
+  var right=0;
+  TRI.forEach(function(item){
+    var c=document.createElement('div'); c.className='tcard';
+    c.innerHTML='<div class="cand">'+item.t+(item.src?'<span class="src">'+item.src+'</span>':'')+'</div><div class="tbtns">'+
+      TLBL.map(function(l){ return '<button type="button" class="tbtn" data-k="'+l[0]+'">'+l[1]+'</button>'; }).join('')+
+      '</div><div class="tfb"></div>';
+    var fb=c.querySelector('.tfb');
+    c.querySelectorAll('.tbtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(c.dataset.done) return; c.dataset.done='1';
+        var ok=+b.dataset.k===item.a; if(ok) right++;
+        c.querySelectorAll('.tbtn').forEach(function(x){ x.classList.add('lk');
+          if(+x.dataset.k===item.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+        fb.className='tfb show '+(ok?'g':'b');
+        fb.innerHTML=(ok?'':'<strong>It’s '+(item.a?'case '+item.a:'no case')+'.</strong> ')+item.w;
+        var d=host.querySelectorAll('.tcard[data-done]').length;
+        sum.innerHTML=d+' of '+TRI.length+' sorted, '+right+' right.'+(d<TRI.length?'':right===TRI.length?
+          ' All of them.':' For the misses, look hardest at step 3: “bigger” or “smaller” has to mean by a factor of <i>n</i><sup>ϵ</sup>.');
+      });
+    });
+    host.appendChild(c);
+  });
+  sum.textContent='0 of '+TRI.length+' sorted.';
+})();
+
+/* ---------- §3 n^ϵ vs log n chart ---------- */
+(function(){
+  var inp=document.getElementById('eps'), ch=document.getElementById('ech');
+  if(!inp||!ch) return;
+  var lab=document.getElementById('epsv'), expl=document.getElementById('eexpl');
+  var EPS=[1,0.5,0.25,0.1,0.05,0.02,0.01];
+  function lg2(x){ return Math.log(x)/Math.LN2; }
+  function roots(e){                       /* where e·m = log2 m, for m ≥ 1 */
+    var g=function(m){ return e*m-lg2(m); }, m0=1/(e*Math.LN2);
+    if(m0<=1 || g(m0)>=0) return null;
+    var lo=1, hi=m0, i;
+    for(i=0;i<80;i++){ var mid=(lo+hi)/2; if(g(mid)>0) lo=mid; else hi=mid; }
+    var r1=(lo+hi)/2; lo=m0; hi=m0*2; while(g(hi)<0) hi*=2;
+    for(i=0;i<80;i++){ var md=(lo+hi)/2; if(g(md)<0) lo=md; else hi=md; }
+    return [r1,(lo+hi)/2];
+  }
+  function nice(x){ var p=Math.pow(10,Math.floor(Math.log(x)/Math.LN10)), q=x/p;
+    return (q<1.5?1:q<3.5?2:q<7.5?5:10)*p; }
+  function bigN(m){                         /* 2^m in words */
+    var e10=m*Math.log(2)/Math.LN10, e=Math.floor(e10), mant=Math.pow(10,e10-e);
+    if(mant>=9.95){ mant/=10; e+=1; }
+    return e<6 ? group(Math.round(Math.pow(2,m))) : mant.toFixed(1)+' × 10'+supNum(e);
+  }
+  function draw(){
+    var e=EPS[+inp.value], R=roots(e);
+    lab.innerHTML='ϵ = '+e;
+    var X=R?Math.max(8,R[1]*1.35):8, Y=R?Math.max(10,R[1]*1.7):10;
+    var W=Math.max(280,Math.min(700,ch.clientWidth||600)), H=Math.round(Math.max(210,Math.min(300,W*0.52)));
+    var ml=44, mr=14, mt=12, mb=36, pw=W-ml-mr, ph=H-mt-mb;
+    function sx(m){ return ml+pw*m/X; } function sy(v){ return mt+ph*(1-v/Y); }
+    var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="log base 2 of n against n to the epsilon">';
+    s+='<defs><clipPath id="epsclip"><rect x="'+ml+'" y="'+mt+'" width="'+pw+'" height="'+ph+'"/></clipPath></defs>';
+    var xs=nice(X/5), ys=nice(Y/4), t;
+    for(t=ys;t<=Y+1e-9;t+=ys) s+='<line class="gr" x1="'+ml+'" x2="'+(ml+pw)+'" y1="'+sy(t)+'" y2="'+sy(t)+'"/>'+
+      '<text class="tk" x="'+(ml-6)+'" y="'+(sy(t)+4)+'" text-anchor="end">'+group(Math.round(t))+'</text>';
+    for(t=0;t<=X+1e-9;t+=xs) s+='<text class="tk" x="'+sx(t)+'" y="'+(mt+ph+15)+'" text-anchor="middle">'+group(Math.round(t))+'</text>';
+    s+='<text class="cap" x="'+(ml+pw)+'" y="'+(H-3)+'" text-anchor="end">log₂ n  (n itself is too big to draw)</text>';
+    if(R) s+='<rect class="band" x="'+sx(R[0])+'" y="'+mt+'" width="'+(sx(R[1])-sx(R[0]))+'" height="'+ph+'"/>';
+    s+='<path class="ax" d="M'+ml+' '+mt+'V'+(mt+ph)+'H'+(ml+pw)+'"/>';
+    s+='<g clip-path="url(#epsclip)"><path class="c-log" d="M'+sx(0)+' '+sy(0)+'L'+sx(X)+' '+sy(X)+'"/>';
+    var p='', N=240;
+    for(var i=0;i<=N;i++){ var m=X*i/N, v=Math.min(Math.pow(2,e*m),Y*4); p+=(i?'L':'M')+sx(m).toFixed(1)+' '+sy(v).toFixed(1); }
+    s+='<path class="c-pow" d="'+p+'"/></g>';
+    if(R){
+      var cx=sx(R[1]), cy=sy(R[1]);
+      s+='<line class="xline" x1="'+cx+'" x2="'+cx+'" y1="'+mt+'" y2="'+(mt+ph)+'"/>'+
+         '<circle class="xdot" cx="'+cx+'" cy="'+cy+'" r="5"/>'+
+         '<text class="xlab" x="'+(cx-8)+'" y="'+(mt+16)+'" text-anchor="end">n ≈ 2<tspan dy="-5" font-size="9">'+trim(R[1],1)+'</tspan></text>';
+    }
+    s+='</svg>';
+    ch.innerHTML=s;
+    if(!R){
+      expl.innerHTML='With ϵ = 1, <i>n</i><sup>1</sup> is ahead of log₂ <i>n</i> for every <i>n</i> ≥ 1. No contest. Drag right to shrink ϵ.';
+    } else {
+      var m=R[1], digits=Math.floor(m*Math.log(2)/Math.LN10)+1;
+      expl.innerHTML='With ϵ = '+e+', log₂ <i>n</i> is ahead through the shaded stretch. At log₂ <i>n</i> ≈ '+trim(m,1)+', that is, <i>n</i> ≈ '+bigN(m)+
+        ', <i>n</i><sup>'+e+'</sup> overtakes it and leads forever after.'+
+        (digits>30?' That’s an <i>n</i> with '+digits+' digits. Asymptotics doesn’t care how far out the crossover is, only that it exists.':
+         ' Keep shrinking ϵ: the crossover moves out, but it never goes away.');
+    }
+  }
+  inp.addEventListener('input',draw);
+  var rt, lastW=0;
+  function redraw(){ var w=ch.clientWidth; if(w&&w!==lastW){ lastW=w; clearTimeout(rt); rt=setTimeout(draw,80); } }
+  if(window.ResizeObserver) new ResizeObserver(redraw).observe(ch);
+  else window.addEventListener('resize',redraw);
+  draw();
+})();
+
+/* ---------- quick checks ---------- */
+function mcq(id,good,bad){
+  var opts=document.getElementById(id), fb=document.getElementById(id+'fb');
+  if(!opts) return;
+  var done=false;
+  opts.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(done) return; done=true;
+      var ok=+o.dataset.c===1;
+      opts.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+        if(+x.dataset.c===1) x.classList.add('correct');
+        else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+      fb.className='fb show '+(ok?'good':'bad');
+      fb.innerHTML=ok?good:bad;
+    });
+  });
+}
+mcq('q1',
+  '<strong>Yes.</strong> Level <i>i</i> does 4<sup><i>i</i></sup> · <i>n</i>/2<sup><i>i</i></sup> = 2<sup><i>i</i></sup><i>n</i>, so the work doubles every level down and the <i>n</i>² leaves dominate. Case 1: <i>T</i>(<i>n</i>) ∈ Θ(<i>n</i>²).',
+  '<strong>Not quite (answer: B).</strong> What matters is a level’s <em>total</em>, not one node’s share. Level <i>i</i> does 4<sup><i>i</i></sup> · <i>n</i>/2<sup><i>i</i></sup> = 2<sup><i>i</i></sup><i>n</i>, which doubles going down. Mergesort ties because it has <i>a</i> = 2 calls; here there are 4.');
+mcq('q2',
+  '<strong>Right.</strong> <i>n</i> log <i>n</i> ∉ Θ(<i>n</i>) rules out case 2, and log <i>n</i> ∉ Ω(<i>n</i><sup>ϵ</sup>) for any ϵ &gt; 0 rules out case 3. The theorem is silent.',
+  '<strong>Not quite (answer: C).</strong> Case 2 needs Θ(<i>n</i>), and log <i>n</i> is unbounded, so <i>n</i> log <i>n</i> ∉ Θ(<i>n</i>). Case 3 needs Ω(<i>n</i><sup>1+ϵ</sup>), not just Ω(<i>n</i>), and its second condition needs <i>c</i> &lt; 1, not <i>c</i> = 1.');
+
+})();
+</script>
