@@ -1,0 +1,715 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ten Facts, Read Carefully</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.nbtn{width:40px; height:40px; border-radius:9px; border:2px solid var(--rule-2); background:var(--panel-2);
+  font-family:var(--mono); font-weight:700; font-size:14px; cursor:pointer; transition:.12s}
+.nbtn:hover{border-color:var(--acc)}
+.nbtn[aria-pressed="true"]{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .nbtn[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); width:100%; cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-top:12px;
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.12em; line-height:1.85}
+.verdict{display:inline-block; font-family:var(--mono); font-weight:700; font-size:12px; padding:3px 9px;
+  border-radius:6px; margin-left:8px; letter-spacing:.05em}
+.verdict.T{background:var(--ok-soft); color:var(--ok); border:1px solid var(--ok-line)}
+.verdict.F{background:var(--bad-soft); color:var(--bad); border:1px solid var(--bad-line)}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:16.5px; margin-bottom:9px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* assume viewer */
+.slots{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+.slot{padding:7px 12px; border-radius:8px; font-family:var(--mono); font-size:13px; font-weight:700;
+  border:2px solid var(--rule-2); background:var(--panel-2); color:var(--ink-3)}
+.slot.have{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.slot.goal{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .slot.goal{color:#0B0D14}
+.slot.none{background:var(--warn-soft); border-color:var(--warn); color:var(--warn); border-style:dashed}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:13px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2)}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:7px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.5; color:var(--ink-2)}
+
+/* bar */
+.barwrap{margin-top:14px}
+.bar{height:44px; border-radius:9px; border:1px solid var(--rule-2); background:var(--panel-2); overflow:hidden;
+  display:flex; position:relative}
+.seg2{height:100%; border-right:1px solid rgba(255,255,255,.35); transition:width .25s}
+.gap{height:100%; background:repeating-linear-gradient(45deg,var(--bad-soft),var(--bad-soft) 6px,transparent 6px,transparent 12px);
+  border-left:2px solid var(--bad); transition:width .25s; display:flex; align-items:center; justify-content:center}
+.barlbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  margin-top:6px}
+
+/* derivation */
+.deriv{margin-top:12px; display:flex; flex-direction:column; gap:0}
+.dline{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk);
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.05em; line-height:1.6; opacity:0;
+  max-height:0; overflow:hidden; transition:opacity .25s, max-height .25s, padding .25s}
+.dline.on{opacity:1; max-height:220px}
+.dline.good{border-left-color:var(--ok); background:var(--ok-soft)}
+.dline.bad{border-left-color:var(--bad); background:var(--bad-soft)}
+.dline .why{display:block; font-family:var(--sans); font-size:13px; color:var(--ink-3); margin-top:3px}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+/* lec-08 additions */
+.nd{font-family:"STIX Two Math","Cambria Math","Apple Symbols","Segoe UI Symbol",serif; font-style:normal}
+.facts{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; margin-top:14px; font-size:15px}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.facts > div > div{padding:3px 0}
+.fid{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); margin-right:7px}
+.inputs{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+.inputs label{display:flex; align-items:center; gap:6px; font-family:"Iowan Old Style",Palatino,Georgia,serif;
+  font-style:italic; font-size:17px}
+.inputs input{width:84px; font-family:var(--mono); font-size:14px; padding:6px 8px; border-radius:7px;
+  border:1px solid var(--rule-2); background:var(--panel-2); color:var(--ink)}
+.inputs input:focus{outline:2px solid var(--acc-line); border-color:var(--acc)}
+.chk{display:flex; flex-direction:column; gap:4px}
+.chk .ln{display:flex; align-items:center; flex-wrap:wrap; gap:4px}
+.chk .lb{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  width:100px; flex:none}
+@media(max-width:560px){.chk .lb{width:100%} .chk .lb:empty{display:none} .chk .ln{margin-bottom:4px}}
+.verdict.U{background:var(--warn-soft); color:var(--warn); border:1px solid var(--warn-line)}
+.fchip{display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:6px;
+  background:var(--teal-soft); color:var(--teal); border:1px solid var(--teal-line); margin-right:6px}
+.pnum{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); margin-bottom:4px; letter-spacing:.06em}
+.score{font-family:var(--mono); font-size:13px; color:var(--ink-3); margin-top:14px}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Lecture 08</div>
+    <h1>Ten divisibility facts, and the hypothesis each one is leaning on</h1>
+    <p class="sub">Most of these feel obvious. The ones that aren't are the ones with a condition attached — and the
+      condition is usually what a proof forgets to check.</p>
+  </div>
+</header>
+
+<!-- ================= §0 the sheet ================= -->
+<section id="s0" style="padding-top:40px">
+  <div class="wrap">
+    <p style="margin-top:0">Here's the list. <span class="m">a</span> | <span class="m">b</span> means there is an
+      integer <span class="m">k</span> with <span class="m">ak</span> = <span class="m">b</span> — so
+      0 | 0, and 5 | 0, but 0 <span class="nd">∤</span> 5.</p>
+    <div class="facts">
+        <div>
+          <div><span class="fid">D1</span>If <span class="m">a</span> | <span class="m">b</span>, then <span class="m">a</span> | <span class="m">bc</span> for all <span class="m">c</span>.</div>
+          <div><span class="fid">D2</span>If <span class="m">a</span> | <span class="m">b</span> and <span class="m">b</span> | <span class="m">c</span>, then <span class="m">a</span> | <span class="m">c</span>.</div>
+          <div><span class="fid">D3</span>If <span class="m">a</span> | <span class="m">b</span> and <span class="m">a</span> | <span class="m">c</span>, then <span class="m">a</span> | <span class="m">sb</span> + <span class="m">tc</span> for all integers <span class="m">s</span>, <span class="m">t</span>.</div>
+          <div><span class="fid">D4</span>For all <span class="m">c</span> ≠ 0, <span class="m">a</span> | <span class="m">b</span> iff <span class="m">ca</span> | <span class="m">cb</span>.</div>
+        </div>
+        <div>
+          <div><span class="fid">G1</span>Every common divisor of <span class="m">a</span> and <span class="m">b</span> divides gcd(<span class="m">a</span>, <span class="m">b</span>).</div>
+          <div><span class="fid">G2</span>gcd(<span class="m">ka</span>, <span class="m">kb</span>) = <span class="m">k</span> · gcd(<span class="m">a</span>, <span class="m">b</span>).</div>
+          <div><span class="fid">G3</span>If gcd(<span class="m">a</span>, <span class="m">b</span>) = 1 and gcd(<span class="m">a</span>, <span class="m">c</span>) = 1, then gcd(<span class="m">a</span>, <span class="m">bc</span>) = 1.</div>
+          <div><span class="fid">G4</span>If <span class="m">a</span> | <span class="m">bc</span> and gcd(<span class="m">a</span>, <span class="m">b</span>) = 1, then <span class="m">a</span> | <span class="m">c</span>.</div>
+          <div><span class="fid">G5</span>If <span class="m">m</span> | <span class="m">a</span> and <span class="m">m</span> | <span class="m">b</span>, then <span class="m">m</span> | gcd(<span class="m">a</span>, <span class="m">b</span>).</div>
+          <div><span class="fid">G6</span>gcd(<span class="m">a</span>, <span class="m">b</span>) = gcd(<span class="m">b</span>, rem(<span class="m">a</span>, <span class="m">b</span>)).</div>
+        </div>
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>A fact only promises something when its hypothesis holds</h2></div>
+
+    <p>Each fact is an implication. When the hypothesis is false, the fact says <strong>nothing</strong> — the
+      conclusion might happen to be true, or not. So the quickest way to see what a hypothesis is for is to drop it
+      and watch the conclusion fail.</p>
+
+    <p>Two of these carry a hypothesis the sheet doesn't print. G2 needs
+      <span class="m">k</span> ≥ 0, because a gcd is never negative. G6 needs <span class="m">b</span> &gt; 0,
+      because the Division Theorem only defines rem(<span class="m">a</span>, <span class="m">b</span>) for
+      <span class="m">b</span> &gt; 0.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick a fact, plug in numbers, and try to make the conclusion fail.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="ftsel"></div></div>
+      <div class="out" style="font-family:var(--sans);font-size:15px;line-height:1.5" id="ftstate"></div>
+      <div class="inputs" id="ftin"></div>
+      <div class="out" id="ftout"></div>
+      <div class="row"><button class="btn" id="ftgood">Load an ordinary case</button>
+        <button class="btn pri" id="ftbreak">Break the hypothesis</button></div>
+      <div class="expl" id="ftexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>You can't break a fact while its hypothesis holds</strong> — try it. Every counterexample you find has
+      a false hypothesis, and the hypothesis that's false is exactly the one doing the work.
+    </div>
+
+    <div class="note okb">
+      <strong>G1 and G5 are the same sentence.</strong> Rename <span class="m">m</span> to
+      <span class="m">d</span> and they match word for word. In 6.1200 neither one is a theorem — it's
+      <em>part of the definition</em> of gcd (Lecture 08, Definition 3). That clause is why gcd(0, 0) = 0. And G6 is
+      Lecture 08's Lemma 4 with the arguments swapped.
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>Most of the time, one fact does the whole step</h2></div>
+
+    <p>Small problems, none needing a calculator. For each one, get the answer, then check which fact got you
+      there — and whether its hypothesis actually held.</p>
+
+    <div id="probs"></div>
+    <div class="score" id="pscore"></div>
+
+    <div class="note">
+      <strong>Watch problems 6 and 7 together.</strong> They look the same: <span class="m">a</span> |
+      <span class="m">bx</span>. Only one lets you cancel the <span class="m">b</span>, and the difference is
+      entirely whether gcd(<span class="m">a</span>, <span class="m">b</span>) = 1.
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>G4's hypothesis is there because Bezout needs a 1</h2></div>
+
+    <p>G4 is the fact people most often apply without its hypothesis — “<span class="m">a</span> |
+      <span class="m">bc</span>, and <span class="m">a</span> doesn't divide <span class="m">b</span>, so it must
+      divide <span class="m">c</span>.” The proof shows you exactly where gcd = 1 gets used: you write 1 as an ILC
+      (Bezout), multiply through by <span class="m">c</span>, and use D1 and D3.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Run the same proof on both examples</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="bzsel">
+          <button data-k="ok" aria-pressed="true">13 | 9<span class="m">x</span>, gcd(13, 9) = 1</button>
+          <button data-k="bad">6 | 4 · 9, gcd(6, 4) = 2</button>
+        </div>
+      </div>
+      <div class="deriv" id="bzderiv"></div>
+      <div class="row"><button class="btn pri" id="bznext">Start</button>
+        <button class="btn" id="bzreset">Restart</button></div>
+    </div>
+
+    <div class="note">
+      <strong>The proof doesn't fail at some random step. It fails at the end, where you needed a 1.</strong> With
+      gcd 2, Bezout hands you 2 = 6 − 4, and multiplying by 9 only shows 6 | 2 · 9. You can't get rid of the 2. That
+      leftover factor is the gcd, and it's why the hypothesis says gcd = 1.
+    </div>
+
+    <p>G3 runs on the same engine. From 1 = <span class="m">sa</span> + <span class="m">tb</span> and
+      1 = <span class="m">ua</span> + <span class="m">vc</span>, multiply the two together. Every term except one
+      has an <span class="m">a</span> in it, and the last one is <span class="m">tv</span> · <span class="m">bc</span>.
+      So 1 is an ILC of <span class="m">a</span> and <span class="m">bc</span>. Any common divisor of those
+      divides 1 (D3), so the gcd is 1.</p>
+
+    <div class="card">
+      <h4>Quick check</h4>
+      <div style="font-weight:600;font-size:15.6px">You know 7 | 10<span class="m">n</span>. A classmate writes
+        “so 7 | <span class="m">n</span>, by G4.” What should they have written first?</div>
+      <div class="opts" id="q1">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Nothing — 7 doesn't divide 10, so it has to divide <span class="m">n</span>.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>That gcd(7, 10) = 1. That's G4's hypothesis, and it's the reason the step is allowed.</span></button>
+        <button class="opt" data-c="2"><span class="mk">C</span><span>That 7 | 10, using D1.</span></button>
+      </div>
+      <div class="fb" id="q1fb"></div>
+    </div>
+
+    <div class="note">
+      <strong>This exact move comes back.</strong> Lecture 09's theorem that <span class="m">a</span> has an inverse
+      mod <span class="m">n</span> iff gcd(<span class="m">a</span>, <span class="m">n</span>) = 1 is Bezout
+      producing a 1. Recitation 10's CRT uniqueness proof writes 1 = <span class="m">ps</span> +
+      <span class="m">qt</span> and multiplies it through, the same way you just did.
+    </div>
+  </div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <div class="shead"><span class="snum">4</span><h2>The definition decides every edge case</h2></div>
+
+    <p>Zero and negative numbers are where “the biggest number that divides both” stops working. 6.1200 avoids the
+      problem by defining gcd(<span class="m">a</span>, <span class="m">b</span>) as the
+      <strong>non-negative</strong> common divisor that every common divisor divides. When you're unsure about an edge
+      case, go back to that sentence and to “<span class="m">a</span> | <span class="m">b</span> iff
+      <span class="m">ak</span> = <span class="m">b</span> for some integer <span class="m">k</span>”.</p>
+
+    <div id="edge"></div>
+    <div class="score" id="escore"></div>
+
+    <div class="note warnb">
+      <strong>Dividing by 0 and dividing 0 are different things.</strong> 7 | 0 is true, and so is 0 | 0. What's
+      undefined is rem(<span class="m">a</span>, 0) — and that's why G6 needs <span class="m">b</span> &gt; 0 and
+      Euclid stops when <span class="m">y</span> = 0.
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §5 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <div class="shead"><span class="snum">5</span><h2>The next two lectures keep asking whether gcd = 1</h2></div>
+
+    <p>Inverses, cancellation, Fermat, RSA and the CRT all depend on one condition: whether some gcd equals 1.
+      Every question below is a Lecture 08 fact in disguise. The tag on each answer names the fact, and the lecture
+      where it comes back.</p>
+
+    <div id="ahead"></div>
+    <div class="score" id="ascore"></div>
+
+    <div class="note">
+      <strong>The same two arguments keep coming back.</strong> To show something is impossible, find a common
+      divisor <span class="m">g</span> &gt; 1 and use D3: everything you can build is a multiple of
+      <span class="m">g</span>. To show something is possible, use gcd = 1 and Bezout: write 1 as an ILC, then
+      multiply through.
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="take">
+      <h3 style="font-size:19px">The short version</h3>
+      <ol>
+        <li><strong>Check the hypothesis before you cite the fact.</strong> A false hypothesis means the fact says nothing, not that the conclusion is false.</li>
+        <li><strong>Know the hidden conditions.</strong> G2 needs <span class="m">k</span> ≥ 0, G6 needs <span class="m">b</span> &gt; 0, and D4 says <span class="m">c</span> ≠ 0 for a reason: 0 | 0.</li>
+        <li><strong>“<span class="m">a</span> doesn't divide <span class="m">b</span>” is not “gcd(<span class="m">a</span>, <span class="m">b</span>) = 1.”</strong> 6 <span class="nd">∤</span> 4, but 6 | 4 · 9 and 6 <span class="nd">∤</span> 9.</li>
+        <li><strong>To prove G3 or G4, write 1 as an ILC and multiply through.</strong> When the gcd isn't 1, what you get out is the gcd instead of 1, and it doesn't go away.</li>
+        <li><strong>Settle edge cases from the definition.</strong> gcd(0, 0) = 0, gcd(<span class="m">a</span>, 0) = |<span class="m">a</span>|, a gcd is never negative, and 0 is even.</li>
+        <li><strong>When a later lecture asks whether something is possible, check whether a gcd is 1.</strong> A common factor &gt; 1 rules it out (D3); gcd = 1 lets you build it (Bezout).</li>
+        <li><strong>G1 = G5 = the definition.</strong> When a proof needs “the gcd is the biggest,” in 6.1200 it actually means “every common divisor divides it.”</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 08, divisibility, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- number helpers (course definitions) ---------- */
+var ND='<span class="nd">∤</span>';
+function divides(a,b){ return a===0 ? b===0 : b % a === 0; }        // ∃k. ak = b
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var r=a%b; a=b; b=r; } return a; } // gcd(0,0)=0
+function rem(a,b){ return ((a % b) + b) % b; }                       // b > 0 only; always in [0, b)
+function dv(a,b){ return a+' '+(divides(a,b)?'|':'<span class="nd">∤</span>')+' '+b; }
+function V(v){ return '<span class="verdict '+(v===null?'U':(v?'T':'F'))+'">'+(v===null?'UNDEFINED':(v?'TRUE':'FALSE'))+'</span>'; }
+
+/* ---------- §1 fact tester ---------- */
+var FACTS=[
+ {id:'D1', vars:['a','b','c'], good:[7,91,5], bad:[4,2,3],
+  st:'If <i>a</i> | <i>b</i>, then <i>a</i> | <i>bc</i>.',
+  hyp:function(v){ return [{t:dv(v.a,v.b), ok:divides(v.a,v.b)}]; },
+  con:function(v){ return {t:dv(v.a,v.b*v.c), ok:divides(v.a,v.b*v.c)}; },
+  why:'Needs <i>a</i> | <i>b</i>: without it, 4 <span class="nd">∤</span> 2 · 3.'},
+ {id:'D2', vars:['a','b','c'], good:[5,100,700], bad:[4,2,6],
+  st:'If <i>a</i> | <i>b</i> and <i>b</i> | <i>c</i>, then <i>a</i> | <i>c</i>.',
+  hyp:function(v){ return [{t:dv(v.a,v.b), ok:divides(v.a,v.b)},{t:dv(v.b,v.c), ok:divides(v.b,v.c)}]; },
+  con:function(v){ return {t:dv(v.a,v.c), ok:divides(v.a,v.c)}; },
+  why:'The chain has to be unbroken. 2 | 6, but 4 <span class="nd">∤</span> 2, and 4 <span class="nd">∤</span> 6.'},
+ {id:'D3', vars:['a','b','c','s','t'], good:[3,6,9,-1,1], bad:[4,1,3,1,0],
+  st:'If <i>a</i> | <i>b</i> and <i>a</i> | <i>c</i>, then <i>a</i> | <i>sb</i> + <i>tc</i>.',
+  hyp:function(v){ return [{t:dv(v.a,v.b), ok:divides(v.a,v.b)},{t:dv(v.a,v.c), ok:divides(v.a,v.c)}]; },
+  con:function(v){ var x=v.s*v.b+v.t*v.c; return {t:v.a+' '+(divides(v.a,x)?'|':'<span class="nd">∤</span>')+' '+v.s+'·'+v.b+' + '+v.t+'·'+v.c+' = '+x, ok:divides(v.a,x)}; },
+  why:'Both have to hold. Also try <i>a</i>=4, <i>b</i>=1, <i>c</i>=3, <i>s</i>=<i>t</i>=1: 4 | 1 + 3, yet 4 divides neither — so the converse is false. This is the fact behind Die Hard 9: 3 | 6 and 3 | 9, so 3 divides every amount you can pour.'},
+ {id:'D4', vars:['a','b','c'], good:[3,10,7], bad:[2,3,0],
+  st:'For <i>c</i> ≠ 0, <i>a</i> | <i>b</i> iff <i>ca</i> | <i>cb</i>.',
+  hyp:function(v){ return [{t:'c = '+v.c+' ≠ 0', ok:v.c!==0}]; },
+  con:function(v){ var l=divides(v.a,v.b), r=divides(v.c*v.a,v.c*v.b);
+    return {t:'('+dv(v.a,v.b)+')&nbsp; iff &nbsp;('+dv(v.c*v.a,v.c*v.b)+')', ok:l===r}; },
+  why:'At <i>c</i> = 0 the right side is 0 | 0, which is always true. So it can’t tell you anything about <i>a</i> | <i>b</i>.'},
+ {id:'G1', vars:['a','b','d'], good:[84,120,6], bad:[12,18,4],
+  st:'If <i>d</i> | <i>a</i> and <i>d</i> | <i>b</i>, then <i>d</i> | gcd(<i>a</i>, <i>b</i>).',
+  hyp:function(v){ return [{t:dv(v.d,v.a), ok:divides(v.d,v.a)},{t:dv(v.d,v.b), ok:divides(v.d,v.b)}]; },
+  con:function(v){ var g=gcd(v.a,v.b); return {t:v.d+' '+(divides(v.d,g)?'|':'<span class="nd">∤</span>')+' gcd('+v.a+', '+v.b+') = '+g, ok:divides(v.d,g)}; },
+  why:'This is the definition of gcd. Try <i>a</i> = <i>b</i> = 0: everything divides 0, and gcd(0, 0) = 0, so it still works.'},
+ {id:'G2', vars:['a','b','k'], good:[5,7,120], bad:[3,6,-2],
+  st:'gcd(<i>ka</i>, <i>kb</i>) = <i>k</i> · gcd(<i>a</i>, <i>b</i>).',
+  hyp:function(v){ return [{t:'k = '+v.k+' ≥ 0 &nbsp;<span style="font-size:.8em;color:var(--warn)">(hidden)</span>', ok:v.k>=0}]; },
+  con:function(v){ var l=gcd(v.k*v.a,v.k*v.b), r=v.k*gcd(v.a,v.b);
+    return {t:'gcd('+(v.k*v.a)+', '+(v.k*v.b)+') = '+l+'&nbsp; vs &nbsp;'+v.k+' · '+gcd(v.a,v.b)+' = '+r, ok:l===r}; },
+  why:'A gcd is non-negative by definition, so <i>k</i> · gcd(<i>a</i>, <i>b</i>) can’t equal it when <i>k</i> &lt; 0. For negative <i>k</i>, the true statement has |<i>k</i>|.'},
+ {id:'G3', vars:['a','b','c'], good:[10,21,33], bad:[6,5,4],
+  st:'If gcd(<i>a</i>, <i>b</i>) = 1 and gcd(<i>a</i>, <i>c</i>) = 1, then gcd(<i>a</i>, <i>bc</i>) = 1.',
+  hyp:function(v){ return [{t:'gcd('+v.a+', '+v.b+') = '+gcd(v.a,v.b), ok:gcd(v.a,v.b)===1},{t:'gcd('+v.a+', '+v.c+') = '+gcd(v.a,v.c), ok:gcd(v.a,v.c)===1}]; },
+  con:function(v){ var g=gcd(v.a,v.b*v.c); return {t:'gcd('+v.a+', '+(v.b*v.c)+') = '+g, ok:g===1}; },
+  why:'One coprime factor isn’t enough. gcd(6, 5) = 1, but 4 shares a 2 with 6, and so does 20.'},
+ {id:'G4', vars:['a','b','c'], good:[13,9,26], bad:[6,4,9],
+  st:'If <i>a</i> | <i>bc</i> and gcd(<i>a</i>, <i>b</i>) = 1, then <i>a</i> | <i>c</i>.',
+  hyp:function(v){ return [{t:dv(v.a,v.b*v.c)+' &nbsp;(<i>bc</i> = '+v.b+'·'+v.c+')', ok:divides(v.a,v.b*v.c)},{t:'gcd('+v.a+', '+v.b+') = '+gcd(v.a,v.b), ok:gcd(v.a,v.b)===1}]; },
+  con:function(v){ return {t:dv(v.a,v.c), ok:divides(v.a,v.c)}; },
+  why:'6 | 36 = 4 · 9, but 6 divides neither 4 nor 9. 6 splits its factors between them: 2 goes into 4, 3 goes into 9. §3 shows where the proof breaks.'},
+ {id:'G5', vars:['m','a','b'], good:[4,28,44], bad:[8,12,20],
+  st:'If <i>m</i> | <i>a</i> and <i>m</i> | <i>b</i>, then <i>m</i> | gcd(<i>a</i>, <i>b</i>).',
+  hyp:function(v){ return [{t:dv(v.m,v.a), ok:divides(v.m,v.a)},{t:dv(v.m,v.b), ok:divides(v.m,v.b)}]; },
+  con:function(v){ var g=gcd(v.a,v.b); return {t:v.m+' '+(divides(v.m,g)?'|':'<span class="nd">∤</span>')+' gcd('+v.a+', '+v.b+') = '+g, ok:divides(v.m,g)}; },
+  why:'This is G1 again, with <i>d</i> renamed <i>m</i>.'},
+ {id:'G6', vars:['a','b'], good:[1001,777], bad:[12,0],
+  st:'gcd(<i>a</i>, <i>b</i>) = gcd(<i>b</i>, rem(<i>a</i>, <i>b</i>)).',
+  hyp:function(v){ return [{t:'b = '+v.b+' &gt; 0 &nbsp;<span style="font-size:.8em;color:var(--warn)">(hidden)</span>', ok:v.b>0}]; },
+  con:function(v){ if(v.b<=0) return {t:'rem('+v.a+', '+v.b+') isn’t defined', ok:null};
+    var r=rem(v.a,v.b); return {t:'gcd('+v.a+', '+v.b+') = '+gcd(v.a,v.b)+'&nbsp; and &nbsp;gcd('+v.b+', '+r+') = '+gcd(v.b,r), ok:gcd(v.a,v.b)===gcd(v.b,r)}; },
+  why:'rem only exists for <i>b</i> &gt; 0 (Division Theorem). That’s also why Euclid’s Algorithm stops when <i>y</i> = 0: the final state is the one where the next step would need rem(<i>x</i>, 0). Try a negative <i>a</i>, like <i>a</i> = −43, <i>b</i> = 10: rem is 7, never negative.'}
+];
+(function(){
+  var sel=document.getElementById('ftsel'), st=document.getElementById('ftstate'), inp=document.getElementById('ftin'),
+      out=document.getElementById('ftout'), expl=document.getElementById('ftexpl'),
+      gb=document.getElementById('ftgood'), bb=document.getElementById('ftbreak');
+  if(!sel) return;
+  var cur=0, vals={};
+  FACTS.forEach(function(f,i){
+    var b=document.createElement('button'); b.textContent=f.id; b.setAttribute('aria-pressed',i===0?'true':'false');
+    b.addEventListener('click',function(){
+      sel.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); cur=i; load(FACTS[cur].good);
+    });
+    sel.appendChild(b);
+  });
+  function load(arr){
+    var f=FACTS[cur]; vals={}; inp.innerHTML='';
+    f.vars.forEach(function(name,j){
+      vals[name]=arr[j];
+      var l=document.createElement('label'); l.innerHTML=name+' =';
+      var x=document.createElement('input'); x.type='number'; x.step='1'; x.value=arr[j];
+      x.setAttribute('aria-label',name);
+      x.addEventListener('input',function(){ var n=parseInt(x.value,10); vals[name]=isNaN(n)?0:Math.max(-99999,Math.min(99999,n)); draw(); });
+      l.appendChild(x); inp.appendChild(l);
+    });
+    st.innerHTML='<span class="fchip">'+f.id+'</span>'+f.st;
+    draw();
+  }
+  function draw(){
+    var f=FACTS[cur], hs=f.hyp(vals), c=f.con(vals),
+        hall=hs.every(function(h){return h.ok;});
+    out.innerHTML='<div class="chk">'+
+      hs.map(function(h,i){ return '<div class="ln"><span class="lb">'+(i===0?'hypothesis':'')+'</span>'+h.t+V(h.ok)+'</div>'; }).join('')+
+      '<div class="ln"><span class="lb">conclusion</span>'+c.t+V(c.ok)+'</div></div>';
+    var msg;
+    if(hall) msg='<strong>Hypothesis holds, so the fact promises the conclusion</strong> — and it’s true. Change the numbers as much as you like; while every hypothesis line is TRUE, the conclusion will be too.';
+    else if(c.ok===true) msg='<strong>Hypothesis fails, so the fact promises nothing.</strong> The conclusion happens to be true here anyway. That’s luck, not the fact.';
+    else msg='<strong>Hypothesis fails, and so does the conclusion.</strong> '+f.why;
+    expl.innerHTML=msg;
+  }
+  gb.addEventListener('click',function(){ load(FACTS[cur].good); });
+  bb.addEventListener('click',function(){ load(FACTS[cur].bad); });
+  load(FACTS[0].good);
+})();
+
+/* ---------- §2 problems ---------- */
+var PROBS=[
+ {q:'Die Hard 9: jugs of 6 and 9 gallons. Which amount can you rule out <em>without trying a single pour</em>?',
+  o:['3 gallons','5 gallons','Neither — you’d have to search the state machine'], a:1, f:'D3',
+  w:'Every amount you can reach is an ILC 6<i>s</i> + 9<i>t</i> (lecture’s invariant). 3 | 6 and 3 | 9, so by D3, 3 divides every one of them, and 3 <span class="nd">∤</span> 5. Note that 3 is <em>not</em> ruled out — fill the 9, pour into the 6, and 3 is left. An invariant can only rule things out.'},
+ {q:'Does 7 divide 91 · 1234567?',
+  o:['Yes','No — 7 <span class="nd">∤</span> 1234567','Can’t say without multiplying it out'], a:0, f:'D1',
+  w:'91 = 7 · 13, so 7 | 91, and D1 says 7 divides any multiple of 91. It doesn’t matter that 7 <span class="nd">∤</span> 1234567 (true — the remainder is 5). D1 needs only <em>one</em> factor to be divisible.'},
+ {q:'Does 21 | 70?',
+  o:['Yes — 7 divides both','No','Can’t tell without long division'], a:1, f:'D4',
+  w:'21 = 7 · 3 and 70 = 7 · 10. D4 with <i>c</i> = 7 ≠ 0 gives: 21 | 70 iff 3 | 10. And 3 <span class="nd">∤</span> 10. A shared factor in both numbers tells you nothing until you cancel it.'},
+ {q:'<i>d</i> divides both 84 and 120. Which of these must <i>d</i> divide?',
+  o:['6','12','Both 6 and 12','Neither — <i>d</i> must equal 12'], a:1, f:'G1 / G5',
+  w:'gcd(84, 120) = 12, and every common divisor divides the gcd. But <i>d</i> could be 12 itself, which doesn’t divide 6. And <i>d</i> doesn’t have to be 12 either — 3 divides both. It must <em>divide</em> 12 (and then 24, 36, … by D2).'},
+ {q:'gcd(600, 840) = ?',
+  o:['60','120','240'], a:1, f:'G2',
+  w:'600 = 120 · 5 and 840 = 120 · 7. G2 with <i>k</i> = 120 ≥ 0: gcd = 120 · gcd(5, 7) = 120 · 1. Pulling out a common factor is legal; you just have to finish the gcd of what’s left.'},
+ {q:'13 | 9<i>x</i>, and 1 ≤ <i>x</i> ≤ 30. What can <i>x</i> be?',
+  o:['Only 13','13 or 26','Any multiple of 9 in range','Anything — 9<i>x</i> is usually divisible by 13'], a:1, f:'G4',
+  w:'gcd(13, 9) = 1, so G4 cancels the 9: 13 | <i>x</i>. In range that’s 13 and 26. Check one: 9 · 26 = 234 = 13 · 18.'},
+ {q:'6 | 4<i>x</i>. Must 6 | <i>x</i>?',
+  o:['Yes, by G4','No','Only if <i>x</i> is even'], a:1, f:'G4 — hypothesis fails',
+  w:'gcd(6, 4) = 2, so G4 doesn’t apply. <i>x</i> = 3 is a counterexample: 6 | 12, but 6 <span class="nd">∤</span> 3. What you <em>can</em> say: 6 | 4<i>x</i> means 2 · 3 | 2 · 2<i>x</i>, so 3 | 2<i>x</i> by D4, and then G4 (gcd(3, 2) = 1) gives 3 | <i>x</i>.'},
+ {q:'gcd(10, 21) = 1 and gcd(10, 33) = 1. What is gcd(10, 693)?',
+  o:['1','3','11','Can’t tell without computing'], a:0, f:'G3',
+  w:'693 = 21 · 33. Both factors are coprime to 10, so G3 says the product is too. (3 and 11 are in 693, but neither divides 10.)'},
+ {q:'gcd(1000002, 5) = ?',
+  o:['1','2','5'], a:0, f:'G6',
+  w:'Lecture got here by subtracting 5 two hundred thousand times. G6 gets there in one jump: rem(1000002, 5) = 2, so gcd = gcd(5, 2) = gcd(2, 1) = gcd(1, 0) = 1. If you picked 2, you stopped at the remainder — it’s the next argument, not the answer.'}
+];
+function mkProbs(hostId, scoreId, list){
+  var host=document.getElementById(hostId), sc=document.getElementById(scoreId);
+  if(!host) return;
+  var done=0, right=0, L='ABCD';
+  list.forEach(function(p,i){
+    var c=document.createElement('div'); c.className='card';
+    c.innerHTML='<div class="pnum">PROBLEM '+(i+1)+'</div><div style="font-weight:600;font-size:15.6px">'+p.q+'</div>'+
+      '<div class="opts">'+p.o.map(function(t,j){ return '<button class="opt" data-c="'+j+'"><span class="mk">'+L[j]+'</span><span>'+t+'</span></button>'; }).join('')+
+      '</div><div class="fb"></div>';
+    var fb=c.querySelector('.fb'), locked=false;
+    c.querySelectorAll('.opt').forEach(function(o){
+      o.addEventListener('click',function(){
+        if(locked) return; locked=true;
+        var ok=+o.dataset.c===p.a; done++; if(ok) right++;
+        c.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+          if(+x.dataset.c===p.a) x.classList.add('correct'); else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+        fb.className='fb show '+(ok?'good':'bad');
+        fb.innerHTML='<span class="fchip">'+p.f+'</span>'+(ok?'<strong>Yes.</strong> ':'<strong>Not quite — '+L[p.a]+'.</strong> ')+p.w;
+        sc.textContent=right+' of '+done+' right so far'+(done===list.length?' · all '+list.length+' done':'')+'.';
+      });
+    });
+    host.appendChild(c);
+  });
+  sc.textContent='0 of '+list.length+' attempted.';
+}
+mkProbs('probs','pscore',PROBS);
+
+/* ---------- §4 edge cases ---------- */
+var EDGE=[
+ {q:'gcd(0, 0) = ?',
+  o:['0','1','Undefined — every integer divides 0, so there’s no greatest one','∞'], a:0, f:'Definition 3',
+  w:'C is the right instinct for “greatest in the ≥ sense” — that version really has no answer here. But 6.1200’s gcd is the non-negative common divisor that <em>every</em> common divisor divides. Every integer divides 0, so the gcd has to be a multiple of every integer. Only 0 is. Lecture flags this one with a “!”.'},
+ {q:'gcd(−12, 18) = ?',
+  o:['−6','6','Undefined — gcd is only for non-negative numbers'], a:1, f:'Definition 3',
+  w:'Divisibility ignores sign: −6 | 18 and 6 | −12 are both true, since (−6)(−3) = 18. The definition picks the <em>non-negative</em> one, so the gcd is 6. Negative inputs are fine — Euclid only needs you to take absolute values first.'},
+ {q:'gcd(−7, 0) = ?',
+  o:['0','−7','7','Undefined — you can’t divide by 0'], a:2, f:'Lemma 1',
+  w:'Lecture 08, Lemma 1: gcd(<i>a</i>, 0) = |<i>a</i>|. Everything divides 0, so the common divisors of −7 and 0 are exactly the divisors of 7. Nobody divides <em>by</em> 0 here. That only comes up with rem(<i>a</i>, 0), and G6 never asks for it.'},
+ {q:'Which pair is coprime, i.e. has gcd = 1?',
+  o:['(0, 0)','(0, 1)','(−4, 6)','None of them — 0 can’t be coprime to anything'], a:1, f:'Lemma 1',
+  w:'gcd(0, 1) = |1| = 1, so 0 and 1 are coprime. In fact 0 is coprime to exactly ±1. gcd(0, 0) = 0, and gcd(−4, 6) = 2. Keep this in mind when an induction starts at <i>n</i> = 0: a hypothesis like gcd(<i>n</i>, <i>m</i>) = 1 can still hold there.'},
+ {q:'Is 0 even?',
+  o:['Yes','No — 0 is neither even nor odd','Only by convention'], a:0, f:'Definition 1',
+  w:'“Even” means 2 | <i>n</i>, and 2 · 0 = 0. That’s all it takes. Lecture brings up the 1977 Paris smog driving ban, where officials weren’t sure what to do about number plates ending in 0. The definition settles it.'},
+ {q:'For every integer <i>n</i>, gcd(<i>n</i>, <i>n</i> + 1) = ?',
+  o:['1','It depends on <i>n</i>','1, except at <i>n</i> = 0'], a:0, f:'D3',
+  w:'Any common divisor <i>d</i> divides (<i>n</i> + 1) − <i>n</i> = 1 (D3 with <i>s</i> = −1, <i>t</i> = 1), so <i>d</i> = ±1 and the gcd is 1. At <i>n</i> = 0 that’s gcd(0, 1) = 1, as in problem 4. Look for this move — subtract to get rid of the variable — whenever you need to show two expressions are coprime.'},
+ {q:'True or false: gcd(<i>a</i>, <i>b</i>) = gcd(<i>a</i>, <i>b</i> + 5<i>a</i>) for all integers <i>a</i>, <i>b</i>.',
+  o:['True','False — adding 5<i>a</i> changes the common divisors','Only when <i>a</i> &gt; 0'], a:0, f:'D3',
+  w:'If <i>d</i> divides <i>a</i> and <i>b</i>, it divides <i>b</i> + 5<i>a</i>. If <i>d</i> divides <i>a</i> and <i>b</i> + 5<i>a</i>, it divides (<i>b</i> + 5<i>a</i>) − 5<i>a</i> = <i>b</i>. Same set of common divisors, so the same gcd. This is Lecture 08’s Lemma 2 applied five times, and it holds for any sign of <i>a</i> and at <i>a</i> = 0.'}
+];
+mkProbs('edge','escore',EDGE);
+
+/* ---------- §5 looking ahead ---------- */
+var AHEAD=[
+ {q:'Is there an integer <i>x</i> with 4<i>x</i> ≡<sub>10</sub> 1?',
+  o:['Yes, <i>x</i> = 3','No','Yes, but it takes a while to find'], a:1, f:'D3 → Lec 09',
+  w:'4<i>x</i> ≡<sub>10</sub> 1 means 4<i>x</i> − 10<i>q</i> = 1 for some <i>q</i>. But 2 | 4 and 2 | 10, so by D3, 2 divides every 4<i>x</i> − 10<i>q</i>, and 2 '+ND+' 1. (For A: 4 · 3 = 12 ≡<sub>10</sub> 2, not 1.) It’s the Die Hard 9 argument again. Lecture 09 turns it into a theorem: <i>a</i> has an inverse mod <i>n</i> iff gcd(<i>a</i>, <i>n</i>) = 1.'},
+ {q:'The Pulverizer on (30, 7) gives 1 = 13 · 7 − 3 · 30. What does that tell you?',
+  o:['7 · 13 ≡<sub>30</sub> 1','13 ≡<sub>30</sub> 7','30 rem 7 = 13'], a:0, f:'Bezout → Lec 09',
+  w:'7 · 13 − 1 = 3 · 30, so 30 | 7 · 13 − 1. That’s the definition of 7 · 13 ≡<sub>30</sub> 1. So 13 is an inverse of 7 mod 30, and Lecture 09 uses exactly this pair to cancel the 7 in 7<i>x</i> ≡<sub>30</sub> 14. Running the Pulverizer is how you find inverses.'},
+ {q:'3<i>x</i> ≡<sub>6</sub> 3. Can you conclude <i>x</i> ≡<sub>6</sub> 1?',
+  o:['Yes — cancel the 3','No','Only if <i>x</i> is odd'], a:1, f:'G4 — hypothesis fails',
+  w:'<i>x</i> = 5 works: 15 − 3 = 12, and 6 | 12. But 5 ≢<sub>6</sub> 1. Written as divisibility, you know 6 | 3(<i>x</i> − 1) and want 6 | <i>x</i> − 1. That’s G4 with gcd(6, 3) = 3 ≠ 1 — problem 7 of §2 again. Lecture 09: you can only cancel <i>a</i> mod <i>n</i> when gcd(<i>a</i>, <i>n</i>) = 1.'},
+ {q:'<i>p</i> is prime and <i>p</i> '+ND+' <i>a</i>. What is gcd(<i>a</i>, <i>p</i>)?',
+  o:['1','<i>p</i>','Depends on <i>a</i>'], a:0, f:'G1 → Lec 09',
+  w:'The gcd divides <i>p</i>, so it’s 1 or <i>p</i>. It can’t be <i>p</i>, because <i>p</i> '+ND+' <i>a</i>. So it’s 1. This is Lecture 09’s Corollary 9: every <i>a</i> ≢<sub><i>p</i></sub> 0 has an inverse mod <i>p</i>. Fermat’s Little Theorem rests on it.'},
+ {q:'RSA with <i>p</i> = 5, <i>q</i> = 11 needs <i>e</i> coprime to (<i>p</i> − 1)(<i>q</i> − 1) = 40. Which <i>e</i> is allowed?',
+  o:['5','10','3','None of these'], a:2, f:'gcd = 1 → Lec 10',
+  w:'gcd(3, 40) = 1, while 5 and 10 both share a 5 with 40. The secret key needs <i>d</i> with <i>ed</i> ≡<sub>40</sub> 1, and that exists only when gcd(<i>e</i>, 40) = 1. Here <i>d</i> = 27: 3 · 27 = 81 = 2 · 40 + 1. Lecture 10 computes <i>d</i> with the Pulverizer.'},
+ {q:'Which system has a solution? &nbsp;(I) <i>x</i> rem 3 = 2 and <i>x</i> rem 5 = 3 &nbsp; (II) <i>x</i> rem 4 = 1 and <i>x</i> rem 6 = 2',
+  o:['Only (I)','Only (II)','Both','Neither'], a:0, f:'gcd = 1 → Rec 10',
+  w:'(I): <i>x</i> = 8 works, and it’s the only one in 0 … 14. (II): <i>x</i> rem 4 = 1 makes <i>x</i> odd, and <i>x</i> rem 6 = 2 makes it even. That’s a contradiction, and it comes from the 2 that 4 and 6 share. gcd(3, 5) = 1 is what makes (I) work — that’s the Chinese Remainder Theorem, in Recitation 10.'},
+ {q:'Jugs of 21 and 26 gallons. Can D3 rule out getting exactly 3 gallons?',
+  o:['Yes — 3 isn’t a multiple of 21 or 26','No — gcd(21, 26) = 1, so it rules out nothing','No, and that proves 3 is reachable'], a:1, f:'D3 + invariants',
+  w:'The invariant only says every amount is a multiple of gcd(21, 26) = 1, and every integer is. So it rules nothing out. But C goes too far. An invariant can show something is <em>impossible</em>; showing it’s <em>possible</em> takes a sequence of pours. Keep the two directions separate in every state-machine proof.'}
+];
+mkProbs('ahead','ascore',AHEAD);
+
+/* ---------- §3 Bezout step-through ---------- */
+var BZ={
+ ok:[
+  {t:'Given: 13 | 9<i>x</i>, and gcd(13, 9) = 1.', why:'Both of G4’s hypotheses.'},
+  {t:'Bezout: &nbsp;1 = 3 · 9 − 2 · 13.', why:'The Pulverizer finds these coefficients. Check: 27 − 26 = 1.'},
+  {t:'Multiply through by <i>x</i>: &nbsp;<i>x</i> = 3 · (9<i>x</i>) − 2 · (13<i>x</i>).', why:'Now <i>x</i> is written as an ILC of 9<i>x</i> and 13<i>x</i>.'},
+  {t:'13 | 9<i>x</i> is given, and 13 | 13<i>x</i> by D1.', why:'13 divides both pieces.'},
+  {t:'So 13 | 3 · (9<i>x</i>) − 2 · (13<i>x</i>) = <i>x</i>.', why:'D3 with <i>s</i> = 3, <i>t</i> = −2.', cls:'good'},
+  {t:'✓ 13 | <i>x</i>. The 9 is gone.', why:'Getting rid of the 9 was what the 1 was for.', cls:'good'}
+ ],
+ bad:[
+  {t:'Given: 6 | 4 · 9 = 36. But gcd(6, 4) = 2.', why:'The first hypothesis holds. The second one doesn’t.', cls:'bad'},
+  {t:'Bezout: &nbsp;2 = 1 · 6 − 1 · 4.', why:'Bezout gives you the gcd, and the gcd here is 2, not 1.'},
+  {t:'Multiply through by 9: &nbsp;2 · 9 = 9 · 6 − 9 · 4, i.e. 18 = 54 − 36.', why:'Same move as before.'},
+  {t:'6 | 54 by D1, and 6 | 36 is given.', why:'6 divides both pieces, just like before.'},
+  {t:'So 6 | 2 · 9 = 18.', why:'D3 — a true conclusion, just not the one you were after.'},
+  {t:'✗ That’s 6 | 2 · 9, not 6 | 9. The 2 is stuck there.', why:'And 6 <span class="nd">∤</span> 9. The extra 2 is gcd(6, 4).', cls:'bad'}
+ ]
+};
+(function(){
+  var sel=document.getElementById('bzsel'), host=document.getElementById('bzderiv'),
+      next=document.getElementById('bznext'), reset=document.getElementById('bzreset');
+  if(!sel) return;
+  var kind='ok', shown=0;
+  function render(){
+    host.innerHTML='';
+    BZ[kind].forEach(function(l,i){
+      var d=document.createElement('div');
+      d.className='dline'+(l.cls?' '+l.cls:'')+(i<shown?' on':'');
+      d.innerHTML=l.t+'<span class="why">'+l.why+'</span>';
+      host.appendChild(d);
+    });
+    next.disabled = shown>=BZ[kind].length;
+    next.textContent = shown>=BZ[kind].length ? 'Done' : (shown===0?'Start':'Next line');
+  }
+  sel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){
+      sel.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true'); kind=b.dataset.k; shown=0; render();
+    });
+  });
+  next.addEventListener('click',function(){ if(shown<BZ[kind].length){ shown++; render(); } });
+  reset.addEventListener('click',function(){ shown=0; render(); });
+  render();
+})();
+
+/* ---------- §3 quick check ---------- */
+(function(){
+  var opts=document.getElementById('q1'), fb=document.getElementById('q1fb');
+  if(!opts) return;
+  var done=false;
+  opts.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(done) return; done=true;
+      var ok=+o.dataset.c===1;
+      opts.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+        if(+x.dataset.c===1) x.classList.add('correct'); else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+      fb.className='fb show '+(ok?'good':'bad');
+      fb.innerHTML=ok
+        ? '<strong>Yes.</strong> Here the conclusion is right — 7 is prime and doesn’t divide 10 — but the reason has to be stated. Change 7 to 6 and the same sentence is false (6 | 10 · 3 and 6 <span class="nd">∤</span> 3), even though 6 doesn’t divide 10 either.'
+        : '<strong>Not quite — B.</strong> “<i>a</i> doesn’t divide <i>b</i>” isn’t G4’s hypothesis; gcd(<i>a</i>, <i>b</i>) = 1 is. They agree when <i>a</i> is prime, which is why A feels right here. Try <i>a</i> = 6, <i>b</i> = 10: 6 <span class="nd">∤</span> 10, but 6 | 10 · 3 and 6 <span class="nd">∤</span> 3.';
+    });
+  });
+})();
+
+})();
+</script>

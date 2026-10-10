@@ -65,7 +65,7 @@ Teaching notes:
 | # | Lecture | Core content | Pairs with |
 |---|---|---|---|
 | 08 | Divisibility | `a \| b`, **ILC**, Die Hard water jugs as a state machine, gcd, Euclid, **the Pulverizer**, Bezout | Rec 08 |
-| 09 | Modular Arithmetic | `a ≡ₙ b`, `rem`/`div` pitfalls, arithmetic mod `n`, inverses, **Fermat's Little Theorem**, divisibility-by-9, ISBN | Rec 09 |
+| 09 | Modular Arithmetic | `a ≡ₙ b`, `rem`/`div` pitfalls, arithmetic mod `n`, inverses, **Fermat's Little Theorem**, divisibility-by-9, ISBN | **Rec 09 — modular arithmetic** ✅ companion exists |
 | 10 | Cryptography | Caesar/substitution/Enigma/one-time pad (**not examined**), Diffie-Hellman, **RSA**, primality & density of primes | Rec 10 — **CRT**, and removing RSA's coprimality assumption |
 
 Teaching notes:
@@ -149,5 +149,7 @@ Teaching notes:
 | Rec 03 | Strong induction: predicates, ordinary vs strong, strengthening | [`companions/rec-03.html`](../companions/rec-03.html) |
 | Lec 04 | State machines on tic-tac-toe: states, final states, invariant + reachability, potential function | [`companions/lec-04.html`](../companions/lec-04.html) |
 | Rec 07 | Master Theorem: recursion-tree picture of the three cases, worked and self-check examples, the gaps (`n log n`, Hanoi) | [`companions/rec-07.html`](../companions/rec-07.html) |
+| Lec 08 | Divisibility and gcd facts D1–D4, G1–G6: fact tester, nine small problems, Bezout step-through for G4, gcd edge cases, look-ahead to inverses / RSA / CRT | [`companions/lec-08.html`](../companions/lec-08.html) |
+| Rec 09 | Modular arithmetic: residue-class viewer + `rem` vs C `%`, 14 true/false on `≡ₙ`, base/exponent substitution sandbox, 11 power problems, `kx ≡ₙ b` map, Pulverizer inverse, 10 division problems, repeated squaring, 14 valid/bogus arguments, bonus divisibility tests for primes 3–23 as inverses of 10 | [`companions/rec-09.html`](../companions/rec-09.html) |
 
 Add a row when you build one.
