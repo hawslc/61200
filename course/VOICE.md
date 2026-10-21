@@ -107,6 +107,9 @@ like a paradox.
   `@media (prefers-color-scheme:dark){:root:not([data-theme="light"])}`,
   `:root[data-theme="dark"]`, and the light default on `:root`.
 - `aria-pressed` on toggle buttons. Keyboard-reachable controls.
+- **Space toggles a blank screen** for presenting, and never scrolls. Widgets
+  must not bind Space; custom keyboard activation uses Enter. The snippet is in
+  the `recitation-companion` skill.
 - Max width `760px`, 16px side gutters, works at phone width.
 
 ---

@@ -56,6 +56,10 @@ number only, no topic slug:
   `https://hawslc.github.io/61200/companions/<file>.html`.
 - When editing one that has been published, republish to its existing URL
   rather than creating a new artifact, so shared links keep working.
+- Every companion has the **Space = blank screen** toggle, used when presenting:
+  Space covers the page in the page colour, pressing it again restores it, and
+  it never scrolls. Widgets must not bind Space (use Enter). The snippet is in
+  `.claude/skills/recitation-companion/SKILL.md`.
 
 `lec-04.html` settled a few conventions worth reusing for later state-machine
 material: a state is written `(b, p)` with the board as a 3×3 tuple and `–` for

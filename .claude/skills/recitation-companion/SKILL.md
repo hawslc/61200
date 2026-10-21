@@ -117,12 +117,60 @@ Skeleton:
   </div>
 </section>
 
+<div id="blank" aria-hidden="true"></div>
+
 <footer>
   <div class="wrap">6.1200J / 18.062J · a short companion to Recitation NN, Fall 2026.</div>
 </footer>
 
-<script>(function(){ "use strict"; /* one IIFE block per widget */ })();</script>
+<script>(function(){ "use strict"; /* one IIFE block per widget, then the blank-screen block */ })();</script>
 ```
+
+#### Space blanks the screen — required in every companion
+
+Companions get projected in recitation. Pressing Space covers the page with a
+plain panel in the page colour; pressing it again brings the page back. Space
+never scrolls and never presses whatever button was just clicked, so it works
+mid-demo. Held-key repeats are ignored. (Settled in `lec-04.html`; also in
+`lec-11.html`.)
+
+Add all three pieces. CSS, at the end of the `<style>` block:
+
+```css
+/* ---- Space = blank screen (presenting) ---- */
+#blank{position:fixed; inset:0; z-index:1000; background:var(--paper); display:none}
+#blank.on{display:block}
+```
+
+HTML, just before `<footer>`:
+
+```html
+<div id="blank" aria-hidden="true"></div>
+```
+
+JS, as the last block inside the main IIFE:
+
+```js
+/* ---------- Space toggles a blank screen; never scrolls ---------- */
+(function(){
+  var blank=document.getElementById('blank');
+  if(!blank) return;
+  document.addEventListener('keydown',function(ev){
+    if(ev.key!==' ' && ev.code!=='Space') return;
+    var t=ev.target, tag=t && t.tagName;
+    if(tag==='INPUT' || tag==='TEXTAREA' || (t && t.isContentEditable)) return;
+    ev.preventDefault();
+    if(ev.repeat) return;
+    blank.classList.toggle('on');
+  });
+})();
+```
+
+**Space belongs to the blank screen, so widgets must not use it.** When you give
+a non-button element keyboard activation (an SVG vertex with `tabindex`, a
+custom tile), bind **Enter** only. Otherwise one keypress activates the element
+*and* blanks the page. Native `<button>`s still respond to Enter, and text inputs
+keep Space because the handler skips them.
 
 Class vocabulary already defined in the stylesheet:
 
@@ -148,6 +196,8 @@ open companions/rec-NN.html
 - [ ] Readable at 375px wide, no horizontal scroll.
 - [ ] `<` is escaped as `&lt;` everywhere — this bites constantly with `m &lt; n`.
 - [ ] Variables wrapped in `<span class="m">`, not left bare.
+- [ ] Space blanks the page and brings it back, including right after clicking a
+      button, without scrolling or pressing anything. No widget binds Space.
 - [ ] Footer says the right recitation number.
 - [ ] Add a row to the table at the bottom of `COURSE-MAP.md`.
 
