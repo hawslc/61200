@@ -1,0 +1,949 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphs Beyond the Picture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.nbtn{width:40px; height:40px; border-radius:9px; border:2px solid var(--rule-2); background:var(--panel-2);
+  font-family:var(--mono); font-weight:700; font-size:14px; cursor:pointer; transition:.12s}
+.nbtn:hover{border-color:var(--acc)}
+.nbtn[aria-pressed="true"]{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .nbtn[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); width:100%; cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-top:12px;
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.12em; line-height:1.85}
+.verdict{display:inline-block; font-family:var(--mono); font-weight:700; font-size:12px; padding:3px 9px;
+  border-radius:6px; margin-left:8px; letter-spacing:.05em}
+.verdict.T{background:var(--ok-soft); color:var(--ok); border:1px solid var(--ok-line)}
+.verdict.F{background:var(--bad-soft); color:var(--bad); border:1px solid var(--bad-line)}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:16.5px; margin-bottom:9px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* assume viewer */
+.slots{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+.slot{padding:7px 12px; border-radius:8px; font-family:var(--mono); font-size:13px; font-weight:700;
+  border:2px solid var(--rule-2); background:var(--panel-2); color:var(--ink-3)}
+.slot.have{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.slot.goal{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .slot.goal{color:#0B0D14}
+.slot.none{background:var(--warn-soft); border-color:var(--warn); color:var(--warn); border-style:dashed}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:13px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2)}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:7px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.5; color:var(--ink-2)}
+
+/* bar */
+.barwrap{margin-top:14px}
+.bar{height:44px; border-radius:9px; border:1px solid var(--rule-2); background:var(--panel-2); overflow:hidden;
+  display:flex; position:relative}
+.seg2{height:100%; border-right:1px solid rgba(255,255,255,.35); transition:width .25s}
+.gap{height:100%; background:repeating-linear-gradient(45deg,var(--bad-soft),var(--bad-soft) 6px,transparent 6px,transparent 12px);
+  border-left:2px solid var(--bad); transition:width .25s; display:flex; align-items:center; justify-content:center}
+.barlbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  margin-top:6px}
+
+/* derivation */
+.deriv{margin-top:12px; display:flex; flex-direction:column; gap:0}
+.dline{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk);
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.05em; line-height:1.6; opacity:0;
+  max-height:0; overflow:hidden; transition:opacity .25s, max-height .25s, padding .25s}
+.dline.on{opacity:1; max-height:220px}
+.dline.good{border-left-color:var(--ok); background:var(--ok-soft)}
+.dline.bad{border-left-color:var(--bad); background:var(--bad-soft)}
+.dline .why{display:block; font-family:var(--sans); font-size:13px; color:var(--ink-3); margin-top:3px}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+/* from lec-08 */
+.facts{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; margin-top:14px; font-size:15px}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.facts > div > div{padding:3px 0}
+.facts .fh{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  margin:6px 0 2px}
+.fid{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); margin-right:7px}
+.fchip{display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:6px;
+  background:var(--teal-soft); color:var(--teal); border:1px solid var(--teal-line); margin-right:6px}
+.pnum{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); margin-bottom:4px; letter-spacing:.06em}
+.score{font-family:var(--mono); font-size:13px; color:var(--ink-3); margin-top:14px}
+
+/* lec-11 additions: drawn graphs */
+:root{ --c1:#CF3A30; --c2:#23864A; --c3:#3560C8; --c4:#A98606; --c5:#8446BF; --on-c:#FFFFFF }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }}
+:root[data-theme="dark"]{ --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }
+.gbox{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; margin-top:12px; overflow:hidden}
+.gbox svg{display:block; width:100%; height:auto; max-height:360px; user-select:none; -webkit-user-select:none}
+svg .e{fill:none; stroke:var(--ink-3); stroke-width:2.4; stroke-linecap:round; transition:stroke .15s}
+svg .e.bad{stroke:var(--bad); stroke-width:4.2}
+svg .e.hi{stroke:var(--acc); stroke-width:4.2}
+svg .e.warn{stroke:var(--warn); stroke-width:3.4; stroke-dasharray:8 6}
+svg .vg{cursor:pointer; outline:none}
+svg .vg circle{fill:var(--panel); stroke:var(--ink); stroke-width:2; transition:fill .15s, stroke .15s}
+svg .vg:hover circle, svg .vg:focus-visible circle{stroke:var(--acc); stroke-width:3.4}
+svg .vg.sel circle{stroke:var(--acc); stroke-width:4.4; fill:var(--acc-soft)}
+svg .vg.sideL circle{fill:var(--acc-soft); stroke:var(--acc)}
+svg .vg.sideR circle{fill:var(--teal-soft); stroke:var(--teal)}
+svg .vl{font-family:var(--sans); font-size:15px; font-weight:600; fill:var(--ink); text-anchor:middle;
+  dominant-baseline:central; pointer-events:none}
+svg .vg.col .vl{fill:var(--on-c)}
+svg .vl.out, svg .vg.col .vl.out{font-family:var(--mono); font-size:13.5px; font-weight:700; fill:var(--ink-2)}
+svg .cap{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--ink-3); text-anchor:middle; letter-spacing:.06em}
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+@media(max-width:560px){.stats{grid-template-columns:1fr}}
+.stat{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:10px 13px; font-size:14.4px; line-height:1.65}
+.stat .sh{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:4px}
+.kv{font-family:var(--mono); font-size:13.2px; line-height:1.85; overflow-wrap:anywhere}
+.out.plain{font-family:var(--sans); font-size:15px; line-height:1.6}
+.dot{display:inline-block; width:11px; height:11px; border-radius:50%; vertical-align:-1px; margin-right:5px;
+  border:1px solid var(--ink-3)}
+.lbl{font-family:var(--mono); font-size:12px; color:var(--ink-3); letter-spacing:.05em}
+@media(max-width:560px){
+  svg .e{stroke-width:3.2} svg .e.bad, svg .e.hi{stroke-width:5.4} svg .e.warn{stroke-width:4.2}
+  svg .vl{font-size:24px} svg .vl.out, svg .vg.col .vl.out{font-size:22px}
+  svg .cap{font-size:20px}
+  .wrap{padding:0 16px} .card{padding:15px 14px}
+  #hmsvg .vl{font-size:18px}
+}
+
+/* ---- Space = blank screen (presenting) ---- */
+#blank{position:fixed; inset:0; z-index:1000; background:var(--paper); display:none}
+#blank.on{display:block}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Lecture 11</div>
+    <h1>The picture is not the graph</h1>
+    <p class="sub">Most wrong answers about graphs come from trusting the drawing over the definition — where the dots
+      sit, what lines up with what, which side looks bigger. Here are the facts from Lecture 11 that actually decide
+      things, and a lot of small questions that check whether you’re using them.</p>
+  </div>
+</header>
+
+<!-- ================= §0 the sheet ================= -->
+<section id="s0" style="padding-top:40px">
+  <div class="wrap">
+    <p style="margin-top:0">Definition 1, read literally: a graph <span class="m">G</span> = (<span class="m">V</span>,
+      <span class="m">E</span>) is a <strong>non-empty</strong> set <span class="m">V</span> of vertices and a
+      <strong>set</strong> <span class="m">E</span> of <strong>2-element subsets</strong> of <span class="m">V</span>.
+      That one sentence rules out self-loops, repeated edges and the empty graph, and it allows graphs with no edges
+      at all. Below, <span class="m">n</span> = |<span class="m">V</span>|.</p>
+    <div class="facts">
+      <div>
+        <div class="fh">Degrees</div>
+        <div><span class="fid">H1</span><strong>Handshake Lemma.</strong> Σ<sub><span class="m">v</span>∈<span class="m">V</span></sub> deg(<span class="m">v</span>) = 2|<span class="m">E</span>|.</div>
+        <div><span class="fid">H2</span>So the number of odd-degree vertices is even.</div>
+        <div><span class="fid">H3</span>0 ≤ deg(<span class="m">v</span>) ≤ <span class="m">n</span> − 1, so |<span class="m">E</span>| ≤ <span class="m">n</span>(<span class="m">n</span> − 1)/2, reached exactly by <span class="m">K</span><sub><span class="m">n</span></sub>.</div>
+        <div><span class="fid">B1</span>If <span class="m">G</span> is bipartite with sides <span class="m">L</span>, <span class="m">R</span>: Σ<sub><span class="m">v</span>∈<span class="m">L</span></sub> deg(<span class="m">v</span>) = |<span class="m">E</span>| = Σ<sub><span class="m">v</span>∈<span class="m">R</span></sub> deg(<span class="m">v</span>).</div>
+        <div><span class="fid">B2</span>So, given at least one edge, (average degree in <span class="m">L</span>) / (average degree in <span class="m">R</span>) = |<span class="m">R</span>| / |<span class="m">L</span>|.</div>
+      </div>
+      <div>
+        <div class="fh">Coloring</div>
+        <div><span class="fid">C1</span>χ(<span class="m">G</span>) = <span class="m">k</span> takes two proofs: a proper <span class="m">k</span>-coloring (χ(<span class="m">G</span>) ≤ <span class="m">k</span>) <em>and</em> an argument that no proper (<span class="m">k</span> − 1)-coloring exists.</div>
+        <div><span class="fid">C2</span>If <span class="m">k</span> vertices are all adjacent to each other, χ(<span class="m">G</span>) ≥ <span class="m">k</span>. So χ(<span class="m">K</span><sub><span class="m">n</span></sub>) = <span class="m">n</span>.</div>
+        <div><span class="fid">C3</span><span class="m">G</span> is bipartite iff it has a proper 2-coloring: call one color <span class="m">L</span> and the other <span class="m">R</span>.</div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>A graph is two sets, and the picture is optional</h2></div>
+
+    <p>Definition 1 says <span class="m">G</span> is the pair (<span class="m">V</span>, <span class="m">E</span>), and
+      that’s all it is. Positions, lengths and shapes belong to a <em>drawing</em>, not to the graph. Two very
+      different pictures can be the same graph. Anything you read off a picture, like “those two look adjacent”, has
+      to be checked against <span class="m">V</span> and <span class="m">E</span>.</p>
+
+    <h3>Is it a graph?</h3>
+    <p>Each of these either satisfies Definition 1 or breaks one specific clause of it. Find the clause.</p>
+    <div class="card">
+      <div id="tri1"></div>
+      <div class="expl" id="tri1sum"></div>
+    </div>
+
+    <div class="note warnb">
+      <strong>Definitions differ across sources</strong>, and lecture warns you about it. Other books allow
+      self-loops, repeated edges, or a graph with no vertices. In 6.1200 all three are out, and graphs with no edges
+      are in. When a theorem says “for all graphs”, these are the graphs it means.
+    </div>
+
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>Bipartite is a fact about the edges, not the layout</h2></div>
+
+    <p>Definition 6: <span class="m">G</span> is bipartite if <span class="m">V</span> <em>can</em> be partitioned
+      into <span class="m">L</span> and <span class="m">R</span> so that every edge has one endpoint in each. You get
+      to choose the split. It doesn’t have to be visible in the drawing, and the two sides don’t have to be the same
+      size.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick a graph, then try to sort its vertices into <span class="m">L</span> and <span class="m">R</span>.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="bpsel"></div></div>
+      <div class="gbox"><svg id="bpsvg" viewBox="0 0 600 300" aria-label="Bipartite sorter"></svg></div>
+      <div class="row"><button class="btn pri" id="bpgo">Sort into L | R</button>
+        <button class="btn" id="bpback">Back to the drawing</button></div>
+      <div class="expl" id="bpexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>To show a graph isn’t bipartite, you have to rule out every split.</strong> One split with an edge inside
+      a side shows nothing. The “two columns” graph fails in the columns it was drawn in, and it’s bipartite anyway.
+      What does rule out every split is a ring with an odd number of vertices. Going around it, the sides have to
+      alternate, and an odd number of alternations can’t come back to where it started.
+    </div>
+
+    <h3>Both sides count the same edges</h3>
+    <p>In a bipartite graph each edge has exactly one endpoint in <span class="m">L</span>. So adding up the degrees
+      on the <span class="m">L</span> side counts every edge once, and so does the <span class="m">R</span> side. Both
+      sums are |<span class="m">E</span>|. Divide each by the size of its side, and the two averages are locked
+      together no matter what the edges are.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Eight Harvard students, five MIT students. Click a Harvard vertex, then an MIT vertex, to toggle a
+        friendship. Each vertex shows its degree.</h4>
+      <div class="gbox"><svg id="hmsvg" viewBox="0 0 600 316" aria-label="Harvard–MIT friendship graph"></svg></div>
+      <div class="stats" id="hmstats"></div>
+      <div class="row">
+        <button class="btn" id="hmrand">Random friendships</button>
+        <button class="btn" id="hmstar">One MIT student befriends all of Harvard</button>
+        <button class="btn" id="hmclear">Clear</button>
+      </div>
+      <div class="expl" id="hmexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>The ratio never moves.</strong> Once there’s an edge, <span class="m">A</span><sub><span class="m">M</span></sub> / <span class="m">A</span><sub><span class="m">H</span></sub>
+      = |<span class="m">H</span>| / |<span class="m">M</span>| = 8/5, however lopsided you make things. That’s how
+      lecture could call the 1994, 2004 and 2007 partner-count studies wrong without looking at their data. The ratio
+      of men’s to women’s averages is pinned at |<span class="m">W</span>| / |<span class="m">M</span>| ≈ 1.03, not
+      1.74 or 3.33.
+    </div>
+
+    <h3>Small questions</h3>
+    <div id="p2"></div>
+    <div class="score" id="p2s"></div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>χ(<span class="m">G</span>) takes two proofs, and a coloring is only one of them</h2></div>
+
+    <p>Any proper <span class="m">k</span>-coloring proves χ(<span class="m">G</span>) ≤ <span class="m">k</span>.
+      That’s the easy half, and it’s the only half a coloring you found can give you. To prove χ(<span class="m">G</span>) = <span class="m">k</span> you
+      also need χ(<span class="m">G</span>) &gt; <span class="m">k</span> − 1, which means arguing that <em>every</em>
+      attempt with fewer colors fails.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Schedule lecture’s five exams. Click an exam to move it to the next time slot.</h4>
+      <div class="row" style="margin-top:0"><span class="lbl">slots available</span><div class="seg" id="exk"></div></div>
+      <div class="gbox"><svg id="exsvg" viewBox="0 0 580 290" aria-label="Exam-scheduling graph"></svg></div>
+      <div class="out plain" id="exout"></div>
+      <div class="row">
+        <button class="btn" data-p="five">Lecture: one slot each</button>
+        <button class="btn" data-p="four">Lecture’s 4-coloring</button>
+        <button class="btn" data-p="three">Lecture’s 3-coloring</button>
+        <button class="btn pri" id="exwhy">Why not 2?</button>
+      </div>
+      <div class="expl" id="exexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>Lecture proved χ(<span class="m">G</span>) = 3 with one proof of each kind.</strong> Upper bound: the
+      3-slot schedule. Lower bound: 6.3700, 6.2000 and 6.1200 all conflict with each other, so they need three
+      different slots. Neither half settles it alone. The first schedule was proper too. It used five slots, and
+      6.1200 got 1am.
+    </div>
+
+    <h3>Small questions</h3>
+    <div id="p3"></div>
+    <div class="score" id="p3s"></div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <div class="shead"><span class="snum">4</span><h2>Induction on graphs starts from the bigger graph</h2></div>
+
+    <p>In an induction on |<span class="m">V</span>|, <span class="m">P</span>(<span class="m">n</span>) usually
+      begins “for all <span class="m">n</span>-vertex graphs <span class="m">G</span> …”. So
+      <span class="m">P</span>(<span class="m">n</span>+1) is a claim about <strong>every</strong> graph with
+      <span class="m">n</span> + 1 vertices. The step has to begin “let <span class="m">G</span> be any graph with
+      <span class="m">n</span> + 1 vertices” and then apply the IH to a smaller subgraph of <span class="m">G</span>,
+      such as <span class="m">G</span> − <span class="m">v</span>, the subgraph of <span class="m">G</span> without one
+      vertex <span class="m">v</span>. If you start
+      from an <span class="m">n</span>-vertex graph and add a vertex, that’s <strong>buildup error</strong>. It only
+      proves something about the graphs your construction happens to reach.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Step through both inductive steps</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="busel">
+        <button data-k="shrink" aria-pressed="true">Start from G: a true claim</button>
+        <button data-k="build" aria-pressed="false">Build up: a false claim</button>
+      </div></div>
+      <div class="deriv" id="buderiv"></div>
+      <div class="row"><button class="btn pri" id="bunext">Start</button>
+        <button class="btn" id="bureset">Restart</button></div>
+    </div>
+
+    <div class="note warnb">
+      <strong>The counterexample was already in §1’s list.</strong> Two separate edges, ({1, 2, 3, 4}, {{1, 2}, {3, 4}}):
+      every degree is 1, and it isn’t connected. The bogus step can never produce it, because it only ever attaches a new vertex to a graph
+      that’s already in one piece. Now start from an arbitrary 4-vertex graph <span class="m">G</span> instead and look at
+      <span class="m">G</span> − <span class="m">v</span>. That subgraph can have a vertex of degree 0, so the IH doesn’t apply and the proof gets stuck. For a false claim, that’s
+      the right outcome.
+    </div>
+
+    <h3>Which opening is right?</h3>
+    <p>Three ways to start an inductive step on graphs. Judge the opening, not the rest of the proof.</p>
+    <div class="card">
+      <div id="tri5"></div>
+      <div class="expl" id="tri5sum"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="take">
+      <h3 style="font-size:19px">The short version</h3>
+      <ol>
+        <li><strong>Read the graph off <span class="m">V</span> and <span class="m">E</span>, not the picture.</strong> Positions, lengths and shapes belong to one drawing. Adjacent means the pair is in <span class="m">E</span>.</li>
+        <li><strong>Bipartite means <em>some</em> split works.</strong> One bad split proves nothing, the sides needn’t match in size, and the average degrees are locked at |<span class="m">R</span>| / |<span class="m">L</span>|.</li>
+        <li><strong>Prove χ(<span class="m">G</span>) = <span class="m">k</span> twice.</strong> Any coloring you exhibit only gives an upper bound. The lower bound needs its own argument, like a triangle or an odd ring.</li>
+        <li><strong>In graph induction, start from an arbitrary (<span class="m">n</span>+1)-vertex graph and apply the IH to a subgraph of it.</strong> Then check that the subgraph satisfies the IH’s hypothesis.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div id="blank" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 11, graphs and coloring, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- shared: drawn graphs ---------- */
+var NS='http://www.w3.org/2000/svg';
+var REDUCE=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var SMALL=!!(window.matchMedia && window.matchMedia('(max-width: 560px)').matches);  // SVGs render at ~0.55 scale on phones
+function S(tag,attrs,parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function key(u,v){ u=String(u); v=String(v); return u<v ? u+'|'+v : v+'|'+u; }
+function clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+function ring(ids,cx,cy,rad,start){
+  var p={}; ids.forEach(function(id,i){ var a=((start===undefined?-90:start)+360*i/ids.length)*Math.PI/180;
+    p[id]=[cx+rad*Math.cos(a), cy+rad*Math.sin(a)]; }); return p;
+}
+function strs(pairs){ return pairs.map(function(e){ return [String(e[0]),String(e[1])]; }); }
+
+/* edges drawn under vertices; vertices are focusable buttons */
+function mkView(svg,ids,labels,opts){
+  opts=opts||{};
+  var big=SMALL ? 1.6 : 1, r=Math.min((opts.r||16)*big, opts.rmax||99),
+      gE=S('g',{},svg), gV=S('g',{},svg);
+  var v={svg:svg, ids:ids, r:r, pos:{}, nodes:{}, lines:{}, edges:[], bend:null};
+  ids.forEach(function(id){
+    var nm=opts.names ? opts.names[id] : 'vertex '+labels[id];
+    var g=S('g',{'class':'vg', tabindex:'0', role:'button', 'aria-label':nm},gV);
+    var c=S('circle',{r:r},g), t=S('text',{'class':'vl'},g);
+    if(opts.out && opts.out[id]!==undefined){ t.setAttribute('y',opts.out[id]*big); t.setAttribute('class','vl out'); }
+    t.textContent=labels[id];
+    v.nodes[id]={g:g,c:c,t:t};
+  });
+  v.setEdges=function(edges){
+    clear(gE); v.lines={}; v.edges=edges.slice();
+    edges.forEach(function(e){ v.lines[key(e[0],e[1])]=S('path',{'class':'e'},gE); });
+    v.place(v.pos,1);
+  };
+  v.place=function(pos,amt){
+    v.pos=pos;
+    ids.forEach(function(id){ var p=pos[id]; if(p) v.nodes[id].g.setAttribute('transform','translate('+p[0].toFixed(1)+','+p[1].toFixed(1)+')'); });
+    v.edges.forEach(function(e){
+      var p=pos[e[0]], q=pos[e[1]]; if(!p||!q) return;
+      var b=v.bend ? v.bend(e[0],e[1],p,q,amt===undefined?1:amt) : null;
+      v.lines[key(e[0],e[1])].setAttribute('d', b
+        ? 'M'+p[0].toFixed(1)+' '+p[1].toFixed(1)+' Q'+b[0].toFixed(1)+' '+b[1].toFixed(1)+' '+q[0].toFixed(1)+' '+q[1].toFixed(1)
+        : 'M'+p[0].toFixed(1)+' '+p[1].toFixed(1)+' L'+q[0].toFixed(1)+' '+q[1].toFixed(1));
+    });
+  };
+  v.tap=function(fn){
+    ids.forEach(function(id){
+      var g=v.nodes[id].g;
+      g.addEventListener('click',function(){ fn(id); });
+      g.addEventListener('keydown',function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); fn(id); } });  // Space is the blank screen
+    });
+  };
+  v.paint=function(id,c){
+    var n=v.nodes[id];
+    if(c===undefined||c===null||c<0){ n.g.classList.remove('col'); n.c.style.fill=''; }
+    else { n.g.classList.add('col'); n.c.style.fill='var(--c'+(c+1)+')'; }
+  };
+  v.line=function(a,b){ return v.lines[key(a,b)]; };
+  return v;
+}
+function tween(view,to,ms,done){
+  var tok={}, from=view.pos; view.anim=tok;
+  if(REDUCE){ view.place(to,1); if(done) done(); return; }
+  var t0=null;
+  function step(ts){
+    if(view.anim!==tok) return;
+    if(t0===null) t0=ts;
+    var t=Math.min(1,(ts-t0)/ms), e=t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2, cur={};
+    for(var k in to){ var a=from[k]||to[k]; cur[k]=[a[0]+(to[k][0]-a[0])*e, a[1]+(to[k][1]-a[1])*e]; }
+    view.place(cur,e);
+    if(t<1) requestAnimationFrame(step); else if(done) done();
+  }
+  requestAnimationFrame(step);
+}
+function pressOnly(seg,btn){
+  seg.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x===btn?'true':'false'); });
+}
+
+/* ---------- shared: triage and problem lists ---------- */
+function mkTriage(hostId,sumId,items,labels,doneMsg){
+  var host=document.getElementById(hostId), sum=document.getElementById(sumId);
+  if(!host) return;
+  items.forEach(function(item){
+    var c=document.createElement('div'); c.className='tcard';
+    c.innerHTML='<div class="cand">'+item.t+'</div><div class="tbtns">'+
+      Object.keys(labels).map(function(k){ return '<button class="tbtn" data-k="'+k+'">'+labels[k]+'</button>'; }).join('')+
+      '</div><div class="tfb"></div>';
+    var fb=c.querySelector('.tfb');
+    c.querySelectorAll('.tbtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(c.dataset.done) return; c.dataset.done='1';
+        var ok=b.dataset.k===item.a;
+        c.querySelectorAll('.tbtn').forEach(function(x){ x.classList.add('lk');
+          if(x.dataset.k===item.a) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+        fb.className='tfb show '+(ok?'g':'b'); fb.innerHTML=(ok?'':'<strong>'+labels[item.a]+'.</strong> ')+item.w;
+        var d=host.querySelectorAll('.tcard[data-done]').length;
+        sum.innerHTML=d+' of '+items.length+' sorted.'+(d===items.length?' '+doneMsg:'');
+      });
+    });
+    host.appendChild(c);
+  });
+  sum.textContent='0 of '+items.length+' sorted.';
+}
+function mkProbs(hostId,scoreId,prefix,list){
+  var host=document.getElementById(hostId), sc=document.getElementById(scoreId);
+  if(!host) return;
+  var done=0, right=0, L='ABCD';
+  list.forEach(function(p,i){
+    var c=document.createElement('div'); c.className='card';
+    c.innerHTML='<div class="pnum">QUESTION '+prefix+'.'+(i+1)+'</div><div style="font-weight:600;font-size:15.6px">'+p.q+'</div>'+
+      '<div class="opts">'+p.o.map(function(t,j){ return '<button class="opt" data-c="'+j+'"><span class="mk">'+L[j]+'</span><span>'+t+'</span></button>'; }).join('')+
+      '</div><div class="fb"></div>';
+    var fb=c.querySelector('.fb'), locked=false;
+    c.querySelectorAll('.opt').forEach(function(o){
+      o.addEventListener('click',function(){
+        if(locked) return; locked=true;
+        var ok=+o.dataset.c===p.a; done++; if(ok) right++;
+        c.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+          if(+x.dataset.c===p.a) x.classList.add('correct'); else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+        fb.className='fb show '+(ok?'good':'bad');
+        fb.innerHTML='<span class="fchip">'+p.f+'</span>'+(ok?'<strong>Yes.</strong> ':'<strong>Not quite — '+L[p.a]+'.</strong> ')+p.w;
+        sc.textContent=right+' of '+done+' right so far'+(done===list.length?' · all '+list.length+' done':'')+'.';
+      });
+    });
+    host.appendChild(c);
+  });
+  sc.textContent='0 of '+list.length+' attempted.';
+}
+
+/* ---------- §1 is it a graph? ---------- */
+mkTriage('tri1','tri1sum',[
+ {t:'({<i>a</i>, <i>b</i>, <i>c</i>}, ∅)', a:'ok',
+  w:'A graph with three vertices and no edges. Lecture uses this exact one: “We do allow graphs without edges.”'},
+ {t:'(∅, ∅)', a:'no',
+  w:'<i>V</i> has to be non-empty. Lecture rules this out on purpose, because it would need a special case in theorems.'},
+ {t:'({<i>a</i>, <i>b</i>, <i>c</i>}, {{<i>a</i>}})', a:'no',
+  w:'{<i>a</i>} has one element, and edges are <em>2-element</em> subsets. This is a self-loop, which a simple graph can’t have.'},
+ {t:'({<i>a</i>, <i>b</i>}, {{<i>a</i>, <i>c</i>}})', a:'no',
+  w:'<i>c</i> ∉ <i>V</i>, so {<i>a</i>, <i>c</i>} isn’t a subset of <i>V</i>. Both endpoints of every edge have to be vertices.'},
+ {t:'({1, 2, 3, 4}, {{1, 2}, {3, 4}})', a:'ok',
+  w:'Two separate pieces are fine. Nothing in Definition 1 says a graph has to hang together. (It comes back in §4.)'},
+ {t:'({7}, ∅)', a:'ok',
+  w:'The smallest possible graph: one vertex, with degree 0.'},
+ {t:'A drawing with two different curves, both joining <i>a</i> to <i>b</i>', a:'no',
+  w:'<i>E</i> is a set, so {<i>a</i>, <i>b</i>} can be in it only once. Some sources allow these repeated edges (multigraphs). 6.1200’s definition doesn’t.'},
+ {t:'({<i>a</i>, <i>b</i>, <i>c</i>}, {{<i>a</i>, <i>b</i>, <i>c</i>}})', a:'no',
+  w:'An edge has exactly two endpoints, and {<i>a</i>, <i>b</i>, <i>c</i>} has three.'}
+],{ok:'A graph', no:'Not a graph'},
+'<strong>Three are graphs.</strong> Each “not” breaks a single clause: <i>V</i> non-empty, edges with exactly 2 elements, endpoints taken from <i>V</i>, <i>E</i> a set.');
+
+/* ---------- §2 sort into L and R ---------- */
+(function(){
+  var svg=document.getElementById('bpsvg'), sel=document.getElementById('bpsel'), expl=document.getElementById('bpexpl'),
+      go=document.getElementById('bpgo'), back=document.getElementById('bpback');
+  if(!svg) return;
+  function nums(k){ var a=[]; for(var i=1;i<=k;i++) a.push(String(i)); return a; }
+  var G=[
+   {k:'hex', name:'6-ring', ids:nums(6), pos:ring(nums(6),300,150,112),
+    E:[[1,2],[2,3],[3,4],[4,5],[5,6],[6,1]],
+    pre:'Six vertices joined in a ring, 1–2–3–4–5–6–1. Nothing about it looks like two columns.',
+    post:'<strong>Sorted.</strong> Going around the ring the vertices alternate L, R, L, R, …, so every edge crosses. Any ring with an even number of vertices sorts the same way.'},
+   {k:'cube', name:'Cube', ids:nums(8),
+    pos:{1:[150,40],2:[450,40],3:[450,260],4:[150,260],5:[245,108],6:[355,108],7:[355,192],8:[245,192]},
+    E:[[1,2],[2,3],[3,4],[4,1],[5,6],[6,7],[7,8],[8,5],[1,5],[2,6],[3,7],[4,8]],
+    pre:'The corners and edges of a cube, drawn as a square inside a square. Every vertex has degree 3.',
+    post:'<strong>Sorted</strong>, with |<i>L</i>| = |<i>R</i>| = 4. The square-in-a-square picture never looked like two columns, and it didn’t need to.'},
+   {k:'cols', name:'Two columns?', ids:nums(6),
+    pos:{1:[170,60],2:[170,150],3:[170,240],4:[430,60],5:[430,150],6:[430,240]},
+    E:[[1,4],[2,5],[3,6],[1,2],[5,6]], split:{1:0,2:0,3:0,4:1,5:1,6:1},
+    pre:'Drawn in two columns, but the dashed edges 1–2 and 5–6 are inside a column. So the split the drawing suggests <em>fails</em>. Does some other split work?',
+    post:'<strong>Sorted</strong>, just not into the columns it was drawn in. Here <i>L</i> = {1, 3, 5} and <i>R</i> = {2, 4, 6}, and every edge crosses. Definition 6 asks whether <em>some</em> split works, so finding one bad split proves nothing.'},
+   {k:'five', name:'5-ring', ids:nums(5), pos:ring(nums(5),300,156,116),
+    E:[[1,2],[2,3],[3,4],[4,5],[5,1]],
+    pre:'Five vertices joined in a ring, 1–2–3–4–5–1.',
+    post:'<strong>Stuck.</strong> Walk around the ring and the sides have to alternate: L, R, L, R, …. Five is odd, so the alternation can’t close up, and some edge ends with both endpoints on one side. Every split you could try fails this way, not just this one, so the 5-ring is <em>not</em> bipartite. The same goes for any ring with an odd number of vertices.'},
+   {k:'lec', name:'Lecture’s graph', ids:['a','b','c','d','e','f','g'],
+    pos:{a:[100,60],b:[100,240],c:[220,150],d:[340,60],e:[340,240],f:[490,60],g:[490,240]},
+    E:[['a','b'],['a','c'],['b','c'],['c','d'],['c','e'],['d','e'],['d','f'],['e','g'],['f','g']],
+    pre:'Lecture 11’s example graph, drawn the way lecture draws it.',
+    post:'<strong>Stuck.</strong> <i>a</i>, <i>b</i>, <i>c</i> are all adjacent to each other, so whatever you do, two of them end up on the same side. The same is true of <i>c</i>, <i>d</i>, <i>e</i>. Lecture’s example graph is not bipartite.'}
+  ];
+  var cur=null, view=null, side={}, sorted=false, capL, capR;
+
+  G.forEach(function(g,i){
+    var b=document.createElement('button'); b.textContent=g.name;
+    b.setAttribute('aria-pressed', i===0?'true':'false');
+    b.addEventListener('click',function(){ pressOnly(sel,b); load(g); });
+    sel.appendChild(b);
+  });
+  function twoColor(g){
+    var adj={}, s={}, order=[];
+    g.ids.forEach(function(i){ adj[i]=[]; });
+    strs(g.E).forEach(function(e){ adj[e[0]].push(e[1]); adj[e[1]].push(e[0]); });
+    g.ids.forEach(function(st){
+      if(s[st]!==undefined) return; s[st]=0; var q=[st];
+      while(q.length){ var u=q.shift(); order.push(u);
+        adj[u].forEach(function(w){ if(s[w]===undefined){ s[w]=1-s[u]; q.push(w); } }); }
+    });
+    return {s:s, order:order};
+  }
+  function load(g){
+    cur=g; sorted=false; clear(svg);
+    var lab={}; g.ids.forEach(function(i){ lab[i]=i; });
+    view=mkView(svg,g.ids,lab);
+    capL=S('text',{'class':'cap',x:170,y:20,opacity:0},svg); capL.textContent='L';
+    capR=S('text',{'class':'cap',x:430,y:20,opacity:0},svg); capR.textContent='R';
+    view.bend=null; view.place(g.pos); view.setEdges(strs(g.E));
+    strs(g.E).forEach(function(e){
+      view.line(e[0],e[1]).setAttribute('class', g.split && g.split[e[0]]===g.split[e[1]] ? 'e warn' : 'e');
+    });
+    expl.innerHTML=g.pre; go.disabled=false; back.disabled=true;
+  }
+  go.addEventListener('click',function(){
+    if(!cur||sorted) return;
+    var r=twoColor(cur); side=r.s; sorted=true;
+    var Ls=r.order.filter(function(v){return side[v]===0;}), Rs=r.order.filter(function(v){return side[v]===1;});
+    var to={};
+    function col(list,x){ var gap=list.length>1 ? Math.min(70,236/(list.length-1)) : 0;
+      list.forEach(function(v,i){ to[v]=[x, 156+(i-(list.length-1)/2)*gap]; }); }
+    col(Ls,170); col(Rs,430);
+    var bad=0;
+    strs(cur.E).forEach(function(e){ var same=side[e[0]]===side[e[1]]; if(same) bad++;
+      view.line(e[0],e[1]).setAttribute('class', same ? 'e bad' : 'e'); });
+    view.bend=function(u,w,p,q,amt){
+      if(side[u]!==side[w]) return null;
+      return [(p[0]+q[0])/2+(side[u]===0?-1:1)*95*amt, (p[1]+q[1])/2];
+    };
+    cur.ids.forEach(function(v){ view.nodes[v].g.classList.add(side[v]===0?'sideL':'sideR'); });
+    capL.setAttribute('opacity',1); capR.setAttribute('opacity',1);
+    tween(view,to,650);
+    expl.innerHTML=cur.post+(bad?' The red edges are the ones with both endpoints on one side.':'');
+    go.disabled=true; back.disabled=false;
+  });
+  back.addEventListener('click',function(){ if(cur) load(cur); });
+  load(G[0]);
+})();
+
+/* ---------- §2 Harvard–MIT averages ---------- */
+(function(){
+  var svg=document.getElementById('hmsvg'), stats=document.getElementById('hmstats'), expl=document.getElementById('hmexpl');
+  if(!svg) return;
+  var NH=8, NM=5, ids=[], lab={}, names={}, pos={};
+  for(var i=0;i<NH;i++){ var h='h'+i; ids.push(h); lab[h]='0'; names[h]='Harvard student '+(i+1); pos[h]=[170,52+i*35]; }
+  for(var j=0;j<NM;j++){ var m='m'+j; ids.push(m); lab[m]='0'; names[m]='MIT student '+(j+1); pos[m]=[430,72+j*56]; }
+  if(SMALL) svg.setAttribute('viewBox','95 0 410 316');
+  var cH=S('text',{'class':'cap',x:170,y:22},svg); cH.textContent=SMALL ? 'H, |H| = 8' : 'H (Harvard), |H| = 8';
+  var cM=S('text',{'class':'cap',x:430,y:22},svg); cM.textContent=SMALL ? 'M, |M| = 5' : 'M (MIT), |M| = 5';
+  var view=mkView(svg,ids,lab,{r:14,rmax:15.5,names:names}), edges={}, pick=null;
+  view.place(pos); view.setEdges([]);
+  view.tap(function(id){
+    if(pick===null){ pick=id; view.nodes[id].g.classList.add('sel'); expl.textContent=''; return; }
+    view.nodes[pick].g.classList.remove('sel');
+    if(pick===id){ pick=null; return; }
+    if(pick[0]===id[0]){
+      expl.innerHTML='Both of those are at '+(id[0]==='h'?'Harvard':'MIT')+'. This graph only records Harvard–MIT friendships, so every edge has to cross. That’s what makes it bipartite.';
+      pick=null; return;
+    }
+    var k=key(pick,id); if(edges[k]) delete edges[k]; else edges[k]=[pick,id];
+    pick=null; expl.textContent=''; draw();
+  });
+  function fmt(x){ return (Math.round(x*1000)/1000).toString(); }
+  function draw(){
+    var list=[], deg={}, m=0;
+    ids.forEach(function(v){ deg[v]=0; });
+    for(var k in edges){ list.push(edges[k]); deg[edges[k][0]]++; deg[edges[k][1]]++; m++; }
+    view.setEdges(list);
+    ids.forEach(function(v){ view.nodes[v].t.textContent=deg[v]; });
+    var sH=0, sM=0; ids.forEach(function(v){ if(v[0]==='h') sH+=deg[v]; else sM+=deg[v]; });
+    stats.innerHTML='<div class="stat"><div class="sh">Sums</div>'+
+      '<div class="kv">Σ over H of deg = '+sH+'</div><div class="kv">Σ over M of deg = '+sM+'</div><div class="kv">|E| = '+m+'</div></div>'+
+      '<div class="stat"><div class="sh">Averages</div>'+
+      '<div class="kv">A<sub>H</sub> = '+m+'/8 = '+fmt(m/8)+'</div><div class="kv">A<sub>M</sub> = '+m+'/5 = '+fmt(m/5)+'</div>'+
+      '<div class="kv">A<sub>M</sub> / A<sub>H</sub> = '+(m?'<b>1.6</b> = |H|/|M|':'0/0, undefined until there’s an edge')+'</div></div>';
+  }
+  document.getElementById('hmrand').addEventListener('click',function(){
+    edges={};
+    while(!Object.keys(edges).length){
+      for(var a=0;a<NH;a++) for(var b=0;b<NM;b++) if(Math.random()<0.28) edges[key('h'+a,'m'+b)]=['h'+a,'m'+b];
+    }
+    expl.textContent=''; draw();
+  });
+  document.getElementById('hmstar').addEventListener('click',function(){
+    for(var a=0;a<NH;a++) edges[key('h'+a,'m0')]=['h'+a,'m0'];
+    expl.innerHTML='One very social MIT student just added 8 to the MIT side’s total, and 1 to each Harvard student. Both sums still equal |<i>E</i>|.';
+    draw();
+  });
+  document.getElementById('hmclear').addEventListener('click',function(){ edges={}; expl.textContent=''; draw(); });
+  draw();
+})();
+
+mkProbs('p2','p2s','2',[
+ {q:'Is ({<i>a</i>, <i>b</i>, <i>c</i>}, ∅) bipartite?',
+  o:['Yes','No: with no edges, nothing crosses between <i>L</i> and <i>R</i>','No: three vertices can’t be split evenly'], a:0, f:'Def. 6',
+  w:'Put <i>a</i> in <i>L</i> and <i>b</i>, <i>c</i> in <i>R</i>. The condition is “every edge has one endpoint in each”, and with no edges that holds automatically. The sides don’t have to be the same size.'},
+ {q:'The star <i>S</i><sub>5</sub> has one center adjacent to five others. Is it bipartite, and with what sides?',
+  o:['Yes, with |<i>L</i>| = |<i>R</i>| = 3','Yes, with |<i>L</i>| = 1 and |<i>R</i>| = 5','No, because the center is adjacent to everything'], a:1, f:'Def. 6',
+  w:'Center on one side and the five others on the other: every edge crosses. Lecture also writes it <i>K</i><sub>1,5</sub>, the complete bipartite graph with sides of size 1 and 5. Lopsided sides are fine. Lecture’s own sides were about 7200 and 4600.'},
+ {q:'A bipartite graph has |<i>L</i>| = 3 and |<i>R</i>| = 4. What is the most edges it can have?',
+  o:['12','21','7'], a:0, f:'Def. 6',
+  w:'Every edge pairs one of the 3 vertices in <i>L</i> with one of the 4 in <i>R</i>, so there are at most 3 · 4 = 12. The answer 21 = 7 · 6/2 is the maximum for an arbitrary 7-vertex graph (H3), which allows edges inside a side.'},
+ {q:'A bipartite graph has |<i>L</i>| = 2 and |<i>R</i>| = 10, and at least one edge. The average degree in <i>L</i> is how many times the average degree in <i>R</i>?',
+  o:['1/5','5','Can’t say without knowing the edges'], a:1, f:'B2',
+  w:'Both sides’ degrees add up to |<i>E</i>| (B1), so <i>A</i><sub><i>L</i></sub> = |<i>E</i>|/2 and <i>A</i><sub><i>R</i></sub> = |<i>E</i>|/10. The ratio is |<i>R</i>|/|<i>L</i>| = 5 whatever the edges are. The smaller side has the larger average.'},
+ {q:'A survey finds that the average MIT student has 3 Harvard friends, and the average Harvard student has 3 MIT friends. With |<i>H</i>| ≈ 7200 and |<i>M</i>| ≈ 4600, what do you conclude?',
+  o:['That’s plausible: the two schools are equally sociable','That’s plausible if the survey was large enough','The two numbers can’t both be right'], a:2, f:'B2',
+  w:'B2 forces <i>A</i><sub><i>M</i></sub>/<i>A</i><sub><i>H</i></sub> = |<i>H</i>|/|<i>M</i>| ≈ 1.6, whatever anyone’s social life is like. Equal averages would require equal populations. Lecture’s partner-count studies fail the same test.'},
+ {q:'You split <i>V</i> into <i>L</i> and <i>R</i> and find an edge with both endpoints in <i>L</i>. What have you shown?',
+  o:['Only that this particular split fails','<i>G</i> is not bipartite','χ(<i>G</i>) ≥ 3'], a:0, f:'Def. 6',
+  w:'Bipartite says <em>some</em> split works. To show a graph isn’t bipartite you have to rule out every split, as the odd-ring argument does. The “two columns” graph fails in the columns it was drawn in and is bipartite anyway. The third answer says the same thing as the second, by C3.'},
+ {q:'<i>G</i> is bipartite and has at least one edge. What is χ(<i>G</i>)?',
+  o:['1','It depends on |<i>L</i>| and |<i>R</i>|','2'], a:2, f:'C3',
+  w:'Give <i>L</i> one color and <i>R</i> another. Every edge crosses, so the coloring is proper and χ(<i>G</i>) ≤ 2. One edge needs two different colors, so χ(<i>G</i>) ≥ 2. Notice that took two arguments. That’s §3.'}
+]);
+
+/* ---------- §3 exam scheduling ---------- */
+(function(){
+  var svg=document.getElementById('exsvg'), kseg=document.getElementById('exk'), out=document.getElementById('exout'),
+      expl=document.getElementById('exexpl'), why=document.getElementById('exwhy');
+  if(!svg) return;
+  if(SMALL) svg.setAttribute('viewBox','70 0 440 290');
+  var ids=['0','1','2','3','4'], nm={0:'6.3700',1:'6.2000',2:'6.1200',3:'6.3000',4:'6.4100'}, names={};
+  ids.forEach(function(i){ names[i]='exam '+nm[i]; });
+  var POS={0:[120,80],1:[290,80],2:[120,215],3:[290,215],4:[460,215]};
+  var EDG=strs([[0,1],[0,2],[1,2],[1,3],[2,3],[3,4]]), TRI={'0|1':1,'0|2':1,'1|2':1};
+  var SL=['5pm','7pm','9pm','11pm','1am'];
+  var PRE={five:{k:5,c:[1,3,4,2,0]}, four:{k:4,c:[0,2,3,1,0]}, three:{k:3,c:[1,2,0,1,0]}};
+  var view=mkView(svg,ids,nm,{r:15,names:names,out:{0:-31,1:-31,2:33,3:33,4:33}});
+  view.place(POS); view.setEdges(EDG);
+  var k=5, col=PRE.five.c.slice(), showWhy=false;
+
+  [2,3,4,5].forEach(function(n){
+    var b=document.createElement('button'); b.textContent=n; b.dataset.k=n;
+    b.setAttribute('aria-pressed', n===k?'true':'false');
+    b.addEventListener('click',function(){ setK(n); showWhy=false; draw(); });
+    kseg.appendChild(b);
+  });
+  function setK(n){
+    k=n; pressOnly(kseg, kseg.querySelector('[data-k="'+n+'"]'));
+    col=col.map(function(c){ return c>=k ? -1 : c; });
+  }
+  view.tap(function(id){ var i=+id; col[i]=col[i]+1>=k ? -1 : col[i]+1; showWhy=false; draw(); });
+  document.querySelectorAll('[data-p]').forEach(function(b){
+    b.addEventListener('click',function(){ var p=PRE[b.dataset.p]; col=p.c.slice(); setK(p.k); showWhy=false; draw(); });
+  });
+  why.addEventListener('click',function(){
+    if(k!==2) setK(2);
+    showWhy=true; draw();
+  });
+  function draw(){
+    ids.forEach(function(id){ view.paint(id,col[+id]); });
+    var bad=[];
+    EDG.forEach(function(e){
+      var a=col[+e[0]], b=col[+e[1]], c='e';
+      if(a>=0 && a===b){ c='e bad'; bad.push(nm[e[0]]+' and '+nm[e[1]]+' are both at '+SL[a]); }
+      else if(showWhy && TRI[key(e[0],e[1])]) c='e hi';
+      view.line(e[0],e[1]).setAttribute('class',c);
+    });
+    var html='', used={};
+    for(var s=0;s<k;s++){
+      var here=ids.filter(function(id){ return col[+id]===s; }).map(function(id){ return nm[id]; });
+      if(here.length) used[s]=1;
+      html+='<div class="kv"><span class="dot" style="background:var(--c'+(s+1)+')"></span>'+SL[s]+'&nbsp;&nbsp;'+(here.length?here.join(', '):'—')+'</div>';
+    }
+    var none=ids.filter(function(id){ return col[+id]<0; }).map(function(id){ return nm[id]; });
+    if(none.length) html+='<div class="kv"><span class="dot"></span>no slot&nbsp;&nbsp;'+none.join(', ')+'</div>';
+    out.innerHTML=html;
+    var u=Object.keys(used).length, msg;
+    if(bad.length) msg='<span class="verdict F">NOT PROPER</span> '+bad.join('; ')+', and they conflict.';
+    else if(none.length) msg=none.length+' exam'+(none.length>1?'s':'')+' still need'+(none.length>1?'':'s')+' a slot. Click to assign one.';
+    else {
+      msg='<span class="verdict T">PROPER</span> A proper '+u+'-coloring, which proves χ(<i>G</i>) ≤ '+u+'.';
+      if(u>3) msg+=' That’s an upper bound only. Try fewer slots.';
+      if(u===3) msg+=' Add the lower bound (6.3700, 6.2000 and 6.1200 all conflict with each other, so they need three different slots) and you have χ(<i>G</i>) = 3.';
+    }
+    if(k===2 && !showWhy) msg+=' <br>With two slots, can you fit everything in? If you can’t, press “Why not 2?”.';
+    if(showWhy) msg='6.3700, 6.2000 and 6.1200 (highlighted) all conflict with each other, so they need three different slots. With only two slots, two of them would have to share one. That shows χ(<i>G</i>) &gt; 2 for <em>every</em> schedule, not just the ones you tried. It’s a lower bound.';
+    expl.innerHTML=msg;
+  }
+  draw();
+})();
+
+mkProbs('p3','p3s','3',[
+ {q:'You found a proper 4-coloring of <i>G</i>. What do you now know?',
+  o:['χ(<i>G</i>) = 4','χ(<i>G</i>) ≤ 4','χ(<i>G</i>) ≥ 4'], a:1, f:'C1',
+  w:'A coloring shows that 4 colors are <em>enough</em>. Maybe 3 are enough too. Lecture’s exam graph had a 4-coloring and χ = 3. To get equality you also need an argument that 3 colors can’t work.'},
+ {q:'<i>G</i> has a vertex of degree 10. What is the smallest χ(<i>G</i>) could be?',
+  o:['2','11','10'], a:0, f:'C3',
+  w:'Take the star <i>S</i><sub>10</sub>: one color for the center and another for all ten others. It’s bipartite, so χ = 2. A vertex with many neighbors doesn’t force many colors; what forces colors is neighbors that are adjacent to <em>each other</em>.'},
+ {q:'No three vertices of <i>G</i> are all adjacent to each other, so <i>G</i> has no triangle. Must χ(<i>G</i>) ≤ 2?',
+  o:['Yes, because it takes a triangle to force a third color','Yes, as long as <i>G</i> has an even number of vertices','No'], a:2, f:'C2',
+  w:'The 5-ring from §2 has no triangle and can’t be 2-colored: going around, the colors would have to alternate, and five is odd. So χ = 3. Add an isolated vertex and you have 6 vertices with the same problem. C2 gives a lower bound when there <em>is</em> a triangle. When there isn’t one, C2 says nothing.'},
+ {q:'Two graphs, every vertex of degree 2 in both: one ring of six vertices, and two separate triangles. What are their chromatic numbers?',
+  o:['2 and 3','Both 2','Both 3'], a:0, f:'C2 · C3',
+  w:'The 6-ring is bipartite (alternate around it), so its χ is 2. Each triangle needs 3 colors by C2. The degrees alone don’t decide χ.'},
+ {q:'When is χ(<i>G</i>) = 1?',
+  o:['When <i>G</i> has one vertex','Never, because every graph needs 2 colors','When <i>G</i> has no edges'], a:2, f:'C1',
+  w:'A coloring with one color is proper iff no edge has two endpoints of the same color, i.e. iff there are no edges at all. ({<i>a</i>, <i>b</i>, <i>c</i>}, ∅) has χ = 1 and three vertices.'},
+ {q:'χ(<i>G</i>) = 3. You add a new vertex <i>x</i> adjacent to exactly one old vertex. What is χ now?',
+  o:['4','3','It could be either'], a:1, f:'C1',
+  w:'Upper bound: keep the old 3-coloring and give <i>x</i> any color other than its one neighbor’s. Lower bound: the old graph is still there and still needs 3 colors. Two bounds give one answer.'},
+ {q:'Someone hands you a 3-coloring of a 1000-vertex graph. How hard is it to check that it’s proper?',
+  o:['Easy: look at each edge once','As hard as finding a 3-coloring, since 3-Coloring is NP-complete','Impossible unless you know χ(<i>G</i>)'], a:0, f:'Lec 11 §2.3',
+  w:'Checking means going through the edges and comparing two colors each time. That gap is lecture’s point: <em>verifying</em> a coloring is easy, but <em>finding</em> one is NP-complete, and nobody knows a fast way to do it. The collaboration policy’s “P vs NP fallacy” is the same gap: checking a proof is easier than writing one.'},
+ {q:'Deleting an edge from <i>G</i> can…',
+  o:['only lower χ or leave it unchanged','only raise χ or leave it unchanged','do either'], a:0, f:'C1',
+  w:'Any proper coloring of <i>G</i> is still proper after an edge disappears, because there’s one fewer constraint. So χ can’t go up. It can go down: delete the only edge of ({<i>a</i>, <i>b</i>}, {{<i>a</i>, <i>b</i>}}) and χ drops from 2 to 1.'}
+]);
+
+/* ---------- §4 start from G vs build up ---------- */
+var BU={
+ shrink:[
+  {t:'<b>Claim.</b> Every graph with <i>n</i> vertices has at most <i>n</i>(<i>n</i> − 1)/2 edges.', why:'H3 on the sheet. Lecture gets it from Handshake; here it’s proved by induction on n instead.'},
+  {t:'<i>P</i>(<i>n</i>) ≔ “every <i>n</i>-vertex graph has ≤ <i>n</i>(<i>n</i> − 1)/2 edges.” Base case <i>n</i> = 1: one vertex, no possible edges, and 0 ≤ 0 ✓', why:'It begins “every n-vertex graph”, so P(n+1) will be about every (n+1)-vertex graph. (n starts at 1 because V can’t be empty.)'},
+  {t:'Assume <i>P</i>(<i>n</i>). Let <i>G</i> be <b>any</b> graph with <i>n</i> + 1 vertices.', why:'The key line. P(n+1) is about every (n+1)-vertex graph, so start from an arbitrary one.', cls:'good'},
+  {t:'Pick any vertex <i>v</i>, and let <i>G</i> − <i>v</i> be the subgraph of <i>G</i> without <i>v</i>: every other vertex, and every edge not incident to <i>v</i>. It has <i>n</i> ≥ 1 vertices, so it’s a graph.', why:'A smaller graph inside G. Check that the IH applies to it: P(n) needs an n-vertex graph, and Definition 1 needs V non-empty. Both hold.'},
+  {t:'By the IH, <i>G</i> − <i>v</i> has ≤ <i>n</i>(<i>n</i> − 1)/2 edges. Every other edge of <i>G</i> is incident to <i>v</i>, and <i>v</i> is adjacent to at most the <i>n</i> other vertices, so there are ≤ <i>n</i> of those.', why:'Count G’s edges in two groups: the ones in G − v, and the ones at v.'},
+  {t:'So |<i>E</i>| ≤ <i>n</i>(<i>n</i> − 1)/2 + <i>n</i> = (<i>n</i> + 1)<i>n</i>/2. ✓ <i>P</i>(<i>n</i>+1), for every (<i>n</i>+1)-vertex graph, because <i>G</i> was arbitrary.', why:'Nothing was left out.', cls:'good'}
+ ],
+ build:[
+  {t:'<b>False Claim.</b> If every vertex of <i>G</i> has degree ≥ 1, then <i>G</i> is connected: you can get from any vertex to any other by following edges.', why:'“Connected” gets its formal definition in Lecture 13. The informal version is enough here.'},
+  {t:'<i>P</i>(<i>n</i>) ≔ “every <i>n</i>-vertex graph with all degrees ≥ 1 is connected.” Base case <i>n</i> = 2: the only such graph is a single edge. Connected ✓', why:'So far so good.'},
+  {t:'Assume <i>P</i>(<i>n</i>). Take an <i>n</i>-vertex graph with all degrees ≥ 1. By the IH it’s connected.', why:'This line starts from the smaller graph.', cls:'bad'},
+  {t:'Add a new vertex <i>x</i> with an edge to some old vertex. Now <i>x</i> has degree ≥ 1, and it’s attached to a connected graph, so the new graph is connected.', why:'That’s true of every graph built this way.'},
+  {t:'“So <i>P</i>(<i>n</i>+1).” ✗', why:'This only covers the (n+1)-vertex graphs you can build by attaching a vertex to a connected one. P(n+1) is about all of them.', cls:'bad'},
+  {t:'Counterexample at <i>n</i> + 1 = 4: two separate edges, {1, 2} and {3, 4}. Every degree is 1, and it isn’t connected. The build-up step never produces it.', why:'It’s the ({1, 2, 3, 4}, {{1, 2}, {3, 4}}) graph from §1’s list.', cls:'bad'}
+ ]
+};
+(function(){
+  var sel=document.getElementById('busel'), host=document.getElementById('buderiv'),
+      next=document.getElementById('bunext'), reset=document.getElementById('bureset');
+  if(!sel) return;
+  var kind='shrink', shown=0;
+  function render(){
+    host.innerHTML='';
+    BU[kind].forEach(function(l,i){
+      var d=document.createElement('div');
+      d.className='dline'+(l.cls?' '+l.cls:'')+(i<shown?' on':'');
+      d.innerHTML=l.t+'<span class="why">'+l.why+'</span>';
+      host.appendChild(d);
+    });
+    next.disabled = shown>=BU[kind].length;
+    next.textContent = shown>=BU[kind].length ? 'Done' : (shown===0?'Start':'Next line');
+  }
+  sel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ pressOnly(sel,b); kind=b.dataset.k; shown=0; render(); });
+  });
+  next.addEventListener('click',function(){ if(shown<BU[kind].length){ shown++; render(); } });
+  reset.addEventListener('click',function(){ shown=0; render(); });
+  render();
+})();
+
+mkTriage('tri5','tri5sum',[
+ {t:'Proving the edge bound: “Let <i>G</i> be any graph with <i>n</i> + 1 vertices, and <i>v</i> any vertex of <i>G</i>. The subgraph <i>G</i> − <i>v</i> has <i>n</i> vertices …”', a:'good',
+  w:'The step from the widget above. It starts from an arbitrary graph of the size <i>P</i>(<i>n</i>+1) is about, and applies the IH to a subgraph of it.'},
+ {t:'Proving the edge bound: “Let <i>G</i> be a graph with <i>n</i> vertices. By the IH it has ≤ <i>n</i>(<i>n</i> − 1)/2 edges. Add a new vertex <i>v</i>, adjacent to at most <i>n</i> others …”', a:'build',
+  w:'This reaches only the (<i>n</i>+1)-vertex graphs you build this way, and never argues that’s all of them. Here every (<i>n</i>+1)-vertex graph does happen to arise this way, but the step has to say so. Saying so means taking an arbitrary (<i>n</i>+1)-vertex graph <i>G</i> and looking at <i>G</i> − <i>v</i>, which is the step from the widget.'},
+ {t:'“Let <i>G</i> be any graph with <i>n</i> + 1 vertices, every degree ≥ 1, and <i>v</i> any vertex of <i>G</i>. By the IH, <i>G</i> − <i>v</i> is connected …”', a:'ih',
+  w:'The first sentence is right. But the IH covers only <i>n</i>-vertex graphs with every degree ≥ 1, and <i>G</i> − <i>v</i> can have a vertex of degree 0. In two separate edges, <i>G</i> − 1 has vertex 2 with degree 0. Starting from <i>G</i> is necessary, but it isn’t enough on its own: check that the subgraph satisfies the IH’s hypothesis.'}
+],{good:'Good start', build:'Buildup error', ih:'Good start, IH misapplied'},
+'<strong>Only the first is a sound opening.</strong> Start from an arbitrary (<i>n</i>+1)-vertex graph, apply the IH to a subgraph of it, and check that the subgraph really satisfies the IH’s hypothesis.');
+
+/* ---------- Space toggles a blank screen; never scrolls ---------- */
+(function(){
+  var blank=document.getElementById('blank');
+  if(!blank) return;
+  document.addEventListener('keydown',function(ev){
+    if(ev.key!==' ' && ev.code!=='Space') return;
+    var t=ev.target, tag=t && t.tagName;
+    if(tag==='INPUT' || tag==='TEXTAREA' || (t && t.isContentEditable)) return;
+    ev.preventDefault();
+    if(ev.repeat) return;
+    blank.classList.toggle('on');
+  });
+})();
+
+})();
+</script>

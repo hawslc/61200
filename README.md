@@ -18,6 +18,7 @@ beyond a webfont. The links below open the live copy on GitHub Pages.
 | Rec 07 | [Master Theorem — the recursion tree behind the three cases, worked examples, and the gaps](https://hawslc.github.io/61200/companions/rec-07.html) |
 | Lec 08 | [Divisibility — ten divisibility and gcd facts, the hypothesis each needs, Bezout behind G4](https://hawslc.github.io/61200/companions/lec-08.html) |
 | Rec 09 | [Modular arithmetic — ≡ₙ vs rem, bases vs exponents, when you can cancel, repeated squaring](https://hawslc.github.io/61200/companions/rec-09.html) |
+| Lec 11 | [Graphs and coloring — the picture is not the graph: what counts as a graph, bipartite splits and the average-degree ratio, two proofs for χ(G), buildup error](https://hawslc.github.io/61200/companions/lec-11.html) |
 
 ## Reference
 

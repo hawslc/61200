@@ -151,5 +151,6 @@ Teaching notes:
 | Rec 07 | Master Theorem: recursion-tree picture of the three cases, worked and self-check examples, the gaps (`n log n`, Hanoi) | [`companions/rec-07.html`](../companions/rec-07.html) |
 | Lec 08 | Divisibility and gcd facts D1–D4, G1–G6: fact tester, nine small problems, Bezout step-through for G4, gcd edge cases, look-ahead to inverses / RSA / CRT | [`companions/lec-08.html`](../companions/lec-08.html) |
 | Rec 09 | Modular arithmetic: residue-class viewer + `rem` vs C `%`, 14 true/false on `≡ₙ`, base/exponent substitution sandbox, 11 power problems, `kx ≡ₙ b` map, Pulverizer inverse, 10 division problems, repeated squaring, 14 valid/bogus arguments, bonus divisibility tests for primes 3–23 as inverses of 10 | [`companions/rec-09.html`](../companions/rec-09.html) |
+| Lec 11 | Graphs and coloring, built around wrong mental models: a facts sheet (H1–H3 degrees, B1–B2 bipartite, C1–C3 coloring); “is it a graph?” triage on Definition 1; an L/R sorter (6-ring, cube, a two-column drawing whose own split fails, 5-ring, lecture’s graph); Harvard–MIT average-degree ratio; lecture’s exam schedule with 2–5 slots and the triangle lower bound; start-from-`G` (the `n(n−1)/2` edge bound, via `G − v`) vs buildup step-through. 15 questions | [`companions/lec-11.html`](../companions/lec-11.html) |
 
 Add a row when you build one.

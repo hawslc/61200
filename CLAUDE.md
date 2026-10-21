@@ -47,6 +47,7 @@ number only, no topic slug:
 | `companions/rec-07.html` | Recitation 07 — the Master Theorem |
 | `companions/lec-08.html` | Lecture 08 — divisibility and gcd facts, and their hypotheses |
 | `companions/rec-09.html` | Recitation 09 — modular arithmetic: what you may substitute, cancel, and reduce |
+| `companions/lec-11.html` | Lecture 11 — graphs and coloring: what the picture doesn’t tell you |
 
 - `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
 - Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.
