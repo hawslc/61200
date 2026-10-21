@@ -2,6 +2,11 @@
 # They are copyrighted 6.1200J/18.062J staff materials and are large (~25 MB).
 lectures/
 
+# Past quizzes and their solutions — staff-confidential, reference only.
+confidential/
+# Loose staff handouts dropped in the repo root.
+/*.pdf
+
 # Student work and anything with a real name attached to it.
 student-work/
 submissions/
