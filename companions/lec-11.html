@@ -306,7 +306,91 @@ svg .cap{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--
 <!-- ================= §2 ================= -->
 <section id="s2">
   <div class="wrap">
-    <div class="shead"><span class="snum">2</span><h2>Bipartite is a fact about the edges, not the layout</h2></div>
+    <div class="shead"><span class="snum">2</span><h2>χ(<span class="m">G</span>) takes two proofs, and a coloring is only one of them</h2></div>
+
+    <p>Any proper <span class="m">k</span>-coloring proves χ(<span class="m">G</span>) ≤ <span class="m">k</span>.
+      That’s the easy half, and it’s the only half a coloring you found can give you. To prove χ(<span class="m">G</span>) = <span class="m">k</span> you
+      also need χ(<span class="m">G</span>) &gt; <span class="m">k</span> − 1, which means arguing that <em>every</em>
+      attempt with fewer colors fails.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Schedule lecture’s five exams. Click an exam to move it to the next time slot.</h4>
+      <div class="row" style="margin-top:0"><span class="lbl">slots available</span><div class="seg" id="exk"></div></div>
+      <div class="gbox"><svg id="exsvg" viewBox="0 0 580 290" aria-label="Exam-scheduling graph"></svg></div>
+      <div class="out plain" id="exout"></div>
+      <div class="row">
+        <button class="btn" data-p="five">Lecture: one slot each</button>
+        <button class="btn" data-p="four">Lecture’s 4-coloring</button>
+        <button class="btn" data-p="three">Lecture’s 3-coloring</button>
+        <button class="btn pri" id="exwhy">Why not 2?</button>
+      </div>
+      <div class="expl" id="exexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>Lecture proved χ(<span class="m">G</span>) = 3 with one proof of each kind.</strong> Upper bound: the
+      3-slot schedule. Lower bound: 6.3700, 6.2000 and 6.1200 all conflict with each other, so they need three
+      different slots. Neither half settles it alone. The first schedule was proper too. It used five slots, and
+      6.1200 got 1am.
+    </div>
+
+    <h3>Small questions</h3>
+    <div id="p2"></div>
+    <div class="score" id="p2s"></div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>Induction on graphs starts from the bigger graph</h2></div>
+
+    <p>In an induction on |<span class="m">V</span>|, <span class="m">P</span>(<span class="m">n</span>) usually
+      begins “for all <span class="m">n</span>-vertex graphs <span class="m">G</span> …”. So
+      <span class="m">P</span>(<span class="m">n</span>+1) is a claim about <strong>every</strong> graph with
+      <span class="m">n</span> + 1 vertices. The step has to begin “let <span class="m">G</span> be any graph with
+      <span class="m">n</span> + 1 vertices” and then apply the IH to a smaller subgraph of <span class="m">G</span>,
+      such as <span class="m">G</span> − <span class="m">v</span>, the subgraph of <span class="m">G</span> without one
+      vertex <span class="m">v</span>. If you start
+      from an <span class="m">n</span>-vertex graph and add a vertex, that’s <strong>buildup error</strong>. It only
+      proves something about the graphs your construction happens to reach.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Step through both inductive steps</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="busel">
+        <button data-k="shrink" aria-pressed="true">Start from G: a true claim</button>
+        <button data-k="build" aria-pressed="false">Build up: a false claim</button>
+      </div></div>
+      <div class="deriv" id="buderiv"></div>
+      <div class="row"><button class="btn pri" id="bunext">Start</button>
+        <button class="btn" id="bureset">Restart</button></div>
+    </div>
+
+    <div class="note warnb">
+      <strong>The counterexample was already in §1’s list.</strong> Two separate edges, ({1, 2, 3, 4}, {{1, 2}, {3, 4}}):
+      every degree is 1, and it isn’t connected. The bogus step can never produce it, because it only ever attaches a new vertex to a graph
+      that’s already in one piece. Now start from an arbitrary 4-vertex graph <span class="m">G</span> instead and look at
+      <span class="m">G</span> − <span class="m">v</span>. That subgraph can have a vertex of degree 0, so the IH doesn’t apply and the proof gets stuck. For a false claim, that’s
+      the right outcome.
+    </div>
+
+    <h3>Which opening is right?</h3>
+    <p>Three ways to start an inductive step on graphs. Judge the opening, not the rest of the proof.</p>
+    <div class="card">
+      <div id="tri5"></div>
+      <div class="expl" id="tri5sum"></div>
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <div class="shead"><span class="snum">4</span><h2>Bipartite is a fact about the edges, not the layout</h2></div>
 
     <p>Definition 6: <span class="m">G</span> is bipartite if <span class="m">V</span> <em>can</em> be partitioned
       into <span class="m">L</span> and <span class="m">R</span> so that every edge has one endpoint in each. You get
@@ -359,92 +443,8 @@ svg .cap{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--
     </div>
 
     <h3>Small questions</h3>
-    <div id="p2"></div>
-    <div class="score" id="p2s"></div>
-  </div>
-  <div class="wrap"><hr class="soft"></div>
-</section>
-
-<!-- ================= §3 ================= -->
-<section id="s3">
-  <div class="wrap">
-    <div class="shead"><span class="snum">3</span><h2>χ(<span class="m">G</span>) takes two proofs, and a coloring is only one of them</h2></div>
-
-    <p>Any proper <span class="m">k</span>-coloring proves χ(<span class="m">G</span>) ≤ <span class="m">k</span>.
-      That’s the easy half, and it’s the only half a coloring you found can give you. To prove χ(<span class="m">G</span>) = <span class="m">k</span> you
-      also need χ(<span class="m">G</span>) &gt; <span class="m">k</span> − 1, which means arguing that <em>every</em>
-      attempt with fewer colors fails.</p>
-
-    <div class="card">
-      <span class="tag">Try it</span>
-      <h4>Schedule lecture’s five exams. Click an exam to move it to the next time slot.</h4>
-      <div class="row" style="margin-top:0"><span class="lbl">slots available</span><div class="seg" id="exk"></div></div>
-      <div class="gbox"><svg id="exsvg" viewBox="0 0 580 290" aria-label="Exam-scheduling graph"></svg></div>
-      <div class="out plain" id="exout"></div>
-      <div class="row">
-        <button class="btn" data-p="five">Lecture: one slot each</button>
-        <button class="btn" data-p="four">Lecture’s 4-coloring</button>
-        <button class="btn" data-p="three">Lecture’s 3-coloring</button>
-        <button class="btn pri" id="exwhy">Why not 2?</button>
-      </div>
-      <div class="expl" id="exexpl"></div>
-    </div>
-
-    <div class="note">
-      <strong>Lecture proved χ(<span class="m">G</span>) = 3 with one proof of each kind.</strong> Upper bound: the
-      3-slot schedule. Lower bound: 6.3700, 6.2000 and 6.1200 all conflict with each other, so they need three
-      different slots. Neither half settles it alone. The first schedule was proper too. It used five slots, and
-      6.1200 got 1am.
-    </div>
-
-    <h3>Small questions</h3>
-    <div id="p3"></div>
-    <div class="score" id="p3s"></div>
-  </div>
-  <div class="wrap"><hr class="soft"></div>
-</section>
-
-<!-- ================= §4 ================= -->
-<section id="s4">
-  <div class="wrap">
-    <div class="shead"><span class="snum">4</span><h2>Induction on graphs starts from the bigger graph</h2></div>
-
-    <p>In an induction on |<span class="m">V</span>|, <span class="m">P</span>(<span class="m">n</span>) usually
-      begins “for all <span class="m">n</span>-vertex graphs <span class="m">G</span> …”. So
-      <span class="m">P</span>(<span class="m">n</span>+1) is a claim about <strong>every</strong> graph with
-      <span class="m">n</span> + 1 vertices. The step has to begin “let <span class="m">G</span> be any graph with
-      <span class="m">n</span> + 1 vertices” and then apply the IH to a smaller subgraph of <span class="m">G</span>,
-      such as <span class="m">G</span> − <span class="m">v</span>, the subgraph of <span class="m">G</span> without one
-      vertex <span class="m">v</span>. If you start
-      from an <span class="m">n</span>-vertex graph and add a vertex, that’s <strong>buildup error</strong>. It only
-      proves something about the graphs your construction happens to reach.</p>
-
-    <div class="card">
-      <span class="tag">Try it</span>
-      <h4>Step through both inductive steps</h4>
-      <div class="row" style="margin-top:0"><div class="seg" id="busel">
-        <button data-k="shrink" aria-pressed="true">Start from G: a true claim</button>
-        <button data-k="build" aria-pressed="false">Build up: a false claim</button>
-      </div></div>
-      <div class="deriv" id="buderiv"></div>
-      <div class="row"><button class="btn pri" id="bunext">Start</button>
-        <button class="btn" id="bureset">Restart</button></div>
-    </div>
-
-    <div class="note warnb">
-      <strong>The counterexample was already in §1’s list.</strong> Two separate edges, ({1, 2, 3, 4}, {{1, 2}, {3, 4}}):
-      every degree is 1, and it isn’t connected. The bogus step can never produce it, because it only ever attaches a new vertex to a graph
-      that’s already in one piece. Now start from an arbitrary 4-vertex graph <span class="m">G</span> instead and look at
-      <span class="m">G</span> − <span class="m">v</span>. That subgraph can have a vertex of degree 0, so the IH doesn’t apply and the proof gets stuck. For a false claim, that’s
-      the right outcome.
-    </div>
-
-    <h3>Which opening is right?</h3>
-    <p>Three ways to start an inductive step on graphs. Judge the opening, not the rest of the proof.</p>
-    <div class="card">
-      <div id="tri5"></div>
-      <div class="expl" id="tri5sum"></div>
-    </div>
+    <div id="p4"></div>
+    <div class="score" id="p4s"></div>
   </div>
 </section>
 
@@ -454,9 +454,9 @@ svg .cap{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--
       <h3 style="font-size:19px">The short version</h3>
       <ol>
         <li><strong>Read the graph off <span class="m">V</span> and <span class="m">E</span>, not the picture.</strong> Positions, lengths and shapes belong to one drawing. Adjacent means the pair is in <span class="m">E</span>.</li>
-        <li><strong>Bipartite means <em>some</em> split works.</strong> One bad split proves nothing, the sides needn’t match in size, and the average degrees are locked at |<span class="m">R</span>| / |<span class="m">L</span>|.</li>
         <li><strong>Prove χ(<span class="m">G</span>) = <span class="m">k</span> twice.</strong> Any coloring you exhibit only gives an upper bound. The lower bound needs its own argument, like a triangle or an odd ring.</li>
         <li><strong>In graph induction, start from an arbitrary (<span class="m">n</span>+1)-vertex graph and apply the IH to a subgraph of it.</strong> Then check that the subgraph satisfies the IH’s hypothesis.</li>
+        <li><strong>Bipartite means <em>some</em> split works.</strong> One bad split proves nothing, the sides needn’t match in size, and the average degrees are locked at |<span class="m">R</span>| / |<span class="m">L</span>|.</li>
       </ol>
     </div>
   </div>
@@ -610,7 +610,7 @@ mkTriage('tri1','tri1sum',[
  {t:'({<i>a</i>, <i>b</i>}, {{<i>a</i>, <i>c</i>}})', a:'no',
   w:'<i>c</i> ∉ <i>V</i>, so {<i>a</i>, <i>c</i>} isn’t a subset of <i>V</i>. Both endpoints of every edge have to be vertices.'},
  {t:'({1, 2, 3, 4}, {{1, 2}, {3, 4}})', a:'ok',
-  w:'Two separate pieces are fine. Nothing in Definition 1 says a graph has to hang together. (It comes back in §4.)'},
+  w:'Two separate pieces are fine. Nothing in Definition 1 says a graph has to hang together. (It comes back in §3.)'},
  {t:'({7}, ∅)', a:'ok',
   w:'The smallest possible graph: one vertex, with degree 0.'},
  {t:'A drawing with two different curves, both joining <i>a</i> to <i>b</i>', a:'no',
@@ -620,7 +620,7 @@ mkTriage('tri1','tri1sum',[
 ],{ok:'A graph', no:'Not a graph'},
 '<strong>Three are graphs.</strong> Each “not” breaks a single clause: <i>V</i> non-empty, edges with exactly 2 elements, endpoints taken from <i>V</i>, <i>E</i> a set.');
 
-/* ---------- §2 sort into L and R ---------- */
+/* ---------- §4 sort into L and R ---------- */
 (function(){
   var svg=document.getElementById('bpsvg'), sel=document.getElementById('bpsel'), expl=document.getElementById('bpexpl'),
       go=document.getElementById('bpgo'), back=document.getElementById('bpback');
@@ -707,7 +707,7 @@ mkTriage('tri1','tri1sum',[
   load(G[0]);
 })();
 
-/* ---------- §2 Harvard–MIT averages ---------- */
+/* ---------- §4 Harvard–MIT averages ---------- */
 (function(){
   var svg=document.getElementById('hmsvg'), stats=document.getElementById('hmstats'), expl=document.getElementById('hmexpl');
   if(!svg) return;
@@ -760,7 +760,7 @@ mkTriage('tri1','tri1sum',[
   draw();
 })();
 
-mkProbs('p2','p2s','2',[
+mkProbs('p4','p4s','4',[
  {q:'Is ({<i>a</i>, <i>b</i>, <i>c</i>}, ∅) bipartite?',
   o:['Yes','No: with no edges, nothing crosses between <i>L</i> and <i>R</i>','No: three vertices can’t be split evenly'], a:0, f:'Def. 6',
   w:'Put <i>a</i> in <i>L</i> and <i>b</i>, <i>c</i> in <i>R</i>. The condition is “every edge has one endpoint in each”, and with no edges that holds automatically. The sides don’t have to be the same size.'},
@@ -781,10 +781,10 @@ mkProbs('p2','p2s','2',[
   w:'Bipartite says <em>some</em> split works. To show a graph isn’t bipartite you have to rule out every split, as the odd-ring argument does. The “two columns” graph fails in the columns it was drawn in and is bipartite anyway. The third answer says the same thing as the second, by C3.'},
  {q:'<i>G</i> is bipartite and has at least one edge. What is χ(<i>G</i>)?',
   o:['1','It depends on |<i>L</i>| and |<i>R</i>|','2'], a:2, f:'C3',
-  w:'Give <i>L</i> one color and <i>R</i> another. Every edge crosses, so the coloring is proper and χ(<i>G</i>) ≤ 2. One edge needs two different colors, so χ(<i>G</i>) ≥ 2. Notice that took two arguments. That’s §3.'}
+  w:'Give <i>L</i> one color and <i>R</i> another. Every edge crosses, so the coloring is proper and χ(<i>G</i>) ≤ 2. One edge needs two different colors, so χ(<i>G</i>) ≥ 2. Notice that took two arguments, as §2 says.'}
 ]);
 
-/* ---------- §3 exam scheduling ---------- */
+/* ---------- §2 exam scheduling ---------- */
 (function(){
   var svg=document.getElementById('exsvg'), kseg=document.getElementById('exk'), out=document.getElementById('exout'),
       expl=document.getElementById('exexpl'), why=document.getElementById('exwhy');
@@ -851,7 +851,7 @@ mkProbs('p2','p2s','2',[
   draw();
 })();
 
-mkProbs('p3','p3s','3',[
+mkProbs('p2','p2s','2',[
  {q:'You found a proper 4-coloring of <i>G</i>. What do you now know?',
   o:['χ(<i>G</i>) = 4','χ(<i>G</i>) ≤ 4','χ(<i>G</i>) ≥ 4'], a:1, f:'C1',
   w:'A coloring shows that 4 colors are <em>enough</em>. Maybe 3 are enough too. Lecture’s exam graph had a 4-coloring and χ = 3. To get equality you also need an argument that 3 colors can’t work.'},
@@ -860,7 +860,7 @@ mkProbs('p3','p3s','3',[
   w:'Take the star <i>S</i><sub>10</sub>: one color for the center and another for all ten others. It’s bipartite, so χ = 2. A vertex with many neighbors doesn’t force many colors; what forces colors is neighbors that are adjacent to <em>each other</em>.'},
  {q:'No three vertices of <i>G</i> are all adjacent to each other, so <i>G</i> has no triangle. Must χ(<i>G</i>) ≤ 2?',
   o:['Yes, because it takes a triangle to force a third color','Yes, as long as <i>G</i> has an even number of vertices','No'], a:2, f:'C2',
-  w:'The 5-ring from §2 has no triangle and can’t be 2-colored: going around, the colors would have to alternate, and five is odd. So χ = 3. Add an isolated vertex and you have 6 vertices with the same problem. C2 gives a lower bound when there <em>is</em> a triangle. When there isn’t one, C2 says nothing.'},
+  w:'Five vertices in a ring, 1–2–3–4–5–1, have no triangle and can’t be 2-colored: going around, the colors would have to alternate, and five is odd. So χ = 3. Add an isolated vertex and you have 6 vertices with the same problem. C2 gives a lower bound when there <em>is</em> a triangle. When there isn’t one, C2 says nothing.'},
  {q:'Two graphs, every vertex of degree 2 in both: one ring of six vertices, and two separate triangles. What are their chromatic numbers?',
   o:['2 and 3','Both 2','Both 3'], a:0, f:'C2 · C3',
   w:'The 6-ring is bipartite (alternate around it), so its χ is 2. Each triangle needs 3 colors by C2. The degrees alone don’t decide χ.'},
@@ -878,7 +878,7 @@ mkProbs('p3','p3s','3',[
   w:'Any proper coloring of <i>G</i> is still proper after an edge disappears, because there’s one fewer constraint. So χ can’t go up. It can go down: delete the only edge of ({<i>a</i>, <i>b</i>}, {{<i>a</i>, <i>b</i>}}) and χ drops from 2 to 1.'}
 ]);
 
-/* ---------- §4 start from G vs build up ---------- */
+/* ---------- §3 start from G vs build up ---------- */
 var BU={
  shrink:[
   {t:'<b>Claim.</b> Every graph with <i>n</i> vertices has at most <i>n</i>(<i>n</i> − 1)/2 edges.', why:'H3 on the sheet. Lecture gets it from Handshake; here it’s proved by induction on n instead.'},
