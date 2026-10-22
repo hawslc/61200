@@ -1,0 +1,1604 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stable, Not Happy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.nbtn{width:40px; height:40px; border-radius:9px; border:2px solid var(--rule-2); background:var(--panel-2);
+  font-family:var(--mono); font-weight:700; font-size:14px; cursor:pointer; transition:.12s}
+.nbtn:hover{border-color:var(--acc)}
+.nbtn[aria-pressed="true"]{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .nbtn[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); width:100%; cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-top:12px;
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.12em; line-height:1.85}
+.verdict{display:inline-block; font-family:var(--mono); font-weight:700; font-size:12px; padding:3px 9px;
+  border-radius:6px; margin-left:8px; letter-spacing:.05em}
+.verdict.T{background:var(--ok-soft); color:var(--ok); border:1px solid var(--ok-line)}
+.verdict.F{background:var(--bad-soft); color:var(--bad); border:1px solid var(--bad-line)}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:16.5px; margin-bottom:9px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* assume viewer */
+.slots{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+.slot{padding:7px 12px; border-radius:8px; font-family:var(--mono); font-size:13px; font-weight:700;
+  border:2px solid var(--rule-2); background:var(--panel-2); color:var(--ink-3)}
+.slot.have{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.slot.goal{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .slot.goal{color:#0B0D14}
+.slot.none{background:var(--warn-soft); border-color:var(--warn); color:var(--warn); border-style:dashed}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:13px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2)}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:7px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.5; color:var(--ink-2)}
+
+/* bar */
+.barwrap{margin-top:14px}
+.bar{height:44px; border-radius:9px; border:1px solid var(--rule-2); background:var(--panel-2); overflow:hidden;
+  display:flex; position:relative}
+.seg2{height:100%; border-right:1px solid rgba(255,255,255,.35); transition:width .25s}
+.gap{height:100%; background:repeating-linear-gradient(45deg,var(--bad-soft),var(--bad-soft) 6px,transparent 6px,transparent 12px);
+  border-left:2px solid var(--bad); transition:width .25s; display:flex; align-items:center; justify-content:center}
+.barlbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  margin-top:6px}
+
+/* derivation */
+.deriv{margin-top:12px; display:flex; flex-direction:column; gap:0}
+.dline{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk);
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.05em; line-height:1.6; opacity:0;
+  max-height:0; overflow:hidden; transition:opacity .25s, max-height .25s, padding .25s}
+.dline.on{opacity:1; max-height:220px}
+.dline.good{border-left-color:var(--ok); background:var(--ok-soft)}
+.dline.bad{border-left-color:var(--bad); background:var(--bad-soft)}
+.dline .why{display:block; font-family:var(--sans); font-size:13px; color:var(--ink-3); margin-top:3px}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+/* ---- from lec-04 / lec-11 ---- */
+details.more{margin-top:10px; border:1px solid var(--rule); border-radius:9px; background:var(--panel)}
+details.more summary{cursor:pointer; padding:8px 13px; font-size:14.4px; font-weight:600; color:var(--acc);
+  list-style:none; display:flex; align-items:center; gap:8px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"▸"; font-size:12px; transition:transform .15s}
+details.more[open] summary::before{transform:rotate(90deg)}
+details.more .body{padding:0 14px 11px 34px; font-size:14.8px; line-height:1.55; color:var(--ink-2)}
+details.more .body p{margin-top:8px}
+.facts{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; font-size:14.6px}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.facts > div > div{padding:3px 0}
+.facts .fh{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  margin:8px 0 2px}
+.fid{font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--acc); margin-right:6px}
+.lbl{font-family:var(--mono); font-size:12px; color:var(--ink-3); letter-spacing:.05em}
+:root{ --c1:#CF3A30; --c2:#23864A; --c3:#3560C8; --c4:#A98606; --c5:#8446BF; --on-c:#FFFFFF }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }}
+:root[data-theme="dark"]{ --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }
+
+/* ---- lec-12: robots and jobs ---- */
+.rb{--rc:var(--ink-3); position:relative; display:inline-flex; align-items:center; justify-content:center; flex:none;
+  width:24px; height:21px; margin-top:7px; border-radius:6px; background:var(--rc); color:var(--on-c);
+  font-family:var(--mono); font-size:11.5px; font-weight:700; line-height:1; vertical-align:middle}
+.rb::before{content:""; position:absolute; left:50%; top:-6px; width:2px; height:6px; margin-left:-1px; background:var(--rc)}
+.rb::after{content:""; position:absolute; left:50%; top:-10px; width:6px; height:6px; margin-left:-3px; border-radius:50%;
+  background:var(--rc)}
+.pl{display:inline-flex; align-items:center; justify-content:center; flex:none; width:24px; height:24px; border-radius:50%;
+  border:1.6px solid var(--ink-2); background:var(--panel); color:var(--ink); font-family:var(--mono); font-size:11.5px;
+  font-weight:700; line-height:1; vertical-align:middle}
+.cw{position:relative; display:inline-flex; align-items:center; justify-content:center; width:24px; height:31px; flex:none;
+  transition:opacity .2s}
+.cw > .rb, .cw > .pl{transition:box-shadow .2s, opacity .2s}
+.cw.x > .rb, .cw.x > .pl{opacity:.32}
+.cw.x::after{content:""; position:absolute; left:-3px; right:-3px; top:58%; height:2px; background:var(--bad);
+  transform:rotate(-38deg); border-radius:2px}
+.cw.tgt > .rb, .cw.tgt > .pl{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--acc)}
+.cw.held > .rb, .cw.held > .pl{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--ok)}
+.cw.rej > .rb, .cw.rej > .pl{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--bad)}
+.cw.mate > .rb, .cw.mate > .pl{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--ink)}
+.cw.cand > .rb, .cw.cand > .pl{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--warn)}
+.cw.dim > .rb, .cw.dim > .pl{opacity:.22}
+.cw.feas > .pl{background:var(--teal-soft); border-color:var(--teal)}
+.cw .bdg{position:absolute; top:-4px; right:-8px; font-size:10.5px; line-height:1; color:var(--teal); font-weight:700}
+
+.cast{display:grid; grid-template-columns:1fr 1fr; gap:2px 24px; margin-top:6px}
+@media(max-width:600px){.cast{grid-template-columns:1fr}}
+.cast .ch{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  margin:6px 0 2px}
+.castrow{display:flex; gap:11px; align-items:flex-start; padding:5px 0; font-size:14.4px; line-height:1.45}
+.castrow > .rb, .castrow > .pl{margin-top:0}
+.castrow > .rb{margin-top:9px}
+.castrow > .pl{margin-top:1px}
+.castrow .bio{color:var(--ink-2)}
+
+.board{display:flex; flex-direction:column; gap:12px}
+.bblk .bh{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:2px; font-weight:700}
+.bblk .bh span{font-weight:400}
+.brow{display:flex; align-items:center; gap:8px; padding:0 6px; border-radius:7px; transition:background .15s}
+.brow.hl{background:var(--warn-soft)}
+.who{display:inline-flex; align-items:center; gap:8px; width:106px; flex:none; font-size:14px; font-weight:600;
+  white-space:nowrap}
+.who > .rb{margin-top:7px}
+.lst{display:flex; gap:7px; align-items:center}
+.brow.rk{height:16px}
+.brow + .brow:not(.rk){margin-top:2px}
+.rkn{width:24px; text-align:center; font-family:var(--mono); font-size:10px; color:var(--ink-3)}
+
+.simgrid{display:grid; grid-template-columns:minmax(0,318px) minmax(0,1fr); gap:14px 18px; align-items:start; margin-top:12px}
+@media(max-width:700px){.simgrid{grid-template-columns:minmax(0,1fr)}}
+.bip{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; max-width:360px; width:100%}
+.bip svg{display:block; width:100%; height:auto; user-select:none; -webkit-user-select:none}
+svg .ln{fill:none; stroke-linecap:round}
+svg .ln.app{stroke-width:2.8}
+svg .ln.keep{stroke-width:4.8}
+svg .ln.mt{stroke-width:5.6}
+svg .ln.rej{stroke:var(--bad); stroke-width:2.4; stroke-dasharray:5 6}
+svg .ln.rogue{stroke:var(--bad); stroke-width:2.8; stroke-dasharray:7 6}
+svg .ln.cand{stroke:var(--warn); stroke-width:3; stroke-dasharray:2 6}
+svg .ln.free{stroke:var(--ink-3); stroke-width:2.4}
+svg .ln.off{stroke:var(--ink-3); stroke-width:2; opacity:.16}
+svg .ln.draw{stroke-dasharray:260; stroke-dashoffset:260; animation:draw .55s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+svg .hit{stroke:transparent; stroke-width:18; cursor:pointer; outline:none}
+svg .hit:focus-visible{stroke:var(--acc-line); stroke-opacity:.5}
+svg .xm{fill:var(--panel); stroke:var(--bad); stroke-width:1.6}
+svg .xt{fill:var(--bad); font-family:var(--mono); font-size:11px; font-weight:700; text-anchor:middle; dominant-baseline:central}
+svg .nd{outline:none}
+svg .nd.click{cursor:pointer}
+svg .nd .pc{fill:var(--panel); stroke:var(--ink-2); stroke-width:2}
+svg .nd .ring{fill:none; stroke:transparent; stroke-width:3}
+svg .nd.sel .ring, svg .nd.click:focus-visible .ring{stroke:var(--acc)}
+svg .nd.click:hover .ring{stroke:var(--acc-line)}
+svg .lt{font-family:var(--mono); font-size:13px; font-weight:700; text-anchor:middle; dominant-baseline:central; pointer-events:none}
+svg .rt{fill:var(--on-c)} svg .ptx{fill:var(--ink)}
+svg .nm{font-family:var(--sans); font-size:12.5px; font-weight:600; fill:var(--ink-2); dominant-baseline:central}
+svg .nsub{font-family:var(--mono); font-size:10.5px; font-weight:700; fill:var(--ink-3); dominant-baseline:central}
+@media (prefers-reduced-motion:reduce){ svg .ln.draw{animation:none; stroke-dasharray:none; stroke-dashoffset:0} }
+
+.simstat{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3);
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.simstat b{color:var(--acc); font-weight:700}
+.panel{grid-column:1 / -1; border-top:1px solid var(--rule); padding-top:13px}
+.narr{font-size:14.8px; color:var(--ink-2); line-height:1.6}
+.narr b{color:var(--ink); font-weight:600}
+.qbox{margin-top:12px; background:var(--panel-2); border:1px solid var(--rule-2); border-radius:11px; padding:13px 15px}
+.qbox.live{background:var(--acc-soft); border-color:var(--acc-line)}
+.qtag{font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--acc);
+  font-weight:700; margin-bottom:5px}
+.qp{font-weight:600; font-size:15.4px; line-height:1.5}
+.pick{display:flex; flex-wrap:wrap; gap:7px; margin-top:11px}
+.pbtn{display:inline-flex; align-items:center; gap:8px; padding:4px 12px 4px 8px; min-height:40px; border-radius:9px;
+  border:1px solid var(--rule-2); background:var(--panel); cursor:pointer; font-size:14px; font-weight:600; transition:.12s}
+.pbtn > .rb{margin-top:7px}
+.pbtn:hover:not(:disabled){border-color:var(--acc)}
+.pbtn[aria-pressed="true"]{border-color:var(--acc); background:var(--acc-soft); box-shadow:inset 0 0 0 1px var(--acc)}
+.pbtn.correct{border-color:var(--ok); background:var(--ok-soft)}
+.pbtn.wrong{border-color:var(--bad); background:var(--bad-soft)}
+.pbtn.dim{opacity:.45}
+.pbtn:disabled{cursor:default}
+.numin{width:96px; padding:8px 10px; border-radius:8px; border:1px solid var(--rule-2); background:var(--panel);
+  font-family:var(--mono); font-size:15px; color:var(--ink)}
+.ctrl{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.ctrl .sp{flex:1}
+.linkbtn{background:none; border:0; padding:4px 2px; color:var(--ink-3); font-size:13px; cursor:pointer; text-decoration:underline;
+  text-underline-offset:3px}
+.linkbtn:hover{color:var(--acc)}
+.endbox{margin-top:12px; padding:12px 14px; border-radius:10px; background:var(--ok-soft); border:1px solid var(--ok-line);
+  font-size:14.8px; line-height:1.55}
+
+.dtwrap{overflow-x:auto; margin-top:14px; border:1px solid var(--rule); border-radius:10px; background:var(--sunk)}
+table.dt{border-collapse:collapse; width:100%; font-size:13px}
+.dt th{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3);
+  font-weight:700; padding:7px 9px; text-align:left; border-bottom:1px solid var(--rule); white-space:nowrap}
+.dt td{padding:2px 9px; border-bottom:1px solid var(--rule); white-space:nowrap; vertical-align:middle; height:38px}
+.dt tr:last-child td{border-bottom:0}
+.dt td.now, .dt th.now{background:var(--acc-soft)}
+.dt td .cw{margin-right:4px}
+.dt .who{width:auto}
+.dtcap{padding:8px 11px; font-size:13px; color:var(--ink-3)}
+
+.found{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+.fslot{font-family:var(--mono); font-size:12.5px; font-weight:700; padding:7px 11px; border-radius:8px;
+  border:2px dashed var(--rule-2); color:var(--ink-3); background:var(--panel-2)}
+.fslot.got{border-style:solid; border-color:var(--ok); background:var(--ok-soft); color:var(--ok)}
+.rogues{margin-top:10px; font-size:14.4px; line-height:1.55}
+.rogues .rg{padding:7px 11px; border-radius:8px; background:var(--bad-soft); border:1px solid var(--bad-line); margin-top:6px}
+.rogues .st{padding:9px 12px; border-radius:8px; background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tcard .cand .rb, .tcard .cand .pl{margin-right:4px}
+.tcard .cand{display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-family:var(--sans); font-size:15px; font-weight:600}
+
+.chart{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; margin-top:12px}
+.chart svg{display:block; width:100%; height:auto}
+svg .ax{stroke:var(--rule); stroke-width:1}
+svg .axt{font-family:var(--mono); font-size:10.5px; fill:var(--ink-3)}
+svg .cl{fill:none; stroke-width:2.6; stroke-linejoin:round; stroke-linecap:round; transition:opacity .15s}
+svg .cl.pline{stroke:var(--ink-2); stroke-width:2.2}
+svg .cdot{stroke:var(--sunk); stroke-width:1.5; transition:opacity .15s}
+svg .fade{opacity:.13}
+svg .fbar{fill:var(--teal); opacity:.85}
+svg .fbar.last{fill:var(--ink-3)}
+svg .fval{font-family:var(--mono); font-size:11px; font-weight:700; fill:var(--ink); text-anchor:middle}
+.legend{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
+.legend .pbtn{min-height:34px; padding:2px 10px 2px 6px; font-size:13px}
+
+.pgrid{display:grid; grid-template-columns:auto repeat(5, minmax(0,1fr)); gap:5px; margin-top:12px; align-items:center}
+.pgrid .gh{font-family:var(--mono); font-size:10.5px; color:var(--ink-3); text-align:center; letter-spacing:.06em}
+.pgrid .who{width:auto; padding-right:6px; font-size:13.5px}
+.pcell{display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 2px 5px; border-radius:8px;
+  border:1px solid var(--rule); background:var(--panel); cursor:pointer; transition:.12s; min-width:0}
+.pcell:hover{border-color:var(--acc)}
+.pcell.rj{background:var(--bad-soft); border-color:var(--bad-line)}
+.pcell.mt{background:var(--ok-soft); border-color:var(--ok)}
+.pcell[aria-pressed="true"]{box-shadow:0 0 0 2px var(--acc); border-color:var(--acc)}
+.pcell .s2{font-family:var(--mono); font-size:10px; color:var(--ink-2); white-space:nowrap}
+.pcell{position:relative}
+.pcell.seen::after{content:""; position:absolute; top:4px; right:4px; width:6px; height:6px; border-radius:50%; background:var(--acc)}
+@media(max-width:560px){ .pgrid .who > span:last-child{display:none} .pgrid .who{padding-right:0} }
+
+.rmgrid{display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:14px; align-items:center; margin-top:12px}
+@media(max-width:600px){.rmgrid{grid-template-columns:minmax(0,1fr)}}
+.rmsvg{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; max-width:280px}
+.rmsvg svg{display:block; width:100%; height:auto}
+.plist{font-family:var(--mono); font-size:13.5px; line-height:1.9}
+.plist b{color:var(--acc)}
+.legendline{font-size:13px; color:var(--ink-3); margin-top:10px; line-height:1.6}
+
+@media(max-width:560px){
+  .wrap{padding:0 16px} .card{padding:15px 14px}
+  .who{width:92px; font-size:13.5px}
+  .lst{gap:5px}
+}
+
+/* ---- Space = blank screen (presenting) ---- */
+#blank{position:fixed; inset:0; z-index:1000; background:var(--paper); display:none}
+#blank.on{display:block}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Lecture 12 · matching</div>
+    <h1>Stable doesn’t mean happy</h1>
+    <p class="sub">Gale-Shapley is quick to learn and easy to run wrong. Here it is on five robots applying for five
+      campus jobs. You call each step before it happens, then see why the result has no rogue couples, and why it’s
+      the best stable outcome for the robots and the worst for the jobs.</p>
+  </div>
+</header>
+
+<!-- ================= the cast ================= -->
+<section id="s0" style="padding-top:40px">
+  <div class="wrap">
+    <p style="margin-top:0">It’s fall 2026, and MIT is piloting robot staff. Five humanoid robots are the
+      <strong>Applicants</strong> and five campus jobs are the <strong>Evaluators</strong>. Each side ranks the
+      entire other side, with no ties. Every job has an obvious best fit, and not one robot puts its best fit first.</p>
+    <div class="card">
+      <div class="cast" id="cast"></div>
+    </div>
+    <details class="more"><summary>Lecture 12 on one card</summary><div class="body">
+      <div class="facts">
+        <div>
+          <div class="fh">Matchings</div>
+          <div><span class="fid">Def 1</span>A <strong>matching</strong> in <span class="m">G</span> is a subgraph in which every vertex has degree 1: edges with no shared endpoints.</div>
+          <div><span class="fid">Def 2</span><span class="m">M</span> is <strong>maximal</strong> if no matching <span class="m">M</span>′ has <span class="m">M</span> ⊂ <span class="m">M</span>′.</div>
+          <div><span class="fid">Def 3</span><span class="m">M</span> is <strong>maximum</strong> if |<span class="m">M</span>′| ≤ |<span class="m">M</span>| for every matching <span class="m">M</span>′.</div>
+          <div><span class="fid">Def 4</span><span class="m">M</span> is <strong>perfect</strong> if it has |<span class="m">V</span>|/2 edges.</div>
+          <div class="fh">Stable matching</div>
+          <div><span class="fid">Def 7</span>A <strong>rogue couple</strong> is a pair (<span class="m">x</span>, <span class="m">y</span>), not matched in <span class="m">M</span>, who prefer each other over their matches.</div>
+          <div><span class="fid">Def 8</span><span class="m">M</span> is <strong>stable</strong> iff it has no rogue couples.</div>
+          <div><span class="fid">Thm 2</span>If anyone can be matched with anyone (not bipartite), a stable matching may not exist.</div>
+        </div>
+        <div>
+          <div class="fh">Gale-Shapley</div>
+          <div><span class="fid">Thm 5</span>G-S matches everyone.</div>
+          <div><span class="fid">Thm 6</span>G-S produces no rogue couples.</div>
+          <div><span class="fid">Thm 7</span>G-S terminates by day <span class="m">N</span>² + 1.</div>
+          <div><span class="fid">Lem 8</span>An Evaluator’s favorite Applicant never gets worse over time.</div>
+          <div><span class="fid">Lem 9</span>An Applicant’s Evaluator never gets better over time.</div>
+          <div class="fh">Fairness</div>
+          <div><span class="fid">Def 9</span><span class="m">y</span> is a <strong>feasible</strong> match for <span class="m">x</span> iff some stable matching matches them.</div>
+          <div><span class="fid">Def 10–11</span><strong>Optimal</strong> / <strong>pessimal</strong>: <span class="m">x</span>’s favorite / least favorite feasible match.</div>
+          <div><span class="fid">Thm 10–11</span>G-S gives every Applicant its optimal match and every Evaluator its pessimal match.</div>
+        </div>
+      </div>
+    </div></details>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>Stuck is not the same as biggest</h2></div>
+
+    <p>Before anyone ranks anyone, there’s only compatibility: an edge means the robot is qualified for the job. A
+      <strong>matching</strong> is a set of edges with no shared endpoints. It’s <strong>maximal</strong> if you can’t
+      add another edge, and <strong>maximum</strong> if no matching is larger. Those are different things, and the
+      gap between them is easy to fall into.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Click edges to build a matching. Try to give all five robots a job.</h4>
+      <div class="simgrid" style="grid-template-columns:minmax(0,318px) minmax(0,1fr)">
+        <div class="bip" id="cpsvg"></div>
+        <div>
+          <div class="out" id="cpout" style="font-family:var(--sans);font-size:15px;line-height:1.6;margin-top:0"></div>
+          <div class="row">
+            <button class="btn" id="cpreset">Clear</button>
+            <button class="btn" id="cpshow">Show me one</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Being stuck is local; being biggest is global.</strong> To check maximal, look at each unused edge and
+      see that it touches something already used. To check maximum, you have to rule out <em>every</em> other
+      matching. Lecture’s Claim 1 does that with a degree argument, and the same one works here: Beep is qualified
+      only for Lobby 7 and Dot only for Stata, so a perfect matching must use both of those edges. Axel and Cog have
+      to go somewhere else.
+    </div>
+    <details class="more"><summary>Weighted matchings</summary><div class="body">
+      Lecture also gives each edge a weight (Definition 5), lower meaning more desirable, and asks for a perfect
+      matching of minimum total weight. That problem and the maximum matching problem both have fast algorithms,
+      beyond the scope of 6.1200. Stable matching asks a different question. It isn’t about how good the total is.
+      It’s about whether anyone would defect.
+    </div></details>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>A rogue couple takes two</h2></div>
+
+    <p>From here on, every robot is qualified for every job, and each side ranks the other completely. The worry is no
+      longer size. It’s defection. A <strong>rogue couple</strong> is a robot and a job, not matched to each other, who
+      <em>both</em> prefer each other over their current matches (Definition 7). A matching is
+      <strong>stable</strong> iff it has none (Definition 8).</p>
+    <p>The registrar’s first draft just went alphabetically: Axel–Hayden, Beep–Lobby 7, Cog–Media Lab, Dot–Stata,
+      Echo–Z Center. Ringed entries are each party’s current match.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4 id="sbh">Rogue or not? Check both sides of each pair.</h4>
+      <div class="simgrid">
+        <div class="bip" id="sbsvg"></div>
+        <div id="sbboard"></div>
+      </div>
+      <div id="sbtri"></div>
+      <div class="expl" id="sbtrisum"></div>
+      <div id="sbfix" hidden>
+        <p class="expl" style="margin-top:14px">Click a robot, then a job, to move the robot there. Whoever held that job
+          takes the robot’s old one. Red dashed lines are rogue couples. These preferences have exactly
+          <strong>three</strong> stable matchings. Find them all.</p>
+        <div class="rogues" id="sbrog"></div>
+        <div class="found" id="sbfound"></div>
+        <div class="row"><button class="btn" id="sbreset">Back to the draft</button></div>
+      </div>
+    </div>
+
+    <div class="note warnb">
+      <strong>One-sided envy isn’t instability.</strong> Echo would love Media Lab, but Media Lab has Cog, its first
+      choice. Hayden would love Echo, but Echo ranks Hayden last. It takes both. That’s also why stable doesn’t mean
+      happy. Lecture’s Pokémon <span class="m">b</span> and <span class="m">d</span> both had their first choices in a
+      matching that still wasn’t stable, because <span class="m">a</span> and <span class="m">c</span> would rather
+      train together.
+    </div>
+
+    <h3>Why the two sides matter</h3>
+    <p>Lecture’s Theorem 2: if anyone can be matched with anyone, a stable matching may not exist.
+      <span class="m">a</span> likes <span class="m">b</span> best, <span class="m">b</span> likes
+      <span class="m">c</span>, <span class="m">c</span> likes <span class="m">a</span>, and nobody likes
+      <span class="m">d</span>. Someone has to be stuck with <span class="m">d</span>.</p>
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick who gets <span class="m">d</span>. Find the rogue couple.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="rmsel">
+        <button data-k="a" aria-pressed="true">d with a</button>
+        <button data-k="b" aria-pressed="false">d with b</button>
+        <button data-k="c" aria-pressed="false">d with c</button>
+      </div></div>
+      <div class="rmgrid">
+        <div class="rmsvg" id="rmsvg"></div>
+        <div>
+          <div class="plist"><b>a</b>: b &gt; c &gt; d<br><b>b</b>: c &gt; a &gt; d<br><b>c</b>: a &gt; b &gt; d<br><b>d</b>: doesn’t matter</div>
+          <div class="expl" id="rmexpl"></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Whoever gets <span class="m">d</span> is somebody’s first choice,</strong> and that somebody is stuck
+      with its second. The two of them defect together. The three cases are the same up to relabeling, which is why
+      lecture’s proof can open with “WLOG <span class="m">d</span> is matched with <span class="m">a</span>.” With two
+      sides, a stable matching always exists. Gale-Shapley finds one.
+    </div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>Applicants walk down their lists, Evaluators trade up</h2></div>
+
+    <p>Gale-Shapley runs in days. Every day:</p>
+    <ol style="margin:10px 0 0; padding-left:22px; font-size:15.6px; line-height:1.6; max-width:62ch">
+      <li>Each Applicant applies to its favorite Evaluator still on its list.</li>
+      <li>Each Evaluator with more than one applicant keeps its favorite and rejects the rest.</li>
+      <li>Each rejected Applicant crosses that Evaluator off its list.</li>
+      <li>If no Evaluator had more than one applicant, stop. Match each Evaluator with its current applicant.</li>
+    </ol>
+    <p>Two things catch people out. A robot that wasn’t rejected applies to the <em>same</em> job again the next day.
+      And a job that keeps a robot can still drop it later.</p>
+
+    <div class="card" id="sim">
+      <span class="tag">Run it</span>
+      <h4>Predict each step, then watch it happen.</h4>
+      <div class="row" style="margin-top:0">
+        <div class="seg" id="simmode">
+          <button data-k="quiz" aria-pressed="true">Quiz me</button>
+          <button data-k="watch" aria-pressed="false">Just watch</button>
+        </div>
+      </div>
+      <div class="simstat" id="simstat"></div>
+      <div class="simgrid">
+        <div class="bip" id="simsvg"></div>
+        <div id="simboard"></div>
+        <div class="panel" id="simpanel" aria-live="polite"></div>
+      </div>
+      <div class="dtwrap" id="simtable"></div>
+      <div class="row">
+        <button class="btn" id="simrestart">Restart</button>
+        <button class="btn" id="simrand">New random preferences</button>
+        <button class="btn" id="simmain" hidden>Back to the main example</button>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Count the bumps.</strong> Cog bumped Echo, Echo bumped Dot, Dot bumped Beep, and Beep landed at Hayden,
+      the one job nobody had applied to. Every robot finished lower on its list than it started, and every job
+      finished with someone at least as good as anyone it had kept before. Those two one-way facts are most of the
+      proof. (Lecture’s Pokémon run took four days. This one takes five.)
+    </div>
+    <details class="more"><summary>Some books run it one application at a time</summary><div class="body">
+      Instead of everyone applying each day, one unmatched Applicant applies per step. The order looks like it should
+      matter, but you get the same matching every time. Each version hands every Applicant its optimal match
+      (§5), and there’s only one matching that does that.
+    </div></details>
+    <details class="more"><summary>What if a robot runs out of jobs?</summary><div class="body">
+      Lecture’s rule covers it: the Applicant “stays home and is sad.” It never actually happens. That’s Theorem 5,
+      in the next section.
+    </div></details>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <div class="shead"><span class="snum">4</span><h2>It works because everything moves one way</h2></div>
+
+    <p>Lecture proves G-S correct by treating it as a state machine. The state is the set of rejections so far, it
+      starts with none, and each transition is one day. Three quantities only ever move in one direction. Here they
+      are for the main example.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick a view. Click a name to follow one line.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="mvsel">
+        <button data-k="r" aria-pressed="true">Robots</button>
+        <button data-k="p" aria-pressed="false">Jobs</button>
+        <button data-k="f" aria-pressed="false"><span class="m">f</span></button>
+      </div></div>
+      <div class="chart" id="mvchart"></div>
+      <div class="legend" id="mvleg"></div>
+      <div class="expl" id="mvexpl"></div>
+    </div>
+
+    <div class="card">
+      <h4>Quick check</h4>
+      <div style="font-weight:600;font-size:15.6px">Theorem 7 says G-S stops by Day <span class="m">N</span>² + 1. Where does the + 1 come from?</div>
+      <div class="opts" id="qc1">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Days are numbered from 1, so <span class="m">N</span>² days end on Day <span class="m">N</span>² + 1.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>At most <span class="m">N</span>² days can have a rejection, since each one lowers <span class="m">f</span>. Then there’s the last day, which has none.</span></button>
+        <button class="opt" data-c="2"><span class="mk">C</span><span>An Evaluator with no applications on Day 1 adds a day of waiting.</span></button>
+      </div>
+      <div class="fb" id="qc1fb"></div>
+    </div>
+
+    <h3>No rogue couples (Theorem 6)</h3>
+    <p>Take any robot <span class="m">a</span> and job <span class="m">e</span> that G-S did <em>not</em> match. Either
+      <span class="m">e</span> rejected <span class="m">a</span> at some point, or it didn’t. Each row is a robot’s
+      list in order. Click any pair to run the proof on it.</p>
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick a pair. Which case kills it?</h4>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="out" id="pout" style="font-family:var(--sans);font-size:15px;line-height:1.6"></div>
+      <div class="expl" id="pcount"></div>
+    </div>
+    <div class="note okb">
+      <strong>Look at the shape of each row.</strong> Left of the match are exactly the jobs that rejected that robot.
+      Right of it are jobs it never reached. Left of the match, the <em>job</em> prefers its own match (Lemma 8).
+      Right of it, the <em>robot</em> prefers its own match (Lemma 9). No pair is left over to be a rogue couple.
+    </div>
+    <details class="more"><summary>Theorem 5: everyone gets matched</summary><div class="body">
+      Lecture’s proof, by contradiction. Suppose some Applicant <span class="m">a</span> is unmatched at the end.
+      Then <span class="m">a</span> crossed every Evaluator off its list, so every Evaluator rejected
+      <span class="m">a</span>. An Evaluator that has rejected someone always has an applicant from then on (Lemma 8),
+      so all <span class="m">N</span> Evaluators end up matched. That uses up all <span class="m">N</span> Applicants,
+      <span class="m">a</span> included. ⇒⇐
+    </div></details>
+    <details class="more"><summary>A tighter bound</summary><div class="body">
+      Lecture notes that G-S actually always terminates by day (<span class="m">N</span> − 1)² + 1, and usually much
+      faster. For <span class="m">N</span> = 5 that’s Day 17. The main example stopped on Day 5.
+    </div></details>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §5 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <div class="shead"><span class="snum">5</span><h2>Whoever applies wins</h2></div>
+
+    <p>A job <span class="m">e</span> is a <strong>feasible</strong> match for robot <span class="m">a</span> if some
+      stable matching pairs them (Definition 9). <span class="m">a</span>’s <strong>optimal</strong> match is its
+      favorite feasible one, and its <strong>pessimal</strong> match is its least favorite. The same definitions apply
+      from the jobs’ side. You found all three stable matchings in §2. Here they are again.</p>
+    <p>Theorems 10 and 11: G-S gives every Applicant its optimal match and every Evaluator its pessimal one. Flip who
+      applies and watch the rings move.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Choose a stable matching. Compare the rings with the ★ and ▼.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="fsel">
+        <button data-k="r" aria-pressed="true">Robots apply</button>
+        <button data-k="mid" aria-pressed="false">The third one</button>
+        <button data-k="p" aria-pressed="false">Jobs apply</button>
+      </div></div>
+      <div class="simgrid">
+        <div class="bip" id="fsvg"></div>
+        <div id="fboard"></div>
+      </div>
+      <div class="legendline">Shaded or full-color entries are feasible; faded ones aren’t. ★ optimal ·
+        ▼ pessimal · ◆ only feasible match · ring = partner in this matching.</div>
+      <div class="expl" id="fexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>Optimal doesn’t mean first choice.</strong> No robot gets its first choice in <em>any</em> stable
+      matching here, because no robot’s first choice is feasible. Optimal means the best you can get without someone
+      defecting. When jobs apply, G-S stops on Day 1, because every job’s first choice is a different robot.
+    </div>
+
+    <div class="card">
+      <h4>Quick check</h4>
+      <div style="font-weight:600;font-size:15.6px">When robots apply, Lobby 7 ends up with Axel, and Axel is the only
+        robot that ever applied to Lobby 7. Is Axel Lobby 7’s optimal match?</div>
+      <div class="opts" id="qc2">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Yes. It’s the best applicant Lobby 7 ever saw.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>You can’t tell without running G-S with the jobs applying.</span></button>
+        <button class="opt" data-c="2"><span class="mk">C</span><span>No. Beep and Echo are feasible for Lobby 7 and both rank higher, so Axel is its pessimal match.</span></button>
+      </div>
+      <div class="fb" id="qc2fb"></div>
+    </div>
+
+    <div class="card">
+      <h4>Quick check</h4>
+      <div style="font-weight:600;font-size:15.6px">In G-S, Applicants absorb every rejection, and Evaluators only ever
+        trade up. Who comes out ahead?</div>
+      <div class="opts" id="qc3">
+        <button class="opt" data-c="0"><span class="mk">A</span><span>Evaluators. They never lose anyone they want.</span></button>
+        <button class="opt" data-c="1"><span class="mk">B</span><span>Applicants. Each one gets its optimal match, and each Evaluator gets its pessimal one.</span></button>
+        <button class="opt" data-c="2"><span class="mk">C</span><span>Neither. A stable matching is equally fair to both sides.</span></button>
+      </div>
+      <div class="fb" id="qc3fb"></div>
+    </div>
+
+    <details class="more"><summary>Where this runs for real</summary><div class="body">
+      <p style="margin-top:0">Lecture lists the applications: residents and hospitals on Match Day, NYC schools, kidney
+        donation, Akamai servers. The National Resident Matching Program has used an applicant-proposing version since
+        1998, redesigned by Alvin Roth and Elliott Peranson so that the residents, not the hospitals, are the side that
+        applies. New York City has used deferred acceptance for high-school admissions since 2003. Roth and Lloyd
+        Shapley shared the 2012 Nobel Prize in Economics; David Gale had died in 2008.</p>
+    </div></details>
+    <details class="more"><summary>Can anyone game it?</summary><div class="body">
+      When Applicants apply, no Applicant can get a better match by lying about its list. Telling the truth is always
+      a best strategy. Evaluators sometimes <em>can</em> gain by misreporting, and no stable matching algorithm is
+      immune to lying on both sides at once (Roth, 1982). Interesting, but not part of 6.1200.
+    </div></details>
+    <details class="more"><summary>The idea behind Theorem 10 (for recitation)</summary><div class="body">
+      Suppose not, and look at the <em>first</em> day any Applicant is rejected by its optimal Evaluator. The stable
+      matching that makes that Evaluator feasible turns out to contain a rogue couple. Recitation fills in the details
+      and gets Theorem 11 from it.
+    </div></details>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="take">
+      <h3 style="font-size:19px">The short version</h3>
+      <ol>
+        <li><strong>Don’t confuse stuck with biggest.</strong> Maximal means no edge can be added. Maximum means no matching is larger. You check the first locally; the second needs an argument about every matching.</li>
+        <li><strong>Check both sides for a rogue couple.</strong> Each must prefer the other over its own match. One-sided envy isn’t instability, and unhappy isn’t unstable.</li>
+        <li><strong>Treat keeping as provisional.</strong> Every day, every Applicant applies to the top of what’s left on its list, including the ones kept yesterday, and an Evaluator drops whoever it’s keeping the moment someone better applies.</li>
+        <li><strong>Prove it with what moves one way.</strong> Applicants’ Evaluators only get worse (Lemma 9), Evaluators’ favorites only get better (Lemma 8), and <span class="m">f</span> only drops. Every unmatched pair falls into one of two cases.</li>
+        <li><strong>Remember who applies.</strong> Applicants get their optimal matches and Evaluators their pessimal ones, among stable matchings. That’s not the same as anyone’s first choice.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div id="blank" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 12, matching, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- the cast and their preferences ---------- */
+var R=['A','B','C','D','E'], P=['H','L','M','S','Z'];
+var ROB={
+  A:{name:'Axel', c:'var(--c1)', bio:'Lifts a piano one-handed. Wants to be where the cameras are.'},
+  B:{name:'Beep', c:'var(--c4)', bio:'Talks nonstop, and would love a job where nobody asks it anything.'},
+  C:{name:'Cog',  c:'var(--c3)', bio:'Surgical-grade grippers. Loves Stata’s crooked walls.'},
+  D:{name:'Dot',  c:'var(--c2)', bio:'Knee-high, quick, knows every shortcut. Dreams of demo day.'},
+  E:{name:'Echo', c:'var(--c5)', bio:'Silent, remembers everything. Everyone’s second choice. Wants anywhere but a library.'}
+};
+var PLC={
+  H:{name:'Hayden', bio:'Hayden Library, night reshelving. Wants quiet.'},
+  L:{name:'Lobby 7', bio:'The info desk under the dome. Wants a talker.'},
+  M:{name:'Media Lab', bio:'Demo-day assistant. Wants steady hands.'},
+  S:{name:'Stata', bio:'Mail runs through the Stata Center maze. Wants a navigator.'},
+  Z:{name:'Z Center', bio:'Re-racking weights at the gym. Wants strength.'}
+};
+function split(o){ var r={}; Object.keys(o).forEach(function(k){ r[k]=o[k].split(''); }); return r; }
+var MAIN={
+  pr:split({A:'MLZHS', B:'SHMLZ', C:'SMZLH', D:'MZSHL', E:'MZSLH'}),
+  pp:split({H:'ECDBA', L:'BEADC', M:'CEDAB', S:'DEABC', Z:'AEBDC'})
+};
+
+/* ---------- small helpers ---------- */
+function nm(id){ return (ROB[id]||PLC[id]).name; }
+function ord(n){ return n+(n===1?'st':n===2?'nd':n===3?'rd':'th'); }
+var WORDS=['no','one','two','three','four','five'];
+function rank(list,x){ return list.indexOf(x)+1; }
+function chip(id){ return ROB[id] ? '<span class="rb" style="--rc:'+ROB[id].c+'">'+id+'</span>' : '<span class="pl">'+id+'</span>'; }
+function cw(id,cls,badge){ return '<span class="cw'+(cls?' '+cls:'')+'" title="'+nm(id)+'">'+chip(id)+(badge?'<span class="bdg">'+badge+'</span>':'')+'</span>'; }
+function who(id){ return '<span class="who">'+chip(id)+'<span>'+nm(id)+'</span></span>'; }
+function andList(a){ if(a.length<2) return a.join(''); if(a.length===2) return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
+function names(ids){ return andList(ids.map(nm)); }
+function lst(list){ return '<span style="font-family:var(--mono);font-size:.92em">'+list.join(' ')+'</span>'; }
+function inverse(m){ var r={}; Object.keys(m).forEach(function(k){ r[m[k]]=k; }); return r; }
+function setPressed(seg,btn){ seg.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x===btn?'true':'false'); }); }
+function cloneLists(o){ var r={}; Object.keys(o).forEach(function(k){ r[k]=o[k].slice(); }); return r; }
+
+/* ---------- Gale-Shapley, day by day, as in lecture ---------- */
+function runGS(pa,pe,A,E){
+  var crossed={}, f=A.length*E.length, days=[];
+  A.forEach(function(a){ crossed[a]=[]; });
+  for(var guard=0; guard<200; guard++){
+    var d={k:days.length+1, apps:{}, target:{}, kept:{}, rej:{}, fBefore:f, crossedBefore:cloneLists(crossed)};
+    E.forEach(function(e){ d.apps[e]=[]; d.rej[e]=[]; });
+    A.forEach(function(a){
+      var t=null;
+      for(var i=0;i<pa[a].length;i++){ if(crossed[a].indexOf(pa[a][i])<0){ t=pa[a][i]; break; } }
+      d.target[a]=t; if(t) d.apps[t].push(a);
+    });
+    d.final=E.every(function(e){ return d.apps[e].length<=1; });
+    E.forEach(function(e){
+      var v=d.apps[e]; if(!v.length) return;
+      var best=v.reduce(function(x,y){ return pe[e].indexOf(y)<pe[e].indexOf(x)?y:x; });
+      d.kept[e]=best;
+      if(!d.final) d.rej[e]=v.filter(function(x){ return x!==best; });
+    });
+    if(!d.final) E.forEach(function(e){ d.rej[e].forEach(function(a){ crossed[a].push(e); f--; }); });
+    d.fAfter=f; d.crossedAfter=cloneLists(crossed);
+    days.push(d);
+    if(d.final) break;
+  }
+  var last=days[days.length-1], match={};
+  E.forEach(function(e){ if(last.kept[e]) match[last.kept[e]]=e; });
+  return {days:days, match:match, pa:pa, pe:pe};
+}
+function rejDay(run,a,e){
+  for(var j=0;j<run.days.length;j++){ if(run.days[j].rej[e] && run.days[j].rej[e].indexOf(a)>=0) return j+1; }
+  return 0;
+}
+function perms(arr){
+  if(arr.length<=1) return [arr.slice()];
+  var out=[];
+  arr.forEach(function(x,i){ perms(arr.slice(0,i).concat(arr.slice(i+1))).forEach(function(p){ out.push([x].concat(p)); }); });
+  return out;
+}
+function roguesOf(m,pr,pp){
+  var inv=inverse(m), out=[];
+  R.forEach(function(a){ P.forEach(function(e){
+    if(m[a]===e) return;
+    if(pr[a].indexOf(e)<pr[a].indexOf(m[a]) && pp[e].indexOf(a)<pp[e].indexOf(inv[e])) out.push([a,e]);
+  }); });
+  return out;
+}
+function keyOf(m){ return R.map(function(a){ return m[a]; }).join(''); }
+function stableAll(pr,pp){
+  return perms(P).map(function(p){ var m={}; R.forEach(function(a,i){ m[a]=p[i]; }); return m; })
+    .filter(function(m){ return !roguesOf(m,pr,pp).length; });
+}
+
+var MR=runGS(MAIN.pr, MAIN.pp, R, P);
+var MSTABLE=stableAll(MAIN.pr, MAIN.pp);
+
+/* ---------- the two-column picture: robots left, jobs right ---------- */
+function Y(i){ return 38+62*i; }
+var RX=92, PX=216;
+function bipSVG(o){
+  var s='<svg viewBox="0 0 318 330" role="img" aria-label="'+(o.label||'Robots on the left, jobs on the right')+'">';
+  (o.lines||[]).forEach(function(l){
+    var y1=Y(R.indexOf(l.a)), y2=Y(P.indexOf(l.e));
+    var colored=/\b(app|keep|mt)\b/.test(l.cls);
+    s+='<line class="ln '+l.cls+'" x1="'+(RX+18)+'" y1="'+y1+'" x2="'+(PX-18)+'" y2="'+y2+'"'+(colored?' style="stroke:'+ROB[l.a].c+'"':'')+'/>';
+    if(l.x){ var mx=(RX+PX)/2, my=(y1+y2)/2; s+='<circle class="xm" cx="'+mx+'" cy="'+my+'" r="8"/><text class="xt" x="'+mx+'" y="'+my+'">×</text>'; }
+  });
+  (o.lines||[]).forEach(function(l){
+    if(!l.hit) return;
+    s+='<line class="hit" data-k="'+l.a+l.e+'" tabindex="0" role="button" aria-label="'+nm(l.a)+' – '+nm(l.e)+'" x1="'+(RX+18)+'" y1="'+Y(R.indexOf(l.a))+'" x2="'+(PX-18)+'" y2="'+Y(P.indexOf(l.e))+'"/>';
+  });
+  var sub=o.sub||{};
+  R.forEach(function(a,i){
+    var y=Y(i), c=ROB[a].c, cl='nd'+(o.click?' click':'')+(o.sel===a?' sel':'');
+    s+='<g class="'+cl+'" data-id="'+a+'"'+(o.click?' tabindex="0" role="button" aria-label="'+nm(a)+'"':'')+'>'+
+      '<rect class="ring" x="'+(RX-23)+'" y="'+(y-21)+'" width="46" height="42" rx="12"/>'+
+      '<line x1="'+RX+'" y1="'+(y-15)+'" x2="'+RX+'" y2="'+(y-21)+'" style="stroke:'+c+'" stroke-width="2"/>'+
+      '<circle cx="'+RX+'" cy="'+(y-23)+'" r="3.2" style="fill:'+c+'"/>'+
+      '<rect x="'+(RX-17)+'" y="'+(y-15)+'" width="34" height="30" rx="8" style="fill:'+c+'"/>'+
+      '<text class="lt rt" x="'+RX+'" y="'+(y+1)+'">'+a+'</text></g>'+
+      '<text class="nm" x="'+(RX-30)+'" y="'+(sub[a]?y-7:y)+'" text-anchor="end">'+nm(a)+'</text>'+
+      (sub[a]?'<text class="nsub" x="'+(RX-30)+'" y="'+(y+9)+'" text-anchor="end">'+sub[a]+'</text>':'');
+  });
+  P.forEach(function(e,i){
+    var y=Y(i), cl='nd'+(o.click?' click':'')+(o.sel===e?' sel':'');
+    s+='<g class="'+cl+'" data-id="'+e+'"'+(o.click?' tabindex="0" role="button" aria-label="'+nm(e)+'"':'')+'>'+
+      '<circle class="ring" cx="'+PX+'" cy="'+y+'" r="23"/>'+
+      '<circle class="pc" cx="'+PX+'" cy="'+y+'" r="17"/>'+
+      '<text class="lt ptx" x="'+PX+'" y="'+(y+1)+'">'+e+'</text></g>'+
+      '<text class="nm" x="'+(PX+30)+'" y="'+(sub[e]?y-7:y)+'">'+nm(e)+'</text>'+
+      (sub[e]?'<text class="nsub" x="'+(PX+30)+'" y="'+(y+9)+'">'+sub[e]+'</text>':'');
+  });
+  return s+'</svg>';
+}
+
+/* ---------- both sides' preference lists ---------- */
+function boardHTML(pr,pp,mk,hlRows){
+  hlRows=hlRows||[];
+  function block(title,sub,ids,prefs,side){
+    var h='<div class="bblk"><div class="bh">'+title+' <span>· '+sub+'</span></div>'+
+      '<div class="brow rk"><span class="who"></span><span class="lst">'+[1,2,3,4,5].map(function(n){ return '<span class="rkn">'+n+'</span>'; }).join('')+'</span></div>';
+    ids.forEach(function(id){
+      h+='<div class="brow'+(hlRows.indexOf(id)>=0?' hl':'')+'">'+who(id)+'<span class="lst">'+
+        prefs[id].map(function(x){ var r=mk?mk(side,id,x):null; return cw(x, r&&r.cls, r&&r.badge); }).join('')+'</span></div>';
+    });
+    return h+'</div>';
+  }
+  return '<div class="board">'+block('Robots rank jobs','Applicants',R,pr,'r')+block('Jobs rank robots','Evaluators',P,pp,'p')+'</div>';
+}
+
+/* ---------- cast ---------- */
+(function(){
+  var host=document.getElementById('cast'); if(!host) return;
+  host.innerHTML='<div><div class="ch">Robots · Applicants</div>'+R.map(function(a){
+      return '<div class="castrow">'+chip(a)+'<div><b>'+nm(a)+'</b> <span class="bio">'+ROB[a].bio+'</span></div></div>'; }).join('')+'</div>'+
+    '<div><div class="ch">Jobs · Evaluators</div>'+P.map(function(e){
+      return '<div class="castrow">'+chip(e)+'<div><b>'+nm(e)+'</b> <span class="bio">'+PLC[e].bio+'</span></div></div>'; }).join('')+'</div>';
+})();
+
+/* ---------- §1 maximal vs maximum ---------- */
+(function(){
+  var box=document.getElementById('cpsvg'), out=document.getElementById('cpout');
+  if(!box) return;
+  var EDGES=['AL','AZ','AM','BL','CM','CS','DS','EH','EM','EZ'], PERFECT=['AZ','BL','CM','DS','EH'];
+  var on=[], stuck=0;
+  function used(id){ return on.some(function(k){ return k.indexOf(id)>=0; }); }
+  function free(k){ return on.indexOf(k)<0 && !used(k[0]) && !used(k[1]); }
+  function draw(){
+    var lines=EDGES.map(function(k){
+      return {a:k[0], e:k[1], hit:true, cls: on.indexOf(k)>=0 ? 'keep' : (free(k)?'free':'off')};
+    });
+    box.innerHTML=bipSVG({lines:lines, label:'Compatibility graph between robots and jobs'});
+    var n=on.length, maximal=!EDGES.some(free);
+    var h='<div><b>|<span class="m">M</span>| = '+n+'</b> &nbsp;·&nbsp; maximal: '+(maximal?'<b>yes</b>':'no')+
+      ' &nbsp;·&nbsp; maximum: '+(n===5?'<b>yes</b>':'no')+' &nbsp;·&nbsp; perfect: '+(n===5?'<b>yes</b>':'no')+'</div>';
+    if(n===0) h+='<div class="expl">Each robot has one to three qualifications. Pick edges; ones that would share an endpoint fade out.</div>';
+    else if(n===5) h+='<div class="expl" style="color:var(--ok)"><strong>Perfect: 5 edges = |<span class="m">V</span>|/2 = 10/2.</strong> A perfect matching is automatically maximum, since no matching can have more than |<span class="m">V</span>|/2 edges.'+(stuck?' It took '+(stuck+1)+' tries. Getting stuck on the way is normal.':'')+'</div>';
+    else if(maximal) h+='<div class="expl" style="color:var(--warn)"><strong>Stuck at '+n+'.</strong> This matching is maximal: every unused edge touches a robot or job you’ve already used. It isn’t maximum, though. A matching with 5 edges exists. Clear and try again.</div>';
+    else h+='<div class="expl">Still room: at least one edge has both endpoints free.</div>';
+    out.innerHTML=h;
+  }
+  function toggle(k){
+    var i=on.indexOf(k);
+    if(i>=0) on.splice(i,1);
+    else if(free(k)){ on.push(k); if(!EDGES.some(free) && on.length<5) stuck++; }
+    draw();
+  }
+  box.addEventListener('click',function(ev){ var t=ev.target.closest('.hit'); if(t) toggle(t.getAttribute('data-k')); });
+  box.addEventListener('keydown',function(ev){ if(ev.key!=='Enter') return; var t=ev.target.closest('.hit'); if(t){ ev.preventDefault(); toggle(t.getAttribute('data-k')); } });  // Space is the blank screen
+  document.getElementById('cpreset').addEventListener('click',function(){ on=[]; draw(); });
+  document.getElementById('cpshow').addEventListener('click',function(){ on=PERFECT.slice(); draw(); });
+  draw();
+})();
+
+/* ---------- §2 rogue couples: triage, then fix the draft ---------- */
+(function(){
+  var svg=document.getElementById('sbsvg'), brd=document.getElementById('sbboard'), tri=document.getElementById('sbtri'),
+      trisum=document.getElementById('sbtrisum'), fix=document.getElementById('sbfix'), rog=document.getElementById('sbrog'),
+      found=document.getElementById('sbfound'), head=document.getElementById('sbh');
+  if(!svg) return;
+  var pr=MAIN.pr, pp=MAIN.pp, DRAFT={A:'H',B:'L',C:'M',D:'S',E:'Z'};
+  var m=JSON.parse(JSON.stringify(DRAFT)), unlocked=false, sel=null, hl=null, got={};
+  var STABLE_KEYS=MSTABLE.map(keyOf);
+
+  function side(a,e,mm){ // does a prefer e over its match, and e prefer a over its match?
+    var inv=inverse(mm);
+    return {ra:rank(pr[a],e), rm:rank(pr[a],mm[a]), ea:rank(pp[e],a), em:rank(pp[e],inv[e]), ma:mm[a], me:inv[e]};
+  }
+  function reason(a,e,mm){
+    var s=side(a,e,mm);
+    return nm(a)+' ranks '+nm(e)+' '+ord(s.ra)+', '+(s.ra<s.rm?'above':'below')+' its match '+nm(s.ma)+' ('+ord(s.rm)+') '+(s.ra<s.rm?'✓':'✗')+
+      ' · '+nm(e)+' ranks '+nm(a)+' '+ord(s.ea)+', '+(s.ea<s.em?'above':'below')+' its match '+nm(s.me)+' ('+ord(s.em)+') '+(s.ea<s.em?'✓':'✗');
+  }
+
+  var TRI=[
+    {a:'A',e:'Z',rogue:true, w:'Both sides want it. Axel would rather lift weights than reshelve books, and the Z Center would rather have Axel than Echo.'},
+    {a:'E',e:'M',rogue:false,w:'Only Echo wants this. Media Lab already has Cog, its first choice, so it would never defect.'},
+    {a:'E',e:'H',rogue:false,w:'Only Hayden wants this. Echo ranks Hayden last and is happy at the Z Center.'},
+    {a:'B',e:'H',rogue:true, w:'Both sides want it. Beep would rather be quiet at Hayden than chatty at Lobby 7, and Hayden ranks Beep above Axel.'},
+    {a:'C',e:'M',rogue:false,w:'Cog and Media Lab are already matched to each other. A rogue couple has to be a pair that isn’t.'}
+  ];
+
+  function draw(){
+    var lines=R.map(function(a){ return {a:a, e:m[a], cls:'keep'}; });
+    if(unlocked) roguesOf(m,pr,pp).forEach(function(p){ lines.push({a:p[0], e:p[1], cls:'rogue'}); });
+    if(hl && !unlocked) lines.push({a:hl[0], e:hl[1], cls:'cand'});
+    svg.innerHTML=bipSVG({lines:lines, click:unlocked, sel:sel, label:'The current matching between robots and jobs'});
+    brd.innerHTML=boardHTML(pr,pp,function(sd,row,x){
+      var mate = sd==='r' ? m[row]===x : m[x]===row;
+      var cand = hl && ((sd==='r' && row===hl[0] && x===hl[1]) || (sd==='p' && row===hl[1] && x===hl[0]));
+      return {cls: cand?'cand':(mate?'mate':'')};
+    }, hl?[hl[0],hl[1]]:[]);
+    if(!unlocked) return;
+    var rs=roguesOf(m,pr,pp), k=keyOf(m);
+    if(!rs.length){
+      if(!got[k]) got[k]=true;
+      rog.innerHTML='<div class="st"><strong>Stable.</strong> No rogue couples. '+
+        (Object.keys(got).length===3?'That’s all three.':'That’s '+Object.keys(got).length+' of 3.')+'</div>';
+    } else {
+      rog.innerHTML='<div class="lbl">'+rs.length+' rogue couple'+(rs.length===1?'':'s')+'</div>'+rs.map(function(p){
+        return '<div class="rg"><strong>('+nm(p[0])+', '+nm(p[1])+')</strong><br><span style="font-size:13.6px">'+reason(p[0],p[1],m)+'</span></div>'; }).join('');
+    }
+    found.innerHTML=STABLE_KEYS.map(function(sk){
+      return got[sk] ? '<span class="fslot got">'+R.map(function(a,i){ return a+'–'+sk[i]; }).join(' ')+'</span>' : '<span class="fslot">? ? ? ? ?</span>';
+    }).join('');
+  }
+
+  function unlock(){
+    if(unlocked) return; unlocked=true; hl=null; fix.hidden=false;
+    head.textContent='Now fix the draft.';
+    var done=tri.querySelectorAll('.tcard[data-done]').length, right=tri.querySelectorAll('.tbtn.ok.picked').length;
+    tri.hidden=true;
+    trisum.innerHTML=done?'You judged '+done+' of '+TRI.length+' pairs, '+right+' correctly. The draft’s rogue couples are drawn in red below.':'';
+    draw();
+    head.parentNode.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  /* triage */
+  TRI.forEach(function(it){
+    var c=document.createElement('div'); c.className='tcard';
+    c.innerHTML='<div class="cand">('+chip(it.a)+nm(it.a)+',&nbsp;'+chip(it.e)+nm(it.e)+')</div>'+
+      '<div class="tbtns"><button class="tbtn" data-k="1">Rogue couple</button><button class="tbtn" data-k="0">Not rogue</button></div><div class="tfb"></div>';
+    var fb=c.querySelector('.tfb');
+    function on(){ if(!unlocked){ hl=[it.a,it.e]; draw(); } }
+    function off(){ if(!unlocked && hl && hl[0]===it.a && hl[1]===it.e){ hl=null; draw(); } }
+    c.addEventListener('mouseenter',on); c.addEventListener('mouseleave',off);
+    c.addEventListener('focusin',on); c.addEventListener('focusout',off);
+    c.querySelectorAll('.tbtn').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(c.dataset.done) return; c.dataset.done='1';
+        var ans=it.rogue?'1':'0', ok=b.dataset.k===ans;
+        b.classList.add('picked');
+        c.querySelectorAll('.tbtn').forEach(function(x){ x.classList.add('lk');
+          if(x.dataset.k===ans) x.classList.add('ok'); else if(x===b) x.classList.add('no'); });
+        fb.className='tfb show '+(ok?'g':'b');
+        fb.innerHTML='<strong>'+(ok?'Right.':'Not quite.')+'</strong> '+it.w+
+          (it.a+it.e!=='CM'?'<br><span style="font-size:13.4px;color:var(--ink-2)">'+reason(it.a,it.e,DRAFT)+'</span>':'');
+        var d=tri.querySelectorAll('.tcard[data-done]').length;
+        trisum.innerHTML=d+' of '+TRI.length+' judged.'+(d===TRI.length?' The draft has two rogue couples: (Axel, Z Center) and (Beep, Hayden). <button class="btn pri" id="sbgo" style="margin-left:6px">Fix the draft</button>':
+          ' <button class="linkbtn" id="sbskip">Skip to fixing it</button>');
+        var go=document.getElementById('sbgo')||document.getElementById('sbskip');
+        if(go) go.addEventListener('click',unlock);
+      });
+    });
+    tri.appendChild(c);
+  });
+  trisum.innerHTML='0 of '+TRI.length+' judged. <button class="linkbtn" id="sbskip0">Skip to fixing it</button>';
+  document.getElementById('sbskip0').addEventListener('click',unlock);
+
+  /* swapping */
+  function pickNode(id){
+    if(!unlocked) return;
+    var isR=!!ROB[id];
+    if(sel===null || (!!ROB[sel])===isR){ sel=(sel===id)?null:id; draw(); return; }
+    var a=isR?id:sel, e=isR?sel:id, prev=m[a], b=inverse(m)[e];
+    m[a]=e; m[b]=prev; sel=null; draw();
+  }
+  svg.addEventListener('click',function(ev){ var g=ev.target.closest('.nd'); if(g) pickNode(g.getAttribute('data-id')); });
+  svg.addEventListener('keydown',function(ev){ if(ev.key!=='Enter') return; var g=ev.target.closest('.nd'); if(g){ ev.preventDefault(); pickNode(g.getAttribute('data-id')); } });  // Space is the blank screen
+  document.getElementById('sbreset').addEventListener('click',function(){ m=JSON.parse(JSON.stringify(DRAFT)); sel=null; draw(); });
+  draw();
+})();
+
+/* ---------- §2 roommates: no stable matching ---------- */
+(function(){
+  var sel=document.getElementById('rmsel'), box=document.getElementById('rmsvg'), ex=document.getElementById('rmexpl');
+  if(!sel) return;
+  var POS={a:[140,34], b:[54,118], c:[226,118], d:[140,186]};
+  var CASES={
+    a:{m:[['a','d'],['b','c']], r:['a','c'], t:'<strong>(a, c) is rogue.</strong> c is with b, its 2nd choice, and ranks a 1st. a is with d, its last choice, and ranks c 2nd.'},
+    b:{m:[['b','d'],['a','c']], r:['a','b'], t:'<strong>(a, b) is rogue.</strong> a is with c, its 2nd choice, and ranks b 1st. b is with d, its last choice, and ranks a 2nd.'},
+    c:{m:[['c','d'],['a','b']], r:['b','c'], t:'<strong>(b, c) is rogue.</strong> b is with a, its 2nd choice, and ranks c 1st. c is with d, its last choice, and ranks b 2nd.'}
+  };
+  function seg(p,q,cls){ var A=POS[p], B=POS[q]; return '<line class="ln '+cls+'" x1="'+A[0]+'" y1="'+A[1]+'" x2="'+B[0]+'" y2="'+B[1]+'"'+(cls==='mt'?' style="stroke:var(--ink)"':'')+'/>'; }
+  function draw(k){
+    var c=CASES[k], s='<svg viewBox="0 0 280 220" role="img" aria-label="Four people, two pairs, and a rogue couple">';
+    c.m.forEach(function(p){ s+=seg(p[0],p[1],'mt'); });
+    s+=seg(c.r[0],c.r[1],'rogue');
+    Object.keys(POS).forEach(function(v){ var p=POS[v];
+      s+='<g class="nd"><circle class="pc" cx="'+p[0]+'" cy="'+p[1]+'" r="17"/><text class="lt ptx" x="'+p[0]+'" y="'+(p[1]+1)+'" style="font-family:\'Iowan Old Style\',Palatino,Georgia,serif;font-style:italic;font-size:17px">'+v+'</text></g>'; });
+    box.innerHTML=s+'</svg>';
+    ex.innerHTML=c.t+' Solid lines are the matching; the red dashed line is the pair that defects.';
+  }
+  sel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ setPressed(sel,b); draw(b.dataset.k); });
+  });
+  draw('a');
+})();
+
+/* ---------- §3 the simulator ---------- */
+function whyApply(run,a,k){
+  var d=run.days[k-1], cr=d.crossedBefore[a];
+  return 'Crossed off '+nm(a)+'’s list so far: '+(cr.length?names(cr):'nothing')+'. The top job left on it ('+lst(run.pa[a])+') is '+nm(d.target[a])+'.';
+}
+function wrongApply(run,a,k,c){
+  var d=run.days[k-1];
+  if(d.crossedBefore[a].indexOf(c)>=0) return nm(c)+' already rejected '+nm(a)+' on Day '+rejDay(run,a,c)+', so it’s crossed off. ';
+  if(rank(run.pa[a],c)>rank(run.pa[a],d.target[a])) return nm(d.target[a])+' is higher on '+nm(a)+'’s list and hasn’t rejected it. ';
+  return '';
+}
+function whyKeep(run,e,k){
+  var d=run.days[k-1];
+  return nm(e)+'’s list is '+lst(run.pe[e])+'. Of today’s applicants, its favorite is '+nm(d.kept[e])+' ('+ord(rank(run.pe[e],d.kept[e]))+').';
+}
+function wrongKeep(run,e,k,c){
+  var d=run.days[k-1];
+  return nm(e)+' ranks '+nm(c)+' '+ord(rank(run.pe[e],c))+', below '+nm(d.kept[e])+' ('+ord(rank(run.pe[e],d.kept[e]))+'). Use the job’s list here, not the robots’. ';
+}
+function stopQ(){
+  return {kind:'mcq', prompt:'Every job now has at most one applicant. What happens?',
+    opts:[{t:'Any job whose applicant is low on its list rejects it.', w:'An Evaluator rejects only when it has more than one applicant. '},
+          {t:'G-S stops and matches everyone.', ok:true},
+          {t:'It runs one more day to make sure nothing changes.', w:'No list changed today, so tomorrow would look exactly the same. '}],
+    why:'The stopping rule: if every Evaluator has at most one applicant, no preference list is modified, so match each Evaluator with its current applicant.'};
+}
+function curatedQs(run){
+  var D=run.days;
+  return {
+    '1.apply':[{kind:'pick', choices:P, ans:'M',
+      prompt:'Day 1: every robot applies to the first job on its list. Which job gets the most applications?',
+      why:'Media Lab is first on three lists: Axel’s, Dot’s and Echo’s. Stata gets Beep and Cog. Hayden, Lobby 7 and the Z Center get nobody, which is allowed. An Evaluator with no applicants just waits.',
+      wrongFn:function(c){ return nm(c)+' gets '+WORDS[D[0].apps[c].length]+'. Read the first column of the robots’ lists. '; }}],
+    '1.decide':[{kind:'pick', choices:['A','D','E'], ans:'E',
+      prompt:'Media Lab has applications from Axel, Dot and Echo. Who does it keep?',
+      why:'Media Lab’s list is '+lst(run.pe.M)+'. Cog didn’t apply, so the best applicant it actually has is Echo. Keeping isn’t accepting: Media Lab can still drop Echo if someone better turns up. That’s the “deferred” in Deferred Acceptance.',
+      wrongFn:function(c){ return wrongKeep(run,'M',1,c); }},
+      {kind:'multi', choices:R, ans:['A','C','D'],
+       prompt:'Stata has Beep and Cog. Select every robot rejected on Day 1.',
+       why:'Media Lab rejects Axel and Dot. Stata’s list is '+lst(run.pe.S)+', so it keeps Beep and rejects Cog. Hayden, Lobby 7 and the Z Center have nobody to reject.'}],
+    '2.apply':[
+      {kind:'mcq', prompt:'Media Lab kept Echo on Day 1. What does Echo do on Day 2?',
+       opts:[{t:'Nothing. It’s matched with Media Lab now.', w:'Nobody is matched until the day G-S stops. '},
+             {t:'Applies to Media Lab again.', ok:true},
+             {t:'Moves on to the Z Center, its second choice.', w:'Echo only moves down its list when it’s rejected. '}],
+       why:'Every day, every robot applies to the top job still on its list. Nothing was crossed off Echo’s list, so that’s Media Lab again. Beep reapplies to Stata the same way.'},
+      {kind:'pick', choices:P, ans:'M', prompt:'Cog was rejected by Stata. Where does Cog apply on Day 2?',
+       why:whyApply(run,'C',2)+' That’s where Echo is being kept.', wrongFn:function(c){ return wrongApply(run,'C',2,c); }}],
+    '2.decide':[{kind:'mcq', prompt:'Echo reapplied to Media Lab, and now Cog has applied there too. What happens?',
+      opts:[{t:'Media Lab keeps Echo, because Echo was there first.', w:'There’s no first-come rule. '},
+            {t:'Media Lab keeps both until one of them leaves.', w:'An Evaluator with more than one applicant always rejects all but one. '},
+            {t:'Media Lab rejects Echo and keeps Cog.', ok:true}],
+      why:'Cog is Media Lab’s first choice. Keeping Echo yesterday was never a promise. Each day an Evaluator keeps its favorite of the applicants in front of it, and today that’s Cog, so Echo crosses Media Lab off. Everyone else applied somewhere alone, so Lobby 7 keeps Axel and the Z Center keeps Dot.'}],
+    '3.apply':[{kind:'num', ans:21,
+      prompt:'Let <span class="m">f</span> be the number of jobs still on the robots’ lists, counted across all five lists. It started at 5 × 5 = 25. What is <span class="m">f</span> after Day 2?',
+      why:'Three rejections on Day 1 and one on Day 2: 25 − 4 = 21. Each rejection crosses off exactly one entry, so <span class="m">f</span> drops by the number of rejections. It’s the derived variable lecture uses to prove termination (§4).'}],
+    '3.decide':[{kind:'mcq', prompt:'Echo moved down to the Z Center, which has been keeping Dot. Who gets rejected on Day 3?',
+      opts:[{t:'Echo, since Dot was there first.', w:'Arrival order never matters. '},
+            {t:'Dot.', ok:true},
+            {t:'Nobody. The Z Center can hold both for a day.', w:'More than one applicant means a rejection that same day. '}],
+      why:'The Z Center ranks Echo 2nd and Dot 4th, so Dot is out. Notice the chain: Cog bumped Echo, and now Echo bumps Dot.'}],
+    '4.apply':[{kind:'mcq', prompt:'Dot has been rejected by Media Lab and by the Z Center. Could Dot still end up at the Z Center?',
+      opts:[{t:'Yes, if Echo gets bumped from the Z Center later.', w:'Even then, Dot would never apply there again. '},
+            {t:'No. The Z Center is crossed off Dot’s list for good.', ok:true}],
+      why:'A crossed-off job never gets that robot’s application again, so each robot only ever moves down its list. That’s Lemma 9: an Applicant’s Evaluator never gets better. Dot’s next stop is Stata, its 3rd choice.'}],
+    '5.apply':[{kind:'pick', choices:P, ans:'H', prompt:'Stata dropped Beep for Dot on Day 4. Where does Beep apply on Day 5?',
+      why:whyApply(run,'B',5)+' Hayden hasn’t had a single applicant all week.', wrongFn:function(c){ return wrongApply(run,'B',5,c); }}],
+    '5.final':[(function(){ var q=stopQ();
+      q.prompt='Day 5 applications are in, and every job has exactly one. What happens now?';
+      q.opts[0]={t:'Hayden rejects Beep. Beep is only Hayden’s 4th choice.', w:'An Evaluator rejects only when it has more than one applicant. '};
+      return q; })()]
+  };
+}
+function genQs(run){
+  var map={}, D=run.days;
+  function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+  D.forEach(function(d,j){
+    var k=d.k, qa=[], qd=[];
+    if(k===1){
+      var counts=P.map(function(e){ return d.apps[e].length; }), mx=Math.max.apply(null,counts);
+      if(counts.filter(function(c){ return c===mx; }).length===1){
+        var e1=P[counts.indexOf(mx)];
+        qa.push({kind:'pick', choices:P, ans:e1, prompt:'Day 1: every robot applies to the first job on its list. Which job gets the most applications?',
+          why:nm(e1)+' is first on '+WORDS[mx]+' lists: '+andList(d.apps[e1].map(function(a){ return nm(a)+'’s'; }))+'.',
+          wrongFn:function(c){ return nm(c)+' gets '+WORDS[d.apps[c].length]+'. '; }});
+      }
+    } else {
+      var prev=D[j-1];
+      if(k===3) qa.push({kind:'num', ans:prev.fAfter,
+        prompt:'Let <span class="m">f</span> be the number of jobs still on the robots’ lists. It started at 25. What is <span class="m">f</span> after Day 2?',
+        why:'There were '+(25-prev.fAfter)+' rejections in the first two days, each crossing off one entry: 25 − '+(25-prev.fAfter)+' = '+prev.fAfter+'.'});
+      var rj=R.filter(function(a){ return P.some(function(e){ return prev.rej[e].indexOf(a)>=0; }); });
+      if(rj.length){ var a=rnd(rj);
+        qa.push({kind:'pick', choices:P, ans:d.target[a], prompt:nm(a)+' was rejected yesterday. Where does it apply on Day '+k+'?',
+          why:whyApply(run,a,k), wrongFn:function(c){ return wrongApply(run,a,k,c); }}); }
+    }
+    var multi=P.filter(function(e){ return d.apps[e].length>1; });
+    if(d.final) qd.push(stopQ());
+    else if(multi.length){ var e=rnd(multi);
+      qd.push({kind:'pick', choices:d.apps[e], ans:d.kept[e], prompt:nm(e)+' has applications from '+names(d.apps[e])+'. Who does it keep?',
+        why:whyKeep(run,e,k), wrongFn:function(c){ return wrongKeep(run,e,k,c); }}); }
+    map[k+'.apply']=qa; map[k+'.'+(d.final?'final':'decide')]=qd;
+  });
+  return map;
+}
+function randomPrefs(){
+  function shuf(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  for(var tries=0; tries<500; tries++){
+    var pr={}, pp={};
+    R.forEach(function(a){ pr[a]=shuf(P); }); P.forEach(function(e){ pp[e]=shuf(R); });
+    var n=runGS(pr,pp,R,P).days.length;
+    if(n>=4 && n<=8) return {pr:pr, pp:pp};
+  }
+  return MAIN;
+}
+
+(function(){
+  var svgBox=document.getElementById('simsvg'), brd=document.getElementById('simboard'), panel=document.getElementById('simpanel'),
+      tbl=document.getElementById('simtable'), stat=document.getElementById('simstat'), modeSel=document.getElementById('simmode'),
+      bMain=document.getElementById('simmain');
+  if(!svgBox) return;
+  var S={quiz:true};
+
+  function build(pr,pp,curated){
+    S.pr=pr; S.pp=pp; S.run=runGS(pr,pp,R,P); S.curated=curated;
+    S.views=[{k:1, ph:'start'}];
+    S.run.days.forEach(function(d){ S.views.push({k:d.k, ph:'apply'}); S.views.push({k:d.k, ph:d.final?'final':'decide'}); });
+    var map=curated?curatedQs(S.run):genQs(S.run);
+    S.qs=S.views.map(function(v,i){ return (map[v.k+'.'+v.ph]||[]).map(function(q,j){ q.id='q'+i+'_'+j; return q; }); });
+    S.cur=0; S.ans={}; S.fb=null; S.drawn=-1;
+    bMain.hidden=curated;
+    render();
+  }
+  function view(){ return S.views[S.cur]; }
+  function day(){ return S.run.days[view().k-1]; }
+  function pending(){
+    if(!S.quiz || S.cur+1>=S.views.length) return null;
+    var list=S.qs[S.cur+1];
+    for(var i=0;i<list.length;i++){ if(!S.ans[list[i].id]) return list[i]; }
+    return null;
+  }
+
+  function mark(v,d,sd,row,x){
+    if(v.ph==='start') return null;
+    if(sd==='r'){
+      var cr=(v.ph==='decide')?d.crossedAfter[row]:d.crossedBefore[row], cls=[];
+      if(cr.indexOf(x)>=0) cls.push('x');
+      if(d.target[row]===x) cls.push(v.ph==='apply'?'tgt':v.ph==='final'?'mate':(d.kept[x]===row?'held':'rej'));
+      return {cls:cls.join(' ')};
+    }
+    if(d.apps[row].indexOf(x)<0) return null;
+    if(v.ph==='apply') return {cls:'tgt'};
+    if(v.ph==='final') return {cls:'mate'};
+    return {cls:d.kept[row]===x?'held':'rej'};
+  }
+  function lines(v,d,fresh){
+    var out=[];
+    if(v.ph==='apply'){
+      var prev=v.k>1?S.run.days[v.k-2]:null;
+      R.forEach(function(a){ var e=d.target[a]; if(!e) return;
+        out.push({a:a, e:e, cls:'app'+(fresh && (!prev || prev.target[a]!==e)?' draw':'')}); });
+    } else if(v.ph==='decide'){
+      P.forEach(function(e){
+        if(d.kept[e]) out.push({a:d.kept[e], e:e, cls:'keep'});
+        d.rej[e].forEach(function(a){ out.push({a:a, e:e, cls:'rej', x:true}); });
+      });
+    } else if(v.ph==='final'){
+      P.forEach(function(e){ if(d.kept[e]) out.push({a:d.kept[e], e:e, cls:'mt'}); });
+    }
+    return out;
+  }
+  function table(v){
+    if(v.ph==='start') return '<div class="dtcap">Lecture’s table fills in here: one row per Evaluator, one column per day, rejected applicants struck out.</div>';
+    var h='<table class="dt"><tr><th>Evaluator</th>';
+    for(var j=1;j<=v.k;j++) h+='<th'+(j===v.k?' class="now"':'')+'>Day '+j+'</th>';
+    h+='</tr>';
+    P.forEach(function(e){
+      h+='<tr><td>'+who(e)+'</td>';
+      for(var j=1;j<=v.k;j++){
+        var dj=S.run.days[j-1], decided=j<v.k || v.ph!=='apply';
+        h+='<td'+(j===v.k?' class="now"':'')+'>'+dj.apps[e].map(function(a){
+          var cls = decided && dj.rej[e].indexOf(a)>=0 ? 'x' : (j===v.k && v.ph==='final' ? 'mate' : '');
+          return cw(a,cls); }).join('')+'</td>';
+      }
+      h+='</tr>';
+    });
+    return h+'</table>';
+  }
+  function narrate(v,d){
+    var run=S.run, multi=P.filter(function(e){ return d.apps[e].length>1; }), s;
+    if(v.ph==='start') return '<b>Before Day 1.</b> Nobody has been rejected and every list is full, so <span class="m">f</span> = 25.';
+    if(v.ph==='apply'){
+      s='<b>Day '+v.k+', applications.</b> ';
+      if(v.k>1){
+        var prev=run.days[v.k-2], moved=R.filter(function(a){ return prev.target[a]!==d.target[a]; });
+        s+=moved.map(function(a){ return nm(a)+' moves down to '+nm(d.target[a]); }).join('; ')+'. Everyone else reapplies where it was kept. ';
+      }
+      s+= multi.length ? multi.map(function(e){ return nm(e)+' has '+names(d.apps[e]); }).join('; ')+'.' : 'No job has more than one applicant.';
+      return s;
+    }
+    if(v.ph==='decide'){
+      var n=d.fBefore-d.fAfter;
+      return '<b>Day '+v.k+', rejections.</b> '+multi.map(function(e){ return nm(e)+' keeps '+nm(d.kept[e])+' and rejects '+names(d.rej[e]); }).join('; ')+
+        '. '+(n===1?'One entry is':n+' entries are')+' crossed off, so <span class="m">f</span> goes from '+d.fBefore+' to '+d.fAfter+'.';
+    }
+    var firsts=R.filter(function(a){ return run.pa[a][0]===run.match[a]; });
+    return '<b>Day '+v.k+': G-S stops.</b> No job had a second applicant, so no list changed. Everyone is matched: '+
+      R.map(function(a){ return nm(a)+'–'+nm(run.match[a])+' ('+ord(rank(run.pa[a],run.match[a]))+')'; }).join(', ')+'. '+
+      (firsts.length ? names(firsts)+(firsts.length===1?' got its':' got their')+' first choice.' : 'Not one robot got its first choice.');
+  }
+
+  function qHTML(q,fb){
+    var locked=!!fb, h='<div class="qbox'+(locked?'':' live')+'"><div class="qtag">'+(locked?'You predicted':'Predict')+'</div><div class="qp">'+q.prompt+'</div>';
+    if(q.kind==='pick' || q.kind==='multi'){
+      h+='<div class="pick">'+q.choices.map(function(id){
+        var cls='';
+        if(locked){
+          var isAns=q.kind==='pick'?id===q.ans:q.ans.indexOf(id)>=0, chosen=q.kind==='pick'?fb.choice===id:(fb.choice||[]).indexOf(id)>=0;
+          cls=isAns?' correct':chosen?' wrong':' dim';
+        }
+        return '<button class="pbtn'+cls+'" data-v="'+id+'" aria-pressed="false"'+(locked?' disabled':'')+'>'+chip(id)+'<span>'+nm(id)+'</span></button>';
+      }).join('')+'</div>';
+      if(q.kind==='multi' && !locked) h+='<div class="ctrl"><button class="btn pri" data-act="check">Check</button><span class="lbl">Select all that apply.</span></div>';
+    } else if(q.kind==='mcq'){
+      h+='<div class="opts">'+q.opts.map(function(o,i){
+        var cls=locked?(o.ok?' correct':fb.choice===i?' wrong':' dim')+' locked':'';
+        return '<button class="opt'+cls+'" data-i="'+i+'"'+(locked?' disabled':'')+'><span class="mk">'+'ABCD'[i]+'</span><span>'+o.t+'</span></button>';
+      }).join('')+'</div>';
+    } else {
+      h+='<div class="ctrl"><input class="numin" type="number" inputmode="numeric" aria-label="Your answer"'+
+        (locked?' disabled value="'+(fb.choice==null?'':fb.choice)+'"':'')+'><button class="btn pri" data-act="check"'+(locked?' disabled':'')+'>Check</button></div>';
+    }
+    if(locked){
+      var lead;
+      if(fb.skip) lead='<strong>Skipped.</strong> ';
+      else if(fb.ok) lead='<strong>Right.</strong> ';
+      else {
+        lead='<strong>Not quite.</strong> ';
+        if(q.kind==='pick' && q.wrongFn) lead+=q.wrongFn(fb.choice);
+        if(q.kind==='mcq' && q.opts[fb.choice].w) lead+=q.opts[fb.choice].w;
+        if(q.kind==='num') lead+='You said '+fb.choice+'; it’s '+q.ans+'. ';
+        if(q.kind==='multi') lead+='The rejected robots are '+names(q.ans)+'. ';
+      }
+      h+='<div class="fb show '+(fb.ok?'good':'bad')+'"'+(fb.skip?' style="background:var(--panel);border:1px solid var(--rule)"':'')+'>'+lead+q.why+'</div>';
+    }
+    return h+'</div>';
+  }
+
+  function score(){
+    var ok=0, n=0;
+    Object.keys(S.ans).forEach(function(k){ var a=S.ans[k]; if(a.skip) return; n++; if(a.ok) ok++; });
+    return {ok:ok, n:n};
+  }
+  function render(){
+    var v=view(), d=day(), fresh=S.drawn!==S.cur; S.drawn=S.cur;
+    svgBox.innerHTML=bipSVG({lines:lines(v,d,fresh), label:'Day '+v.k+' of Gale-Shapley'});
+    brd.innerHTML=boardHTML(S.pr,S.pp,function(sd,row,x){ return mark(v,d,sd,row,x); });
+    tbl.innerHTML=table(v);
+    var fNow=v.ph==='start'?25:v.ph==='apply'?d.fBefore:d.fAfter, sc=score();
+    stat.innerHTML='<span><b>Day '+v.k+'</b> · '+{start:'before it starts', apply:'applications', decide:'rejections', final:'done'}[v.ph]+'</span>'+
+      '<span style="text-transform:none"><i>f</i> = '+fNow+'</span>'+(S.quiz?'<span>score '+sc.ok+' / '+sc.n+'</span>':'')+(S.curated?'':'<span>random preferences</span>');
+    var h='<div class="narr">'+narrate(v,d)+'</div>', q=null;
+    if(S.fb) h+=qHTML(S.fb.q, S.fb);
+    else { q=pending(); if(q) h+=qHTML(q,null); }
+    var last=S.cur===S.views.length-1;
+    if(last && !S.fb){
+      h+='<div class="endbox"><strong>Run complete.</strong> '+(S.quiz && sc.n?'You called '+sc.ok+' of '+sc.n+' steps right the first time. ':'')+
+        '§4 shows why the result has no rogue couples, and §5 shows who it favors.</div>';
+    }
+    h+='<div class="ctrl">';
+    if(S.cur>0) h+='<button class="btn" data-act="back">← Back</button>';
+    h+='<span class="sp"></span>';
+    if(S.fb) h+='<button class="btn pri" data-act="cont">Continue</button>';
+    else if(q) h+='<button class="linkbtn" data-act="skip">Skip this one</button>';
+    else if(!last) h+='<button class="btn pri" data-act="next">Next step →</button>';
+    else h+='<button class="btn pri" data-act="restart">Run it again</button>';
+    panel.innerHTML=h+'</div>';
+  }
+
+  function answer(q,choice,ok,skip){
+    S.ans[q.id]={choice:choice, ok:ok, skip:!!skip};
+    if(!pending()) S.cur++;
+    S.fb={q:q, choice:choice, ok:ok, skip:!!skip};
+    render();
+    var c=panel.querySelector('[data-act="cont"]'); if(c) c.focus({preventScroll:true});
+  }
+  panel.addEventListener('click',function(ev){
+    var t=ev.target.closest('button'); if(!t || t.disabled) return;
+    var q=S.fb?null:pending(), act=t.getAttribute('data-act');
+    if(act==='next'){ S.cur++; render(); return; }
+    if(act==='back'){ S.cur--; S.fb=null; render(); return; }
+    if(act==='cont'){ S.fb=null; render(); var n=panel.querySelector('.pbtn,.opt,.numin,[data-act="next"]'); if(n) n.focus({preventScroll:true}); return; }
+    if(act==='restart'){ build(S.pr,S.pp,S.curated); return; }
+    if(!q) return;
+    if(act==='skip'){ answer(q, q.kind==='multi'?[]:null, false, true); return; }
+    if(t.classList.contains('pbtn')){
+      if(q.kind==='pick'){ var v=t.getAttribute('data-v'); answer(q, v, v===q.ans); }
+      else t.setAttribute('aria-pressed', t.getAttribute('aria-pressed')==='true'?'false':'true');
+      return;
+    }
+    if(t.classList.contains('opt')){ var i=+t.getAttribute('data-i'); answer(q, i, !!q.opts[i].ok); return; }
+    if(act==='check'){
+      if(q.kind==='multi'){
+        var picked=[].slice.call(panel.querySelectorAll('.pbtn[aria-pressed="true"]')).map(function(b){ return b.getAttribute('data-v'); });
+        if(!picked.length) return;
+        var ok=picked.length===q.ans.length && picked.every(function(x){ return q.ans.indexOf(x)>=0; });
+        answer(q, picked, ok);
+      } else if(q.kind==='num'){
+        var inp=panel.querySelector('.numin'), val=inp.value.trim();
+        if(val==='') return;
+        answer(q, +val, +val===q.ans);
+      }
+    }
+  });
+  panel.addEventListener('keydown',function(ev){
+    if(ev.key==='Enter' && ev.target.classList.contains('numin')){ ev.preventDefault(); var b=panel.querySelector('[data-act="check"]'); if(b) b.click(); }
+  });
+  modeSel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ setPressed(modeSel,b); S.quiz=b.dataset.k==='quiz'; S.fb=null; render(); });
+  });
+  document.getElementById('simrestart').addEventListener('click',function(){ build(S.pr,S.pp,S.curated); });
+  document.getElementById('simrand').addEventListener('click',function(){ var r=randomPrefs(); build(r.pr,r.pp,false); });
+  bMain.addEventListener('click',function(){ build(MAIN.pr,MAIN.pp,true); });
+  build(MAIN.pr,MAIN.pp,true);
+})();
+
+/* ---------- §4 one-way chart ---------- */
+(function(){
+  var sel=document.getElementById('mvsel'), box=document.getElementById('mvchart'), leg=document.getElementById('mvleg'), ex=document.getElementById('mvexpl');
+  if(!sel) return;
+  var mode='r', hl=null, D=MR.days.length, pr=MAIN.pr, pp=MAIN.pp;
+  var x0=76, x1=356, y0=34, dy=38;
+  function X(k,i){ return x0+(k-1)*(x1-x0)/(D-1)+(i-2)*7; }
+  function Yr(r){ return y0+(r-1)*dy; }
+  function axes(cap){
+    var s='<text class="axt" x="'+x0+'" y="16">'+cap+'</text>';
+    for(var r=1;r<=5;r++) s+='<line class="ax" x1="'+(x0-18)+'" x2="'+(x1+18)+'" y1="'+Yr(r)+'" y2="'+Yr(r)+'"/><text class="axt" x="'+(x0-26)+'" y="'+(Yr(r)+4)+'" text-anchor="end">'+ord(r)+'</text>';
+    for(var k=1;k<=D;k++) s+='<text class="axt" x="'+X(k,2)+'" y="'+(Yr(5)+30)+'" text-anchor="middle">Day '+k+'</text>';
+    return s;
+  }
+  function draw(){
+    var s='<svg viewBox="0 0 380 240" role="img" aria-label="How each party’s rank changes day by day">';
+    if(mode==='f'){
+      var vals=[25].concat(MR.days.map(function(d){ return d.fAfter; })), n=vals.length, base=196, sc=6.4;
+      vals.forEach(function(v,i){
+        var x=48+i*(300/(n-1)), h=v*sc;
+        s+='<rect class="fbar'+(i===n-1?' last':'')+'" x="'+(x-13)+'" y="'+(base-h)+'" width="26" height="'+h+'" rx="3"/>'+
+          '<text class="fval" x="'+x+'" y="'+(base-h-6)+'">'+v+'</text>'+
+          '<text class="axt" x="'+x+'" y="'+(base+16)+'" text-anchor="middle">'+(i===0?'start':'Day '+i)+'</text>';
+      });
+      s+='<line class="ax" x1="26" x2="364" y1="'+base+'" y2="'+base+'"/>';
+      s+='<text class="axt" x="26" y="226">'+'f after each day: places left on the robots’ lists'+'</text>';
+    } else if(mode==='r'){
+      s+=axes('rank of the job each robot applies to');
+      R.forEach(function(a,i){
+        var pts=MR.days.map(function(d,j){ return [X(j+1,i), Yr(rank(pr[a],d.target[a])), d]; }), f=hl&&hl!==a?' fade':'';
+        s+='<polyline class="cl'+f+'" style="stroke:'+ROB[a].c+'" points="'+pts.map(function(p){ return p[0]+','+p[1]; }).join(' ')+'"/>';
+        pts.forEach(function(p,j){ s+='<circle class="cdot'+f+'" cx="'+p[0]+'" cy="'+p[1]+'" r="4.6" style="fill:'+ROB[a].c+'"><title>Day '+(j+1)+': '+nm(a)+' applies to '+nm(p[2].target[a])+'</title></circle>'; });
+      });
+    } else {
+      s+=axes('rank of the robot each job is keeping');
+      P.forEach(function(e,i){
+        var pts=[], f=hl&&hl!==e?' fade':'';
+        MR.days.forEach(function(d,j){ if(d.kept[e]) pts.push([X(j+1,i), Yr(rank(pp[e],d.kept[e])), d.kept[e], j+1]); });
+        if(pts.length>1) s+='<polyline class="cl pline'+f+'" points="'+pts.map(function(p){ return p[0]+','+p[1]; }).join(' ')+'"/>';
+        pts.forEach(function(p){ s+='<circle class="cdot'+f+'" cx="'+p[0]+'" cy="'+p[1]+'" r="5.2" style="fill:'+ROB[p[2]].c+'"><title>Day '+p[3]+': '+nm(e)+' keeps '+nm(p[2])+'</title></circle>'; });
+      });
+    }
+    box.innerHTML=s+'</svg>';
+    var ids=mode==='r'?R:mode==='p'?P:[];
+    leg.innerHTML=ids.map(function(id){ return '<button class="pbtn" data-v="'+id+'" aria-pressed="'+(hl===id?'true':'false')+'">'+chip(id)+'<span>'+nm(id)+'</span></button>'; }).join('');
+    if(mode==='r') ex.innerHTML='<strong>Lemma 9: an Applicant’s Evaluator never gets better.</strong> A robot moves only when it’s rejected, and then only down its list, because the job that rejected it is crossed off for good. Every line here goes down or stays flat.'+
+      (hl?' '+nm(hl)+': '+MR.days.map(function(d){ return d.target[hl]; }).join(' → ')+'.':'');
+    else if(mode==='p') ex.innerHTML='<strong>Lemma 8: an Evaluator’s favorite never gets worse.</strong> Whoever a job keeps today applies to it again tomorrow, so tomorrow’s favorite is at least that good. Every line goes up or stays flat; dot colors show which robot is being kept.'+
+      (hl?' '+nm(hl)+': '+MR.days.map(function(d){ return d.kept[hl]||'–'; }).join(' → ')+'.':'');
+    else ex.innerHTML='<strong>Theorem 7.</strong> <span class="m">f</span> is a natural-number-valued derived variable. It drops on every day except the last, since every earlier day has a rejection. Starting from <span class="m">N</span>² = 25, it can drop at most 25 times, so G-S stops by Day 26. It’s the same move as the potential function from Lecture 04. The gray bar is Day 5, when nothing changed.';
+  }
+  sel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ setPressed(sel,b); mode=b.dataset.k; hl=null; draw(); });
+  });
+  leg.addEventListener('click',function(ev){ var b=ev.target.closest('.pbtn'); if(!b) return; var v=b.getAttribute('data-v'); hl=hl===v?null:v; draw(); });
+  draw();
+})();
+
+/* ---------- §4 Theorem 6, pair by pair ---------- */
+(function(){
+  var grid=document.getElementById('pgrid'), out=document.getElementById('pout'), cnt=document.getElementById('pcount');
+  if(!grid) return;
+  var pr=MAIN.pr, pp=MAIN.pp, m=MR.match, inv=inverse(m), seen={};
+  var h='<span></span>'+[1,2,3,4,5].map(function(n){ return '<span class="gh">'+ord(n)+'</span>'; }).join('');
+  R.forEach(function(a){
+    h+=who(a);
+    pr[a].forEach(function(e){
+      var st=m[a]===e?'mt':(rejDay(MR,a,e)?'rj':'ur');
+      h+='<button class="pcell '+st+'" data-a="'+a+'" data-e="'+e+'" aria-pressed="false" aria-label="'+nm(a)+' and '+nm(e)+'">'+chip(e)+
+        '<span class="s2">'+(st==='mt'?'match':st==='rj'?'✗ Day '+rejDay(MR,a,e):'never')+'</span></button>';
+    });
+  });
+  grid.innerHTML=h;
+  out.innerHTML='Click a pair. Red cells are jobs that rejected the robot, the green cell is its match, and plain cells are jobs it never applied to.';
+  function explain(a,e){
+    var s='<strong>Is ('+nm(a)+', '+nm(e)+') a rogue couple?</strong> ';
+    if(m[a]===e) return s+'No: they’re matched to each other, and a rogue couple has to be a pair that isn’t.';
+    var d=rejDay(MR,a,e);
+    if(d){
+      var kept=MR.days[d-1].kept[e], fin=inv[e];
+      return s+'<em>Case 1: '+nm(e)+' rejected '+nm(a)+'</em> on Day '+d+', keeping '+nm(kept)+'. By Lemma 8, '+nm(e)+'’s favorite never gets worse after that, and it ends with '+
+        (fin===kept?nm(fin)+' itself':nm(fin))+', its '+ord(rank(pp[e],fin))+' choice, above '+nm(a)+' ('+ord(rank(pp[e],a))+'). So '+nm(e)+' prefers its match. <strong>Not rogue.</strong>';
+    }
+    return s+'<em>Case 2: '+nm(e)+' never rejected '+nm(a)+'</em>. '+nm(a)+' never even applied there. A robot always applies to its favorite job that hasn’t rejected it, and G-S stopped with '+nm(a)+' at '+
+      nm(m[a])+', its '+ord(rank(pr[a],m[a]))+' choice, above '+nm(e)+' ('+ord(rank(pr[a],e))+'). So '+nm(a)+' prefers its match. <strong>Not rogue.</strong>';
+  }
+  grid.addEventListener('click',function(ev){
+    var b=ev.target.closest('.pcell'); if(!b) return;
+    grid.querySelectorAll('.pcell').forEach(function(x){ x.setAttribute('aria-pressed', x===b?'true':'false'); });
+    var a=b.getAttribute('data-a'), e=b.getAttribute('data-e');
+    out.innerHTML=explain(a,e);
+    if(m[a]!==e){ seen[a+e]=true; b.classList.add('seen'); }
+    var n=Object.keys(seen).length;
+    cnt.innerHTML=n+' of 20 unmatched pairs checked.'+(n===20?' <strong>Every one fell into Case 1 or Case 2.</strong> That’s Theorem 6 for this example, and the proof never used anything specific to it.':'');
+  });
+  cnt.textContent='0 of 20 unmatched pairs checked.';
+})();
+
+/* ---------- §5 feasible, optimal, pessimal ---------- */
+(function(){
+  var sel=document.getElementById('fsel'), svg=document.getElementById('fsvg'), brd=document.getElementById('fboard'), ex=document.getElementById('fexpl');
+  if(!sel) return;
+  var pr=MAIN.pr, pp=MAIN.pp;
+  var robotsApply=MR.match, jobsRun=runGS(pp,pr,P,R), jobsApply=inverse(jobsRun.match);
+  var rk=keyOf(robotsApply), jk=keyOf(jobsApply);
+  var mid=MSTABLE.filter(function(m){ var k=keyOf(m); return k!==rk && k!==jk; })[0];
+  var M={r:robotsApply, mid:mid, p:jobsApply};
+  var feas={}, opt={}, pes={};
+  R.concat(P).forEach(function(x){ feas[x]=[]; });
+  MSTABLE.forEach(function(m){ R.forEach(function(a){
+    if(feas[a].indexOf(m[a])<0) feas[a].push(m[a]);
+    if(feas[m[a]].indexOf(a)<0) feas[m[a]].push(a);
+  }); });
+  R.concat(P).forEach(function(x){
+    var list=ROB[x]?pr[x]:pp[x], f=feas[x].slice().sort(function(u,v){ return rank(list,u)-rank(list,v); });
+    opt[x]=f[0]; pes[x]=f[f.length-1];
+  });
+  function draw(k){
+    var m=M[k], inv=inverse(m), sub={};
+    R.forEach(function(a){ sub[a]=ord(rank(pr[a],m[a])); sub[m[a]]=ord(rank(pp[m[a]],a)); });
+    svg.innerHTML=bipSVG({lines:R.map(function(a){ return {a:a, e:m[a], cls:'mt'}; }), sub:sub, label:'A stable matching'});
+    brd.innerHTML=boardHTML(pr,pp,function(sd,row,x){
+      var isF=feas[row].indexOf(x)>=0, mate=sd==='r'?m[row]===x:inv[row]===x, cls=[];
+      cls.push(isF?'feas':'dim'); if(mate) cls.push('mate');
+      var badge='';
+      if(isF){ if(feas[row].length===1) badge='◆'; else if(x===opt[row]) badge='★'; else if(x===pes[row]) badge='▼'; }
+      return {cls:cls.join(' '), badge:badge};
+    });
+    var rOpt=R.filter(function(a){ return m[a]===opt[a]; }), rPes=R.filter(function(a){ return m[a]===pes[a]; }),
+        pOpt=P.filter(function(e){ return inv[e]===opt[e]; }), pPes=P.filter(function(e){ return inv[e]===pes[e]; });
+    if(k==='r') ex.innerHTML='<strong>Robots apply</strong>, as in lecture: five days. All '+rOpt.length+' robots sit on their optimal match (Theorem 10) and all '+pPes.length+' jobs on their pessimal one (Theorem 11). For Cog, Dot, Media Lab and Stata there’s only one feasible partner, so optimal and pessimal coincide.';
+    else if(k==='p') ex.innerHTML='<strong>Jobs apply</strong>: same theorems, roles swapped. Done in one day, since every job’s first choice is a different robot. Every job gets its first choice, which is also its optimal match, and every robot gets its pessimal one. Echo drops from its 2nd choice to its last.';
+    else ex.innerHTML='<strong>The third stable matching</strong> is one that neither run produces. Robots at their optimal match: '+names(rOpt)+'. Jobs at their optimal match: '+names(pOpt)+'. Echo and Lobby 7 sit between their ★ and ▼. Feasible sets can have middles.';
+  }
+  sel.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ setPressed(sel,b); draw(b.dataset.k); });
+  });
+  draw('r');
+})();
+
+/* ---------- quick checks ---------- */
+var QC={
+  qc1:{ans:1, good:'<strong>Yes.</strong> Each day before the last has a rejection, and each rejection lowers <span class="m">f</span>, which starts at <span class="m">N</span>² and can’t go below 0. So at most <span class="m">N</span>² days have rejections. The final day, which has none, is the + 1.',
+       bad:'<strong>Not quite.</strong> The count comes from the derived variable. Every day before the last lowers <span class="m">f</span> by at least 1, and <span class="m">f</span> starts at <span class="m">N</span>², so at most <span class="m">N</span>² days have rejections. The final day, with none, is the + 1. (Answer: B.)'},
+  qc2:{ans:2, good:'<strong>Right.</strong> Optimal is about every stable matching, not about who happened to apply. Lobby 7’s feasible matches are Beep (1st), Echo (2nd) and Axel (3rd), and with robots applying it gets the worst of them. That’s Theorem 11.',
+       bad:'<strong>Not quite.</strong> Optimal means best among <em>all</em> stable matchings, not best among the applicants Lobby 7 happened to see. Its feasible matches are Beep, Echo and Axel, and Axel is the worst of the three, so it’s Lobby 7’s pessimal match. That’s Theorem 11. (Answer: C.)'},
+  qc3:{ans:1, good:'<strong>Yes.</strong> Lecture puts it informally: Applicants hold all of the power. Starting at the top of your list and working down beats waiting for applications and trading up.',
+       bad:'<strong>Not quite.</strong> Evaluators do only trade up, but they start from whoever shows up. Applicants start at the top of their lists, and by Theorems 10 and 11 they come out ahead: optimal for every Applicant, pessimal for every Evaluator. (Answer: B.)'}
+};
+Object.keys(QC).forEach(function(id){
+  var opts=document.getElementById(id), fb=document.getElementById(id+'fb'), spec=QC[id];
+  if(!opts) return;
+  var done=false;
+  opts.querySelectorAll('.opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(done) return; done=true;
+      var ok=+o.dataset.c===spec.ans;
+      opts.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+        if(+x.dataset.c===spec.ans) x.classList.add('correct');
+        else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+      fb.className='fb show '+(ok?'good':'bad');
+      fb.innerHTML=ok?spec.good:spec.bad;
+    });
+  });
+});
+
+/* ---------- Space toggles a blank screen; never scrolls ---------- */
+(function(){
+  var blank=document.getElementById('blank');
+  if(!blank) return;
+  document.addEventListener('keydown',function(ev){
+    if(ev.key!==' ' && ev.code!=='Space') return;
+    var t=ev.target, tag=t && t.tagName;
+    if(tag==='INPUT' || tag==='TEXTAREA' || (t && t.isContentEditable)) return;
+    ev.preventDefault();
+    if(ev.repeat) return;
+    blank.classList.toggle('on');
+  });
+})();
+
+})();
+</script>

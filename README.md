@@ -19,6 +19,7 @@ beyond a webfont. The links below open the live copy on GitHub Pages.
 | Lec 08 | [Divisibility — ten divisibility and gcd facts, the hypothesis each needs, Bezout behind G4](https://hawslc.github.io/61200/companions/lec-08.html) |
 | Rec 09 | [Modular arithmetic — ≡ₙ vs rem, bases vs exponents, when you can cancel, repeated squaring](https://hawslc.github.io/61200/companions/rec-09.html) |
 | Lec 11 | [Graphs and coloring — the picture is not the graph: what counts as a graph, two proofs for χ(G), buildup error, bipartite splits and the average-degree ratio](https://hawslc.github.io/61200/companions/lec-11.html) |
+| Lec 12 | [Matching — stable doesn’t mean happy: maximal vs maximum, rogue couples, Gale-Shapley run day by day on robots applying for campus jobs with a prediction at each step, why it works, who it favors](https://hawslc.github.io/61200/companions/lec-12.html) |
 
 ## Reference
 
