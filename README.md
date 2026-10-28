@@ -13,13 +13,14 @@ beyond a webfont. The links below open the live copy on GitHub Pages.
 
 | For | Topic |
 |---|---|
-| Rec 03 | [Strong induction — predicates, ordinary vs. strong, strengthening](https://hawslc.github.io/61200/companions/rec-03.html) |
-| Lec 04 | [State machines — tic-tac-toe: states, invariants and reachability, potential functions](https://hawslc.github.io/61200/companions/lec-04.html) |
-| Rec 07 | [Master Theorem — the recursion tree behind the three cases, worked examples, and the gaps](https://hawslc.github.io/61200/companions/rec-07.html) |
-| Lec 08 | [Divisibility — ten divisibility and gcd facts, the hypothesis each needs, Bezout behind G4](https://hawslc.github.io/61200/companions/lec-08.html) |
-| Rec 09 | [Modular arithmetic — ≡ₙ vs rem, bases vs exponents, when you can cancel, repeated squaring](https://hawslc.github.io/61200/companions/rec-09.html) |
-| Lec 11 | [Graphs and coloring — the picture is not the graph: what counts as a graph, two proofs for χ(G), buildup error, bipartite splits and the average-degree ratio](https://hawslc.github.io/61200/companions/lec-11.html) |
-| Lec 12 | [Matching — stable doesn’t mean happy: maximal vs maximum, rogue couples, Gale-Shapley run day by day on robots applying for campus jobs with a prediction at each step, why it works, who it favors](https://hawslc.github.io/61200/companions/lec-12.html) |
+| Rec 03 | [Strong induction and strengthening](https://hawslc.github.io/61200/companions/rec-03.html) |
+| Lec 04 | [State machines via tic-tac-toe](https://hawslc.github.io/61200/companions/lec-04.html) |
+| Rec 07 | [The Master Theorem’s three cases](https://hawslc.github.io/61200/companions/rec-07.html) |
+| Lec 08 | [Divisibility facts and their hypotheses](https://hawslc.github.io/61200/companions/lec-08.html) |
+| Rec 09 | [Modular arithmetic: substitute, cancel, reduce](https://hawslc.github.io/61200/companions/rec-09.html) |
+| Lec 11 | [Graphs and coloring](https://hawslc.github.io/61200/companions/lec-11.html) |
+| Lec 12 | [Stable matching, day by day](https://hawslc.github.io/61200/companions/lec-12.html) |
+| Lec 13 | [Connectivity, digraphs and PageRank](https://hawslc.github.io/61200/companions/lec-13.html) |
 
 ## Reference
 

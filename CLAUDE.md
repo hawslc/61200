@@ -49,6 +49,7 @@ number only, no topic slug:
 | `companions/rec-09.html` | Recitation 09 — modular arithmetic: what you may substitute, cancel, and reduce |
 | `companions/lec-11.html` | Lecture 11 — graphs and coloring: what the picture doesn’t tell you |
 | `companions/lec-12.html` | Lecture 12 — matching and stable matching: Gale-Shapley day by day, predict each step |
+| `companions/lec-13.html` | Lecture 13 — connectivity and digraph edge cases, each drawn; PageRank on four examples, solved step by step as linear equations |
 
 - `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
 - Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.

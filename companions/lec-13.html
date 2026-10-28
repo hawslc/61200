@@ -1,0 +1,1099 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting There, and Getting Back</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.nbtn{width:40px; height:40px; border-radius:9px; border:2px solid var(--rule-2); background:var(--panel-2);
+  font-family:var(--mono); font-weight:700; font-size:14px; cursor:pointer; transition:.12s}
+.nbtn:hover{border-color:var(--acc)}
+.nbtn[aria-pressed="true"]{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .nbtn[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); width:100%; cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-top:12px;
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.12em; line-height:1.85}
+.verdict{display:inline-block; font-family:var(--mono); font-weight:700; font-size:12px; padding:3px 9px;
+  border-radius:6px; margin-left:8px; letter-spacing:.05em}
+.verdict.T{background:var(--ok-soft); color:var(--ok); border:1px solid var(--ok-line)}
+.verdict.F{background:var(--bad-soft); color:var(--bad); border:1px solid var(--bad-line)}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:16.5px; margin-bottom:9px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* assume viewer */
+.slots{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+.slot{padding:7px 12px; border-radius:8px; font-family:var(--mono); font-size:13px; font-weight:700;
+  border:2px solid var(--rule-2); background:var(--panel-2); color:var(--ink-3)}
+.slot.have{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.slot.goal{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .slot.goal{color:#0B0D14}
+.slot.none{background:var(--warn-soft); border-color:var(--warn); color:var(--warn); border-style:dashed}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:13px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2)}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:7px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.5; color:var(--ink-2)}
+
+/* bar */
+.barwrap{margin-top:14px}
+.bar{height:44px; border-radius:9px; border:1px solid var(--rule-2); background:var(--panel-2); overflow:hidden;
+  display:flex; position:relative}
+.seg2{height:100%; border-right:1px solid rgba(255,255,255,.35); transition:width .25s}
+.gap{height:100%; background:repeating-linear-gradient(45deg,var(--bad-soft),var(--bad-soft) 6px,transparent 6px,transparent 12px);
+  border-left:2px solid var(--bad); transition:width .25s; display:flex; align-items:center; justify-content:center}
+.barlbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  margin-top:6px}
+
+/* derivation */
+.deriv{margin-top:12px; display:flex; flex-direction:column; gap:0}
+.dline{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk);
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.05em; line-height:1.6; opacity:0;
+  max-height:0; overflow:hidden; transition:opacity .25s, max-height .25s, padding .25s}
+.dline.on{opacity:1; max-height:220px}
+.dline.good{border-left-color:var(--ok); background:var(--ok-soft)}
+.dline.bad{border-left-color:var(--bad); background:var(--bad-soft)}
+.dline .why{display:block; font-family:var(--sans); font-size:13px; color:var(--ink-3); margin-top:3px}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+/* from lec-08 */
+.facts{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; margin-top:14px; font-size:15px}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.facts > div > div{padding:3px 0}
+.facts .fh{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  margin:6px 0 2px}
+.fid{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); margin-right:7px}
+.fchip{display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:6px;
+  background:var(--teal-soft); color:var(--teal); border:1px solid var(--teal-line); margin-right:6px}
+.pnum{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); margin-bottom:4px; letter-spacing:.06em}
+.score{font-family:var(--mono); font-size:13px; color:var(--ink-3); margin-top:14px}
+
+/* lec-11 additions: drawn graphs */
+:root{ --c1:#CF3A30; --c2:#23864A; --c3:#3560C8; --c4:#A98606; --c5:#8446BF; --on-c:#FFFFFF }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }}
+:root[data-theme="dark"]{ --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }
+.gbox{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; margin-top:12px; overflow:hidden}
+.gbox svg{display:block; width:100%; height:auto; max-height:360px; user-select:none; -webkit-user-select:none}
+svg .e{fill:none; stroke:var(--ink-3); stroke-width:2.4; stroke-linecap:round; transition:stroke .15s}
+svg .e.bad{stroke:var(--bad); stroke-width:4.2}
+svg .e.hi{stroke:var(--acc); stroke-width:4.2}
+svg .e.warn{stroke:var(--warn); stroke-width:3.4; stroke-dasharray:8 6}
+svg .vg{cursor:pointer; outline:none}
+svg .vg circle{fill:var(--panel); stroke:var(--ink); stroke-width:2; transition:fill .15s, stroke .15s}
+svg .vg:hover circle, svg .vg:focus-visible circle{stroke:var(--acc); stroke-width:3.4}
+svg .vg.sel circle{stroke:var(--acc); stroke-width:4.4; fill:var(--acc-soft)}
+svg .vg.sideL circle{fill:var(--acc-soft); stroke:var(--acc)}
+svg .vg.sideR circle{fill:var(--teal-soft); stroke:var(--teal)}
+svg .vl{font-family:var(--sans); font-size:15px; font-weight:600; fill:var(--ink); text-anchor:middle;
+  dominant-baseline:central; pointer-events:none}
+svg .vg.col .vl{fill:var(--on-c)}
+svg .vl.out, svg .vg.col .vl.out{font-family:var(--mono); font-size:13.5px; font-weight:700; fill:var(--ink-2)}
+svg .cap{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--ink-3); text-anchor:middle; letter-spacing:.06em}
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+@media(max-width:560px){.stats{grid-template-columns:1fr}}
+.stat{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:10px 13px; font-size:14.4px; line-height:1.65}
+.stat .sh{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:4px}
+.kv{font-family:var(--mono); font-size:13.2px; line-height:1.85; overflow-wrap:anywhere}
+.out.plain{font-family:var(--sans); font-size:15px; line-height:1.6}
+.dot{display:inline-block; width:11px; height:11px; border-radius:50%; vertical-align:-1px; margin-right:5px;
+  border:1px solid var(--ink-3)}
+.lbl{font-family:var(--mono); font-size:12px; color:var(--ink-3); letter-spacing:.05em}
+@media(max-width:560px){
+  svg .e{stroke-width:3.2} svg .e.bad, svg .e.hi{stroke-width:5.4} svg .e.warn{stroke-width:4.2}
+  svg .vl{font-size:24px} svg .vl.out, svg .vg.col .vl.out{font-size:22px}
+  svg .cap{font-size:20px}
+  .wrap{padding:0 16px} .card{padding:15px 14px}
+  #hmsvg .vl{font-size:18px}
+}
+
+/* lec-13 additions: digraphs, PageRank equations, matrix, crowd */
+svg .vs circle{fill:var(--panel); stroke:var(--ink); stroke-width:2; transition:fill .15s, stroke .15s}
+svg .vs.trap circle{fill:var(--warn-soft); stroke:var(--warn); stroke-width:3}
+svg .vl.it{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:20px; font-weight:400}
+svg .ah{stroke:none}
+svg .e.add{stroke-dasharray:9 6}
+.mxcap{max-width:none}
+svg .ah.n{fill:var(--ink-3)} svg .ah.h{fill:var(--acc)} svg .ah.w{fill:var(--warn)}
+svg .wl{font-family:var(--mono); font-size:13px; font-weight:700; fill:var(--ink-3); text-anchor:middle;
+  dominant-baseline:central; paint-order:stroke; stroke:var(--sunk); stroke-width:5px; stroke-linejoin:round}
+svg .wl.hi{fill:var(--acc)}
+svg .pv{font-family:var(--mono); font-size:14px; font-weight:700; fill:var(--teal); text-anchor:middle; dominant-baseline:central;
+  paint-order:stroke; stroke:var(--sunk); stroke-width:5px; stroke-linejoin:round}
+.ideas{margin-top:14px; display:flex; flex-direction:column; gap:8px; font-size:15.2px}
+.ideas > div{display:grid; grid-template-columns:96px 1fr; gap:10px; align-items:baseline}
+.ideas .why{color:var(--ink-2)}
+@media(max-width:560px){.ideas > div{grid-template-columns:1fr; gap:0}}
+.eqs{display:flex; flex-direction:column; gap:5px; margin-top:12px}
+.eq{display:flex; justify-content:space-between; flex-wrap:wrap; gap:2px 12px; align-items:baseline; width:100%; text-align:left;
+  background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:7px 12px; cursor:pointer;
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:16.5px; transition:.12s}
+.eq:hover{border-color:var(--acc)}
+.eq[aria-pressed="true"]{background:var(--acc-soft); border-color:var(--acc)}
+.eq .eqv{font-family:var(--mono); font-size:13.5px; font-weight:700; color:var(--teal)}
+.eq .ar{flex-basis:100%; font-size:15px; color:var(--acc); display:none}
+.eq[aria-pressed="true"] .ar{display:block}
+.eq.sum{cursor:default; background:var(--sunk)}
+.eq.sum:hover{border-color:var(--rule)}
+.mxwrap{overflow-x:auto; margin-top:14px}
+table.mx{border-collapse:collapse; font-family:var(--mono); font-size:13px; margin:0 auto}
+.mx th,.mx td{padding:5px 8px; text-align:center; min-width:40px}
+.mx th{color:var(--ink-3); font-family:"Iowan Old Style",Palatino,Georgia,serif; font-style:italic; font-weight:400; font-size:16px}
+.mx td{border:1px solid var(--rule)}
+.mx td.z{color:var(--ink-3)}
+.mx .hi{background:var(--acc-soft); color:var(--acc); font-weight:700}
+.mx td.rs{border:0; color:var(--ink-3); font-size:12px; text-align:left}
+.mxcap{font-size:13.5px; color:var(--ink-3); text-align:center; margin-top:6px}
+.crowd{margin-top:14px; display:flex; flex-direction:column; gap:10px}
+.cr{display:grid; grid-template-columns:26px 1fr 104px; gap:10px; align-items:center}
+.cr .nm{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-style:italic; font-size:19px; text-align:center}
+.crbar{position:relative; height:22px; border-radius:6px; background:var(--panel-2); border:1px solid var(--rule)}
+.crfill{position:absolute; left:0; top:0; bottom:0; background:var(--acc); border-radius:5px; transition:width .35s}
+.cr.sup .crfill{background:var(--teal)}
+.crtgt{position:absolute; top:-5px; bottom:-5px; width:3px; margin-left:-1.5px; background:var(--ink); border-radius:2px}
+.cr .ct{font-family:var(--mono); font-size:13px; text-align:right; font-weight:700}
+.cr .ct small{font-weight:400; color:var(--ink-3)}
+.tick{display:inline-block; width:3px; height:13px; background:var(--ink); border-radius:2px; vertical-align:-2px; margin:0 3px}
+@media(max-width:560px){
+  .gbox svg .vl.it{font-size:30px}
+  .gbox svg .wl{font-size:20px; stroke-width:7px} .gbox svg .pv{font-size:19px}
+  .stp .mth{font-size:15px}
+  .cr{grid-template-columns:22px 1fr 92px; gap:8px}
+  .eq{font-size:14.6px; padding:7px 10px} .mx th,.mx td{padding:4px 5px; min-width:34px}
+}
+
+/* lec-13: step-by-step solver */
+.blurb{font-size:14.5px; color:var(--ink-2); margin-top:9px}
+#prsvg{max-height:290px}
+.eq .eqv.q{color:var(--ink-3)} .eq .eqv.x{color:var(--acc)}
+.eq.use{border-color:var(--warn); background:var(--warn-soft)}
+.eq.use.pulse{animation:usePulse .9s ease}
+@keyframes usePulse{0%{box-shadow:0 0 0 0 var(--warn-line)} 100%{box-shadow:0 0 0 9px transparent}}
+.solve{margin-top:14px; padding-top:12px; border-top:1px dashed var(--rule-2)}
+.stp{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk); border-radius:0 9px 9px 0;
+  font-size:15px; line-height:1.6; margin-top:8px}
+.stp.now{border-left-color:var(--acc); background:var(--acc-soft)}
+.stp.enter{animation:stpIn .45s ease both}
+@keyframes stpIn{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none}}
+.stp .sn{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--ink-3); margin-bottom:2px}
+.stp .mth{display:block; font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:16.5px; margin-top:3px}
+.fr{white-space:nowrap} .fr sup,.fr sub{font-size:.72em; line-height:0}
+details.more{margin-top:12px; border:1px solid var(--rule); border-radius:9px; background:var(--panel-2); padding:8px 12px}
+details.more summary{cursor:pointer; font-weight:600; font-size:14.5px}
+svg .pv.q{fill:var(--ink-3)} svg .pv.x{fill:var(--acc)}
+svg .vg.flash circle{animation:nodeFlash .9s ease}
+svg .pv.new{animation:pvIn .7s ease}
+@keyframes nodeFlash{0%{stroke:var(--warn); stroke-width:9} 100%{stroke-width:2}}
+@keyframes pvIn{from{opacity:0} to{opacity:1}}
+
+/* lec-13: question figures */
+.qfig{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; margin-top:10px; padding:4px 6px}
+.qfig svg{display:block; width:100%; height:auto; max-height:200px}
+svg.mini{user-select:none; -webkit-user-select:none}
+svg.mini.th .vl.it{font-size:15px}
+svg.mini .cap{font-size:11.5px}
+.opt .ot.fig{display:flex; align-items:center; gap:12px}
+.opt .ot.fig svg{width:112px; flex:none; background:var(--sunk); border:1px solid var(--rule); border-radius:7px}
+.figrow{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px}
+.figrow svg{display:block; width:100%; height:auto; background:var(--panel); border:1px solid var(--rule); border-radius:7px}
+@media(max-width:560px){.figrow{grid-template-columns:repeat(2,1fr)}}
+svg .e{transition:stroke .15s, opacity .6s} svg .vs{transition:opacity .6s}
+svg .gone{opacity:.12}
+svg .e.ghost, svg .wl:empty{opacity:0}
+svg .e.ok{stroke:var(--ok); stroke-width:4}
+svg .e.dash{stroke-dasharray:7 6}
+svg .ah.ok{fill:var(--ok)} svg .ah.bad{fill:var(--bad)}
+svg .wl.h{fill:var(--acc)} svg .wl.ok{fill:var(--ok)} svg .wl.bad{fill:var(--bad)}
+svg .vs.del circle{stroke:var(--bad); stroke-width:2.5; stroke-dasharray:5 4}
+svg .vs.iso circle{fill:var(--bad-soft); stroke:var(--bad); stroke-width:3}
+svg .vs.me circle{fill:var(--acc-soft); stroke:var(--acc); stroke-width:3.5}
+svg .vs.k1 circle{fill:var(--c1); stroke:var(--c1)} svg .vs.k2 circle{fill:var(--c2); stroke:var(--c2)}
+svg .vs.k3 circle{fill:var(--c3); stroke:var(--c3)}
+svg .vs.k1 .vl, svg .vs.k2 .vl, svg .vs.k3 .vl{fill:var(--on-c)}
+@media (prefers-reduced-motion:reduce){
+  .eq.use.pulse, .stp.enter, svg .vg.flash circle, svg .pv.new{animation:none}
+  svg .e, svg .vs{transition:none}
+}
+
+/* ---- Space = blank screen (presenting) ---- */
+#blank{position:fixed; inset:0; z-index:1000; background:var(--paper); display:none}
+#blank.on{display:block}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Lecture 13</div>
+    <h1>Getting there, and getting back</h1>
+    <p class="sub">Lecture 13’s definitions are one line each, and the edge cases are where they bite. A few quick
+      questions on walks and arrows, then lecture’s PageRank example, worked all the way through.</p>
+  </div>
+</header>
+
+<!-- ================= §1 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <div class="shead"><span class="snum">1</span><h2>Connected only asks for a walk</h2></div>
+
+    <p>Nodes <span class="m">a</span> and <span class="m">b</span> are <strong>connected</strong> if {<span class="m">a</span>,
+      <span class="m">b</span>} is an edge or there’s a <strong>walk</strong> {<span class="m">a</span>, <span class="m">v</span><sub>1</sub>},
+      {<span class="m">v</span><sub>1</sub>, <span class="m">v</span><sub>2</sub>}, …, {<span class="m">v</span><sub><span class="m">k</span></sub>,
+      <span class="m">b</span>} between them. A walk may revisit nodes. A <strong>path</strong> is a walk whose nodes
+      are all distinct. A <strong>closed walk</strong> ends where it starts. A graph is connected if every pair of
+      nodes is, and its <strong>connected components</strong> are its maximal connected subgraphs.</p>
+
+    <h3>Three quick checks</h3>
+
+    <div id="p1"></div>
+    <div class="score" id="p1s"></div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <div class="shead"><span class="snum">2</span><h2>Strongly connected needs a way back</h2></div>
+
+    <p>A directed edge (<span class="m">a</span>, <span class="m">b</span>) goes from its tail <span class="m">a</span>
+      to its head <span class="m">b</span>, drawn <span class="m">a</span> → <span class="m">b</span>. Walks and paths
+      carry over, but every step has to follow an arrow. Degree splits into <strong>indegree</strong> and
+      <strong>outdegree</strong>. A digraph is <strong>strongly connected</strong> if for all nodes
+      <span class="m">u</span> and <span class="m">v</span> there’s a directed path from <span class="m">u</span> to
+      <span class="m">v</span> <em>and</em> one from <span class="m">v</span> to <span class="m">u</span>.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Lecture’s digraph isn’t strongly connected. Add one edge. Which ones fix it?</h4>
+      <div class="row" style="margin-top:0"><span class="lbl">add</span><div class="seg" id="scsel"></div></div>
+      <div class="gbox"><svg id="scsvg" viewBox="0 0 600 360" aria-label="Lecture’s digraph on a, b, c, d"></svg></div>
+      <div class="out plain" id="scout"></div>
+    </div>
+
+    <div class="note">
+      <strong>Every edge that works leaves {<span class="m">c</span>, <span class="m">d</span>}.</strong> You can walk
+      into {<span class="m">c</span>, <span class="m">d</span>} along (<span class="m">a</span>, <span class="m">c</span>), but
+      no edge leads back out, so nothing in it can reach <span class="m">a</span> or <span class="m">b</span>.
+      Edges among the other nodes, or into <span class="m">c</span> or <span class="m">d</span>, don’t change that.
+      Remember this trap. It’s why §3’s first PageRank has zeros in it.
+    </div>
+
+    <h3>Two quick checks</h3>
+    <div id="p2"></div>
+    <div class="score" id="p2s"></div>
+  </div>
+  <div class="wrap"><hr class="soft"></div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <div class="shead"><span class="snum">3</span><h2>PageRank flows along links, and pools where there’s no way back</h2></div>
+
+    <p>In the web graph, nodes are pages and an edge (<span class="m">a</span>, <span class="m">b</span>) is a link
+      from <span class="m">a</span> to <span class="m">b</span>. Lecture wants a score <span class="m">P</span>(<span class="m">x</span>)
+      for how important page <span class="m">x</span> is, and gets there in three tries:</p>
+    <div class="ideas">
+      <div><span class="lbl">1st idea</span><span><span class="m">P</span>(<span class="m">x</span>) = indegree(<span class="m">x</span>).
+        <span class="why">Beaten by making lots of dummy pages that link to you.</span></span></div>
+      <div><span class="lbl">Better</span><span><span class="m">P</span>(<span class="m">x</span>) = Σ<sub><span class="m">v</span>→<span class="m">x</span></sub> <span class="m">P</span>(<span class="m">v</span>).
+        <span class="why">Dummy pages are worth little now, but an important page that links to everyone hands each of them its full weight.</span></span></div>
+      <div><span class="lbl">Even better</span><span><span class="m">P</span>(<span class="m">x</span>) = Σ<sub><span class="m">v</span>→<span class="m">x</span></sub> <span class="m">P</span>(<span class="m">v</span>) / outdegree(<span class="m">v</span>).
+        <span class="why">Each page splits its weight evenly over its links.</span></span></div>
+    </div>
+    <p>Add one more equation, that the scores sum to 1, and solve.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick an example. Click a page to see where its PageRank comes from, then solve the equations one step at a
+        time. Highlighted edges carry the share of their tail’s PageRank shown on them.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="prsel">
+        <button data-k="four" aria-pressed="true">Lecture’s 4 pages</button>
+        <button data-k="five" aria-pressed="false">Lecture’s, with S</button>
+        <button data-k="tri" aria-pressed="false">New: 3 pages</button>
+        <button data-k="orph" aria-pressed="false">New: a page nobody links to</button>
+      </div></div>
+      <p class="blurb" id="prblurb"></p>
+      <div class="gbox"><svg id="prsvg" viewBox="0 0 600 360" aria-label="Web graph with PageRank values"></svg></div>
+      <div class="eqs" id="preqs"></div>
+      <div class="expl" id="prexpl"></div>
+      <div class="solve">
+        <div class="row" style="margin-top:0">
+          <button class="btn pri" id="svnext">Next step</button>
+          <button class="btn" id="svplay" aria-pressed="false">Play</button>
+          <button class="btn" id="svreset">Start over</button>
+          <span class="lbl" id="svcount"></span>
+        </div>
+        <div id="svnow" aria-live="polite"></div>
+      </div>
+      <details class="more"><summary id="svlogsum">The solution so far</summary><div id="svlog"></div></details>
+      <details class="more"><summary>The same equations as a matrix</summary>
+        <div class="mxwrap"><table class="mx" id="prmx"></table></div>
+        <p class="mxcap" id="prcap"></p>
+      </details>
+    </div>
+
+    <div class="note warnb">
+      <strong>Without S, <span class="m">a</span> and <span class="m">b</span> get 0.</strong>
+      <span class="m">P</span>(<span class="m">a</span>) = <span class="m">P</span>(<span class="m">b</span>) =
+      <span class="m">P</span>(<span class="m">a</span>)/2 forces <span class="m">P</span>(<span class="m">a</span>) = 0.
+      Their weight flows into {<span class="m">c</span>, <span class="m">d</span>} and none comes back. That’s §2’s
+      trap. Lecture says the zeros come from the graph not being strongly connected, and you’ll prove that on the
+      homework.
+    </div>
+    <div class="note okb">
+      <strong>With S, every page gets something.</strong> S links to every page and every page links to S, so the
+      graph is strongly connected. S ranks highest, but it isn’t a real page, so ignore it. Of the real pages
+      <span class="m">c</span> wins, because it collects from <span class="m">a</span>, <span class="m">d</span> and S.
+      In matrix form the equations are <span class="m">M</span><sup>T</sup><span class="m">x</span> = <span class="m">x</span>.
+      Every row of <span class="m">M</span> sums to 1, so <span class="m">M</span><sup>T</sup> is a
+      <strong>Markov matrix</strong>, and linear algebra guarantees a solution with nonnegative entries.
+    </div>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Put <span id="crN">6300</span> surfers on the pages, spread evenly. On each click, the surfers on a page split
+        evenly over its links.</h4>
+      <div class="row" style="margin-top:0"><div class="seg" id="crsel">
+        <button data-k="four" aria-pressed="true">Lecture’s 4 pages</button>
+        <button data-k="five" aria-pressed="false">Lecture’s, with S</button>
+        <button data-k="tri" aria-pressed="false">New: 3 pages</button>
+        <button data-k="orph" aria-pressed="false">New: a page nobody links to</button>
+      </div></div>
+      <div class="crowd" id="crowd"></div>
+      <div class="row">
+        <button class="btn pri" id="cr1">Everyone clicks once</button>
+        <button class="btn" id="cr10">10 more clicks</button>
+        <button class="btn" id="cr0">Start over</button>
+      </div>
+      <div class="expl" id="crexpl"></div>
+    </div>
+
+    <div class="note">
+      <strong>The crowd settles on the PageRank.</strong> With S it lands on 900, 800, 1400, 1200 and 2000 out of 6300,
+      which is lecture’s 9/63, 8/63, 14/63, 12/63 and 20/63. This is lecture’s random-surfer picture: a page’s PageRank
+      is the share of time a surfer clicking links forever spends there. The edges through S are the surfer
+      getting bored and jumping to a random page. Without S, nobody who reaches {<span class="m">c</span>,
+      <span class="m">d</span>} ever leaves. The two new examples settle on their solved PageRanks too: 200, 100 and 200
+      out of 500, and 300, 800, 700 and 900 out of 2700.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="take">
+      <h3 style="font-size:19px">The short version</h3>
+      <ol>
+        <li><strong>Connected only asks for a walk.</strong> A walk can revisit nodes and a path can’t. A node with no edges is a component by itself.</li>
+        <li><strong>In graph induction, start from an arbitrary (<span class="m">n</span>+1)-node graph.</strong> Building up never reaches two separate edges, the counterexample to “degree ≥ 1 ⇒ connected”.</li>
+        <li><strong>Follow the arrows.</strong> Every step of a directed walk goes tail to head, and (<span class="m">a</span>, <span class="m">b</span>) and (<span class="m">b</span>, <span class="m">a</span>) are different edges.</li>
+        <li><strong>Strongly connected needs a way back.</strong> If no edge leaves some set of nodes, nothing inside it can reach anything outside it.</li>
+        <li><strong>Each page splits its PageRank evenly over its links.</strong> Where there’s no way back, rank drains to 0. The supernode S makes the graph strongly connected and fixes that.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div id="blank" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 13, connectivity, directed graphs and PageRank, Fall 2026.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- shared ---------- */
+var NS='http://www.w3.org/2000/svg';
+var SMALL=!!(window.matchMedia && window.matchMedia('(max-width: 560px)').matches);  // SVGs render at ~0.55 scale on phones
+function S(tag,attrs,parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+function f1(x){ return x.toFixed(1); }
+function pressOnly(seg,btn){
+  seg.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x===btn?'true':'false'); });
+}
+function I(s){ return '<i>'+s+'</i>'; }
+function P(s){ return '<i>P</i>('+I(s)+')'; }
+
+function mkProbs(hostId,scoreId,prefix,list){
+  var host=document.getElementById(hostId), sc=document.getElementById(scoreId);
+  if(!host) return;
+  var done=0, right=0, L='ABCD';
+  list.forEach(function(p,i){
+    var c=document.createElement('div'); c.className='card';
+    c.innerHTML='<div class="pnum">QUESTION '+prefix+'.'+(i+1)+'</div><div style="font-weight:600;font-size:15.6px">'+p.q+'</div>'+
+      (p.fig ? '<div class="qfig">'+p.fig+'</div>' : '')+
+      '<div class="opts">'+p.o.map(function(t,j){ return '<button class="opt" data-c="'+j+'"><span class="mk">'+L[j]+'</span><span class="ot'+(t.indexOf('<svg')>=0?' fig':'')+'">'+t+'</span></button>'; }).join('')+
+      '</div><div class="fb"></div>';
+    var fb=c.querySelector('.fb'), locked=false;
+    c.querySelectorAll('.opt').forEach(function(o){
+      o.addEventListener('click',function(){
+        if(locked) return; locked=true;
+        var ok=+o.dataset.c===p.a; done++; if(ok) right++;
+        c.querySelectorAll('.opt').forEach(function(x){ x.classList.add('locked');
+          if(+x.dataset.c===p.a) x.classList.add('correct'); else if(x===o) x.classList.add('wrong'); else x.classList.add('dim'); });
+        fb.className='fb show '+(ok?'good':'bad');
+        fb.innerHTML='<span class="fchip">'+p.f+'</span>'+(ok?'<strong>Yes.</strong> ':'<strong>Not quite — '+L[p.a]+'.</strong> ')+p.w;
+        if(p.after) p.after(c,fb);
+        sc.textContent=right+' of '+done+' right so far'+(done===list.length?' · all '+list.length+' done':'')+'.';
+      });
+    });
+    host.appendChild(c);
+  });
+  sc.textContent='0 of '+list.length+' attempted.';
+}
+
+function nodeLabel(g,name){ var t=S('text',{'class':'vl it'},g); t.textContent=name; return t; }
+
+/* edge from p to q, bowed sideways by `bend`, trimmed to node radius r; label at t along it, `gap` off to its left */
+function curve(p,q,bend,r,gap,t){
+  var dx=q[0]-p[0], dy=q[1]-p[1], len=Math.sqrt(dx*dx+dy*dy), nx=dy/len, ny=-dx/len;
+  var mx=(p[0]+q[0])/2, my=(p[1]+q[1])/2, cx=mx+nx*bend*2, cy=my+ny*bend*2;
+  function trim(a,d){ var vx=cx-a[0], vy=cy-a[1], l=Math.sqrt(vx*vx+vy*vy); return [a[0]+vx/l*d, a[1]+vy/l*d]; }
+  var s=trim(p,r+2), e=trim(q,r+3), w0=(1-t)*(1-t), w1=2*(1-t)*t, w2=t*t;
+  return {d:'M'+f1(s[0])+' '+f1(s[1])+' Q'+f1(cx)+' '+f1(cy)+' '+f1(e[0])+' '+f1(e[1]),
+          lab:[w0*p[0]+w1*cx+w2*q[0]+nx*gap, w0*p[1]+w1*cy+w2*q[1]+ny*gap]};
+}
+
+/* directed graph view: nodes can be moved (setPos), edges redrawn on each render */
+function mkDigraph(svg,pos,opts){
+  opts=opts||{};
+  var r=(opts.r||19)*(SMALL?1.55:1), aw=SMALL?16:11, id=svg.id;
+  var defs=S('defs',{},svg);
+  ['n','h','w'].forEach(function(k){
+    var m=S('marker',{id:id+'-'+k, viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:aw, markerHeight:aw,
+      markerUnits:'userSpaceOnUse', orient:'auto'},defs);
+    S('path',{d:'M0,0 L10,5 L0,10 z','class':'ah '+k},m);
+  });
+  var gE=S('g',{},svg), gL=S('g',{},svg), gV=S('g',{},svg), gP=S('g',{},svg);
+  var v={nodes:{}, vals:{}, pos:pos};
+  Object.keys(pos).forEach(function(n){
+    var g=S('g',{'class':opts.tap?'vg':'vs'},gV);
+    if(opts.tap){ g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label','page '+n);
+      g.addEventListener('click',function(){ opts.tap(n); });
+      g.addEventListener('keydown',function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); opts.tap(n); } });  // Space is the blank screen
+    }
+    S('circle',{r:r},g); nodeLabel(g,n);
+    v.nodes[n]=g;
+    if(opts.vals) v.vals[n]=S('text',{'class':'pv'},gP);
+  });
+  /* vat: {node: [x, y, text-anchor]} for the value labels */
+  v.setPos=function(p,vat){
+    v.pos=p;
+    Object.keys(p).forEach(function(n){
+      v.nodes[n].setAttribute('transform','translate('+p[n][0]+','+p[n][1]+')');
+      if(vat && vat[n] && v.vals[n]){ var q=vat[n]; v.vals[n].setAttribute('x',q[0]); v.vals[n].setAttribute('y',q[1]); v.vals[n].style.textAnchor=q[2]; }
+    });
+  };
+  v.setPos(pos);
+  /* edges: [{u, v, w (label or null), cls ('' | 'hi' | 'warn')}] ; show: list of visible nodes */
+  v.render=function(edges,show){
+    clear(gE); clear(gL);
+    var has={}; edges.forEach(function(e){ has[e.u+'>'+e.v]=1; });
+    edges.forEach(function(e){
+      var bend=has[e.v+'>'+e.u] ? 17 : 0, gm=curve(v.pos[e.u],v.pos[e.v],bend,r,SMALL?20:14,.5);
+      var c=e.cls||'', hi=/\bhi\b/.test(c), wn=/\bwarn\b/.test(c);
+      S('path',{'class':'e'+(c?' '+c:''), d:gm.d, 'marker-end':'url(#'+id+'-'+(hi?'h':wn?'w':'n')+')'},gE);
+      if(e.w) S('text',{'class':'wl'+(hi?' hi':''), x:f1(gm.lab[0]), y:f1(gm.lab[1])},gL).textContent=e.w;
+    });
+    Object.keys(v.nodes).forEach(function(n){
+      var on=!show || show.indexOf(n)>=0;
+      v.nodes[n].style.display=on?'':'none';
+      if(v.vals[n]) v.vals[n].style.display=on?'':'none';
+    });
+  };
+  return v;
+}
+
+/* ---------- small figures for the questions, built as markup ---------- */
+var MQ=0;
+function mk(cls){ cls=cls||''; return /\bhi\b/.test(cls)?'h':/\bok\b/.test(cls)?'ok':/\bbad\b/.test(cls)?'bad':'n'; }
+/* sp: {w, h, r, n:{id:[x,y]}, e:[[u, v, {cls, l (label), lc, g (label gap), bend}]], dir, nc:{id:cls}, t:[{id,x,y,s}], cls, aria} */
+function mini(sp){
+  var id='mq'+(++MQ), r=sp.r||17, dir=!!sp.dir, eh='', lh='', nh='', th='', has={};
+  (sp.e||[]).forEach(function(e){ has[e[0]+'>'+e[1]]=1; });
+  (sp.e||[]).forEach(function(e){
+    var o=e[2]||{}, k=e[0]+'_'+e[1];
+    var bend=o.bend!==undefined ? o.bend : (dir && has[e[1]+'>'+e[0]] ? 15 : 0);
+    var g=curve(sp.n[e[0]],sp.n[e[1]],bend,dir?r:-2,o.g===undefined?13:o.g,.5);
+    eh+='<path class="e'+(o.cls?' '+o.cls:'')+'" data-e="'+k+'" d="'+g.d+'"'+(dir?' marker-end="url(#'+id+'-'+mk(o.cls)+')"':'')+'/>';
+    lh+='<text class="wl'+(o.lc?' '+o.lc:'')+'" data-l="'+k+'" x="'+f1(g.lab[0])+'" y="'+f1(g.lab[1])+'">'+(o.l||'')+'</text>';
+  });
+  Object.keys(sp.n).forEach(function(n){
+    var p=sp.n[n], c=(sp.nc && sp.nc[n]) || '';
+    nh+='<g class="vs'+(c?' '+c:'')+'" data-n="'+n+'" transform="translate('+p[0]+','+p[1]+')"><circle r="'+r+'"/><text class="vl it">'+n+'</text></g>';
+  });
+  (sp.t||[]).forEach(function(t){ th+='<text class="cap" data-t="'+(t.id||'')+'" x="'+t.x+'" y="'+t.y+'">'+t.s+'</text>'; });
+  return '<svg class="mini'+(sp.cls?' '+sp.cls:'')+'" viewBox="0 0 '+sp.w+' '+sp.h+'" data-m="'+id+'" role="img" aria-label="'+(sp.aria||'graph')+'">'+
+    (dir ? '<defs>'+['n','h','ok','bad'].map(function(k){ return '<marker id="'+id+'-'+k+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="ah '+k+'" d="M0,0 L10,5 L0,10 z"/></marker>'; }).join('')+'</defs>' : '')+
+    '<g>'+eh+'</g><g>'+lh+'</g><g>'+nh+'</g>'+th+'</svg>';
+}
+function qE(root,k,cls,l){
+  var p=root.querySelector('[data-e="'+k+'"]');
+  if(p){ p.setAttribute('class','e'+(cls?' '+cls:''));
+    if(p.hasAttribute('marker-end')) p.setAttribute('marker-end','url(#'+p.ownerSVGElement.getAttribute('data-m')+'-'+mk(cls)+')'); }
+  if(l!==undefined){ var t=root.querySelector('[data-l="'+k+'"]'); if(t){ t.textContent=l; t.setAttribute('class','wl '+mk(cls)); } }
+}
+function qN(root,n,cls){ var g=root.querySelector('[data-n="'+n+'"]'); if(g) g.setAttribute('class','vs'+(cls?' '+cls:'')); }
+function qT(root,id,s){ var t=root.querySelector('[data-t="'+id+'"]'); if(t) t.textContent=s; }
+
+function E(a,b){ return '{'+I(a)+', '+I(b)+'}'; }
+function D(a,b){ return '('+I(a)+', '+I(b)+')'; }
+function L(ns){ return ns.split('').map(I).join(', '); }
+function TH(n,e){ return mini({w:150, h:100, r:13, n:n, e:e, cls:'th'}); }
+
+mkProbs('p1','p1s','1',[
+ {q:'In the graph below, '+L('pqrqs')+' is a walk. The numbers on the edges give the order of its steps. What does it show?',
+  fig:mini({w:340, h:162, n:{p:[40,105], q:[150,105], r:[210,32], s:[270,105]},
+    e:[['p','q',{cls:'hi', l:'1', lc:'h'}], ['q','r',{cls:'hi', l:'2, 3', lc:'h', g:16}], ['q','s',{cls:'hi', l:'4', lc:'h', g:-14}], ['r','s']],
+    t:[{x:170, y:152, s:'walk: p, q, r, q, s'}], aria:'Graph with edges p–q, q–r, q–s, r–s; the walk p, q, r, q, s highlighted'}),
+  o:['Nothing. A walk that repeats a node doesn’t count.',
+     I('p')+' and '+I('s')+' are connected. It’s a walk, just not a path.',
+     'It’s a closed walk, because it comes back to '+I('q')+'.',
+     I('p')+' and '+I('s')+' are adjacent.'],
+  a:1, f:'walk vs path',
+  w:'Connected only asks for a walk, and walks may repeat nodes. It isn’t a path, because '+I('q')+' repeats. It isn’t closed either, since closed means it ends where it started, and this one goes from '+I('p')+' to '+I('s')+'. Adjacent would need '+E('p','s')+' to be an edge, and it isn’t. (Lecture claims the shortest walk between two nodes is always a path. The proof is yours.)'},
+ {q:'A graph has nodes '+L('pqrst')+' and edges '+E('p','q')+', '+E('q','r')+' and '+E('s','t')+'. Delete '+I('q')+' and its edges. How many connected components are left?',
+  fig:mini({w:470, h:142, n:{p:[50,95], q:[145,42], r:[240,95], s:[340,95], t:[430,42]},
+    e:[['p','q'],['q','r'],['s','t']], nc:{q:'del'}, t:[{id:'c', x:235, y:132, s:'delete q (dashed)'}],
+    aria:'Graph with edges p–q, q–r, s–t; q marked for deletion'}),
+  o:['Just 1: {'+L('st')+'}. A node with no edges isn’t in any component.',
+     '2: {'+L('pr')+'} and {'+L('st')+'}.',
+     '3: {'+I('p')+'}, {'+I('r')+'} and {'+L('st')+'}.'],
+  a:2, f:'components',
+  w:I('p')+' and '+I('r')+' were only connected through '+I('q')+'. Without it there’s no walk between them, so they can’t share a component. A single node with no edges still counts. On its own it’s connected, because there’s no second node to reach, and nothing can be added to it, so it’s maximal.',
+  after:function(c){
+    qE(c,'p_q','gone'); qE(c,'q_r','gone'); qN(c,'q','gone');
+    qN(c,'p','k1'); qN(c,'r','k2'); qN(c,'s','k3'); qN(c,'t','k3');
+    qT(c,'c','3 components, one color each');
+  }},
+ {q:'False claim: if every node of a graph has degree ≥ 1, the graph is connected. A bogus inductive step “proves” it by adding a node to an <i>n</i>-node graph whose degrees are all ≥ 1. Which 4-node graph with all degrees ≥ 1 can that step <em>never</em> make?',
+  o:[TH({p:[20,72], q:[57,28], r:[94,72], s:[131,28]},[['p','q'],['q','r'],['r','s']])+'<span>The path '+I('p')+' – '+I('q')+' – '+I('r')+' – '+I('s')+'.</span>',
+     TH({p:[40,22], q:[110,22], r:[110,78], s:[40,78]},[['p','q'],['q','r'],['r','s'],['s','p']])+'<span>A 4-node cycle.</span>',
+     TH({p:[35,22], q:[35,78], r:[115,22], s:[115,78]},[['p','q'],['r','s']])+'<span>Two separate edges, '+E('p','q')+' and '+E('r','s')+'.</span>',
+     TH({p:[75,54], q:[25,22], r:[125,22], s:[75,86]},[['p','q'],['p','r'],['p','s']])+'<span>A star: '+I('p')+' adjacent to '+I('q')+', '+I('r')+' and '+I('s')+'.</span>'],
+  a:2, f:'buildup error',
+  w:'Delete any node from two separate edges and its partner is left with degree 0 (red below). So no 3-node graph that satisfies the hypothesis builds up to it, and it’s exactly a counterexample: every degree is 1 and it isn’t connected. Each of the others has a node you can delete and keep every degree ≥ 1: an end of the path, any node of the cycle, a leaf of the star. That’s buildup error. The step only proves something about the graphs its construction happens to build, and the counterexamples aren’t among them.',
+  after:function(c,fb){
+    var part={p:'q', q:'p', r:'s', s:'r'}, h='<div class="figrow">';
+    'pqrs'.split('').forEach(function(n){
+      var nc={}; nc[n]='gone'; nc[part[n]]='iso';
+      var e=[['p','q',{cls:(n==='p'||n==='q')?'gone':''}],['r','s',{cls:(n==='r'||n==='s')?'gone':''}]];
+      h+=mini({w:150, h:118, r:13, cls:'th', n:{p:[35,22], q:[35,78], r:[115,22], s:[115,78]}, e:e, nc:nc,
+        t:[{x:75, y:111, s:'delete '+n}], aria:'Two separate edges with '+n+' deleted'});
+    });
+    fb.insertAdjacentHTML('beforeend',h+'</div>');
+  }}
+]);
+
+/* ---------- §2 add one edge: strongly connected? ---------- */
+(function(){
+  var svg=document.getElementById('scsvg'), seg=document.getElementById('scsel'), out=document.getElementById('scout');
+  if(!svg) return;
+  var ORDER=['a','b','c','d'];
+  var view=mkDigraph(svg,{a:[140,60], b:[460,60], c:[140,300], d:[460,300]});
+  var BASE=[['a','b'],['b','a'],['a','c'],['c','d'],['d','c']];
+  var CANDS=[null,['a','d'],['b','c'],['b','d'],['c','a'],['c','b'],['d','a'],['d','b']];
+  CANDS.forEach(function(c,i){
+    var b=document.createElement('button');
+    b.innerHTML=c ? I(c[0])+' → '+I(c[1]) : 'nothing';
+    b.setAttribute('aria-pressed', i===0?'true':'false');
+    b.addEventListener('click',function(){ pressOnly(seg,b); render(c); });
+    seg.appendChild(b);
+  });
+  function bfs(E,s){
+    var par={}; par[s]=s; var q=[s];
+    while(q.length){ var u=q.shift();
+      E.forEach(function(e){ if(e[0]===u && !(e[1] in par)){ par[e[1]]=u; q.push(e[1]); } }); }
+    return par;
+  }
+  function setStr(ns){ return '{'+ns.map(I).join(', ')+'}'; }
+  function render(extra){
+    var E=BASE.concat(extra?[extra]:[]), fail=null, par=null;
+    ORDER.forEach(function(u){ if(fail) return; var p=bfs(E,u);
+      ORDER.forEach(function(v){ if(!fail && !(v in p)) fail={u:u, v:v, reach:ORDER.filter(function(w){ return w in p; })}; }); });
+    var hi={};
+    if(!fail){ par=bfs(E,'c'); var w='a'; while(w!=='c'){ hi[par[w]+'>'+w]=1; w=par[w]; } }
+    view.render(E.map(function(e){
+      var k=e[0]+'>'+e[1];
+      return {u:e[0], v:e[1], cls: (hi[k] ? 'hi' : (extra && e===extra ? 'warn' : ''))+(extra && e===extra ? ' add' : '')};
+    }));
+    ORDER.forEach(function(n){ view.nodes[n].classList.toggle('trap', !!fail && fail.reach.indexOf(n)>=0); });
+    if(fail){
+      out.innerHTML='<span class="verdict F" style="margin-left:0">NOT STRONGLY CONNECTED</span><br>'+
+        'There’s no path from '+I(fail.u)+' to '+I(fail.v)+'. Starting at '+I(fail.u)+', a walk can only reach '+
+        setStr(fail.reach)+' (shaded), because no edge leaves that set.';
+    } else {
+      var path=['a']; w='a'; while(w!=='c'){ w=par[w]; path.unshift(w); }
+      out.innerHTML='<span class="verdict T" style="margin-left:0">STRONGLY CONNECTED</span><br>'+
+        'Every node now reaches every other. The way back from '+I('c')+' to '+I('a')+' is '+path.map(I).join(', ')+
+        ' (highlighted). Lecture added '+I('d')+' → '+I('b')+', but it isn’t the only fix.';
+    }
+  }
+  render(null);
+})();
+
+mkProbs('p2','p2s','2',[
+ {q:'A digraph has edges '+D('u','v')+' and '+D('w','v')+'. Is '+L('uvw')+' a directed path?',
+  fig:mini({w:420, h:126, dir:true, n:{u:[60,62], v:[210,62], w:[360,62]},
+    e:[['u','v'],['w','v',{bend:0}],['v','w',{bend:26, cls:'ghost'}]],
+    t:[{id:'c', x:210, y:116, s:'check the walk u, v, w'}], aria:'Digraph with edges (u, v) and (w, v)'}),
+  o:['Yes. Each pair of consecutive nodes is joined by an edge, and the nodes are distinct.',
+     'It’s a walk, but not a path.',
+     'No. The edge is '+D('w','v')+', so there’s no step from '+I('v')+' to '+I('w')+'.'],
+  a:2, f:'direction',
+  w:'Every step of a directed walk goes from a tail to a head. '+D('u','v')+' gives the step from '+I('u')+' to '+I('v')+', but '+D('w','v')+' only goes from '+I('w')+' to '+I('v')+'. So '+L('uvw')+' isn’t even a walk. Being “joined by an edge” is the undirected habit, and a digraph has no undirected edges.',
+  after:function(c){
+    qE(c,'u_v','ok','step 1 ✓'); qE(c,'v_w','bad dash','step 2 ✗ no edge');
+    qT(c,'c','the edge is (w, v): stuck at v');
+  }},
+ {q:'A digraph has edges '+D('u','v')+', '+D('v','u')+' and '+D('u','w')+'. What are outdegree('+I('u')+') and indegree('+I('u')+')?',
+  fig:mini({w:380, h:206, dir:true, n:{u:[80,100], v:[300,40], w:[300,162]},
+    e:[['u','v'],['v','u'],['u','w',{g:-14}]], t:[{id:'c', x:190, y:198, s:''}],
+    aria:'Digraph with edges (u, v), (v, u) and (u, w)'}),
+  o:['1 and 1. '+D('u','v')+' and '+D('v','u')+' are one edge with an arrowhead at each end.',
+     '2 and 1.',
+     '2 and 2.',
+     '3 and 1.'],
+  a:1, f:'degree',
+  w:D('u','v')+' and '+D('v','u')+' are two different edges. Out of '+I('u')+': '+D('u','v')+' and '+D('u','w')+'. Into '+I('u')+': just '+D('v','u')+'. Outdegree matters in §3, because it’s what each page’s PageRank gets divided by.',
+  after:function(c){
+    qN(c,'u','me'); qE(c,'u_v','hi','out'); qE(c,'u_w','hi','out'); qE(c,'v_u','ok','in');
+    qT(c,'c','outdegree(u) = 2, indegree(u) = 1');
+  }}
+]);
+
+/* ---------- §3 PageRank: four examples, each solved step by step ---------- */
+/* T(): P(x) and $x in italics, digit/digit as a small fraction */
+function T(s){
+  return s.replace(/P\((\w)\)/g,'<i>P</i>(<i>$1</i>)').replace(/\$(\w)/g,'<i>$1</i>')
+          .replace(/(\d+)\/(\d+)/g,'<span class="fr"><sup>$1</sup>&frasl;<sub>$2</sub></span>');
+}
+function frac(n,D){ return n===0 ? '0' : (n===D ? '1' : n+'/'+D); }
+var SQ={a:[170,60], b:[430,60], c:[170,300], d:[430,300], S:[300,180]};
+var PR={
+  four:{ids:['a','b','c','d'], D:2, val:{a:0,b:0,c:1,d:1}, N:6300, pos:SQ, sd:{a:'L',b:'R',c:'L',d:'R'},
+    E:[['a','b'],['a','c'],['b','a'],['c','d'],['d','c']],
+    blurb:'Lecture’s web graph. No edge leaves {$c, $d}.',
+    why:{a:'Only $b links to $a, and $b has one link, so $a gets all of P(b). But $b only gets half of P(a).',
+         b:'Only $a links to $b, and $a splits its weight two ways.',
+         c:'$c gets half of P(a) and all of P(d).',
+         d:'$d gets all of P(c).'},
+    steps:[
+     {h:'P(a) and P(b) only mention each other. Substitute P(b) = P(a)/2 into P(a)’s equation.',
+      m:['P(a) = P(b) = P(a)/2'], eq:['a','b']},
+     {h:'Subtract P(a)/2 from both sides. Then P(b) follows.',
+      m:['P(a)/2 = 0, so P(a) = 0','P(b) = P(a)/2 = 0'], eq:['a','b'], know:{a:'0', b:'0'}},
+     {h:'Now P(c). Its P(a) term is 0, so only P(d) is left.',
+      m:['P(c) = P(a)/2 + P(d) = P(d)'], eq:['c'], know:{c:'P(d)', d:'P(d)'}},
+     {h:'P(d)’s equation, P(d) = P(c), says the same thing again. The four equations can’t say how big P(c) and P(d) are, only that they’re equal.',
+      m:[], eq:['d']},
+     {h:'The sum pins down the size. All the weight ends up in {$c, $d}.',
+      m:['0 + 0 + P(d) + P(d) = 1, so P(d) = 1/2','P(c) = P(d) = 1/2'], eq:['sum'], fin:true}
+    ]},
+  five:{ids:['a','b','c','d','S'], D:63, val:{a:9,b:8,c:14,d:12,S:20}, N:6300, pos:SQ, sd:{a:'L',b:'R',c:'L',d:'R',S:'B'},
+    E:[['a','b'],['a','c'],['a','S'],['b','a'],['b','S'],['c','d'],['c','S'],['d','c'],['d','S'],['S','a'],['S','b'],['S','c'],['S','d']],
+    blurb:'Lecture’s graph plus the supernode S, which links to every page and is linked to from every page.',
+    why:{a:'Half of P(b), because $b now links to $a and S. A quarter of P(S), because S links to all four pages.',
+         b:'A third of P(a), because $a now links to $b, $c and S. Plus S’s quarter.',
+         c:'Three sources, $a, $d and S, more than any other real page.',
+         d:'Half of P(c), plus S’s quarter.',
+         S:'Every page links to S, so S collects a share from all of them.'},
+    steps:[
+     {h:'Five unknowns. Keep P(S) as the unknown and write the other four as multiples of it. P(S) shows up in every page’s equation, which makes it a good choice. At the end, the sum tells you P(S).',
+      m:[], know:{S:'P(S)'}},
+     {h:'Start with P(a) and P(b), which only mention each other and P(S). Substitute P(b)’s equation into P(a)’s.',
+      m:['P(a) = (P(a)/3 + P(S)/4)/2 + P(S)/4','P(a) = P(a)/6 + 3/8 P(S)','5/6 P(a) = 3/8 P(S), so P(a) = 9/20 P(S)'],
+      eq:['a','b'], know:{a:'9/20 P(S)'}},
+     {h:'Put that back into P(b)’s equation. Keep everything over 20. It makes the last step easy.',
+      m:['P(b) = P(a)/3 + P(S)/4 = 3/20 P(S) + 5/20 P(S) = 8/20 P(S)'], eq:['b'], know:{b:'8/20 P(S)'}},
+     {h:'Same move for P(c) and P(d): substitute P(d)’s equation into P(c)’s, using P(a) = 9/20 P(S).',
+      m:['P(c) = 3/20 P(S) + (P(c)/2 + P(S)/4)/2 + P(S)/4','P(c) = P(c)/4 + 21/40 P(S)','3/4 P(c) = 21/40 P(S), so P(c) = 14/20 P(S)'],
+      eq:['c','d'], know:{c:'14/20 P(S)'}},
+     {h:'Back into P(d)’s equation.',
+      m:['P(d) = P(c)/2 + P(S)/4 = 7/20 P(S) + 5/20 P(S) = 12/20 P(S)'], eq:['d'], know:{d:'12/20 P(S)'}},
+     {h:'P(S)’s own equation now holds automatically, so it can’t tell you P(S). The five equations only fix the ratios. That’s why lecture adds the sum.',
+      m:['P(a)/3 + P(b)/2 + P(c)/2 + P(d)/2 = (3 + 4 + 7 + 6)/20 P(S) = P(S)'], eq:['S']},
+     {h:'Use the sum.',
+      m:['(9 + 8 + 14 + 12 + 20)/20 P(S) = 63/20 P(S) = 1','P(S) = 20/63'], eq:['sum'], know:{S:'20/63'}},
+     {h:'Multiply each multiple of P(S) by 20/63. A numerator over 20 becomes the same numerator over 63, and that’s lecture’s answer.',
+      m:['P(a) = 9/63, P(b) = 8/63, P(c) = 14/63, P(d) = 12/63'], fin:true}
+    ]},
+  tri:{ids:['a','b','c'], D:5, val:{a:2,b:1,c:2}, N:500, pos:{a:[300,60], b:[440,300], c:[160,300]}, sd:{a:'R',b:'R',c:'L'},
+    E:[['a','b'],['a','c'],['b','c'],['c','a']],
+    blurb:'A new one. Three pages, already strongly connected ($a → $b → $c → $a reaches everything), so no S.',
+    why:{a:'Only $c links to $a, and $c has one link, so $a gets all of P(c).',
+         b:'Only $a links to $b, and $a has two links, so $b gets half of P(a).',
+         c:'$c gets the other half of P(a), plus all of P(b), since $b’s only link goes to $c.'},
+    steps:[
+     {h:'No supernode needed: the graph is already strongly connected. Keep P(a) as the unknown and write the others as multiples of it.',
+      m:[], know:{a:'P(a)'}},
+     {h:'P(b)’s equation already says it.',
+      m:['P(b) = P(a)/2 = 1/2 P(a)'], eq:['b'], know:{b:'1/2 P(a)'}},
+     {h:'Substitute that into P(c)’s equation.',
+      m:['P(c) = P(a)/2 + P(b) = 1/2 P(a) + 1/2 P(a) = P(a)'], eq:['c'], know:{c:'P(a)'}},
+     {h:'P(a)’s equation, P(a) = P(c), now just says P(a) = P(a). Nothing new: one equation is always redundant like this.',
+      m:[], eq:['a']},
+     {h:'Use the sum.',
+      m:['P(a) + 1/2 P(a) + P(a) = 5/2 P(a) = 1','P(a) = 2/5'], eq:['sum'], know:{a:'2/5'}},
+     {h:'So P(a) = 2/5, P(b) = 1/5 and P(c) = 2/5. $c collects from both $a and $b, but hands it all to $a, so $a and $c tie.',
+      m:[], fin:true}
+    ]},
+  orph:{ids:['a','b','c','S'], D:27, val:{a:3,b:8,c:7,S:9}, N:2700, pos:{a:[170,60], S:[430,60], b:[170,300], c:[430,300]},
+    sd:{a:'L',S:'R',b:'L',c:'R'},
+    E:[['a','b'],['a','S'],['b','c'],['b','S'],['c','b'],['c','S'],['S','a'],['S','b'],['S','c']],
+    blurb:'A new one. Without S, nothing links to $a and {$b, $c} is a trap. S is added to fix both.',
+    why:{a:'Only S links to $a, and S has three links, so $a gets a third of P(S). Without S, $a would get nothing.',
+         b:'Half of P(a), half of P(c), and a third of P(S).',
+         c:'Half of P(b), and a third of P(S).',
+         S:'Every page links to S, and each has two links, so S gets half of each page’s PageRank.'},
+    steps:[
+     {h:'Keep P(S) as the unknown again, and write the others as multiples of it.',
+      m:[], know:{S:'P(S)'}},
+     {h:'P(a)’s equation already says it. Write it over 9.',
+      m:['P(a) = P(S)/3 = 3/9 P(S)'], eq:['a'], know:{a:'3/9 P(S)'}},
+     {h:'Substitute P(c)’s equation into P(b)’s, using P(a) = 3/9 P(S).',
+      m:['P(b) = 1/6 P(S) + (P(b)/2 + P(S)/3)/2 + P(S)/3','P(b) = P(b)/4 + 2/3 P(S)','3/4 P(b) = 2/3 P(S), so P(b) = 8/9 P(S)'],
+      eq:['b','c'], know:{b:'8/9 P(S)'}},
+     {h:'Back into P(c)’s equation.',
+      m:['P(c) = P(b)/2 + P(S)/3 = 4/9 P(S) + 3/9 P(S) = 7/9 P(S)'], eq:['c'], know:{c:'7/9 P(S)'}},
+     {h:'P(S)’s equation is the redundant one this time.',
+      m:['P(a)/2 + P(b)/2 + P(c)/2 = (3 + 8 + 7)/18 P(S) = P(S)'], eq:['S']},
+     {h:'Use the sum.',
+      m:['(3 + 8 + 7 + 9)/9 P(S) = 3 P(S) = 1','P(S) = 1/3 = 9/27'], eq:['sum'], know:{S:'9/27'}},
+     {h:'Multiply each multiple of P(S) by 1/3: a numerator over 9 becomes the same numerator over 27. The orphan page $a gets the least, since all it has is S’s third.',
+      m:['P(a) = 3/27, P(b) = 8/27, P(c) = 7/27'], fin:true}
+    ]}
+};
+Object.keys(PR).forEach(function(k){
+  var g=PR[k]; g.out={};
+  g.ids.forEach(function(n){ g.out[n]=g.E.filter(function(e){ return e[0]===n; }).length; });
+  g.into=function(x){ return g.ids.filter(function(v){ return g.E.some(function(e){ return e[0]===v && e[1]===x; }); }); };
+});
+
+(function(){
+  var svg=document.getElementById('prsvg'), seg=document.getElementById('prsel'), eqs=document.getElementById('preqs'),
+      expl=document.getElementById('prexpl'), blurb=document.getElementById('prblurb'), mx=document.getElementById('prmx'),
+      cap=document.getElementById('prcap'), now=document.getElementById('svnow'), log=document.getElementById('svlog'),
+      logsum=document.getElementById('svlogsum'), cnt=document.getElementById('svcount'),
+      bNext=document.getElementById('svnext'), bPlay=document.getElementById('svplay'), bReset=document.getElementById('svreset');
+  if(!svg) return;
+  var mode='four', sel='a', k=0, timer=null;
+  var view=mkDigraph(svg,SQ,{tap:function(n){ sel=n; draw(false); }, vals:true});
+
+  function side(g){
+    var o=SMALL?38:30, v={};
+    g.ids.forEach(function(n){ var p=g.pos[n], sd=g.sd[n];
+      v[n]= sd==='L' ? [p[0]-o,p[1],'end'] : sd==='R' ? [p[0]+o,p[1],'start'] : [p[0],p[1]+(SMALL?58:46),'middle']; });
+    return v;
+  }
+  function load(key){
+    stop(); mode=key; k=0;
+    var g=PR[mode];
+    if(g.ids.indexOf(sel)<0) sel=g.ids[0];
+    view.setPos(g.pos,side(g));
+    blurb.innerHTML=T(g.blurb);
+    draw(false);
+  }
+  /* what the first k steps have found */
+  function state(){
+    var g=PR[mode], know={}, fin=false;
+    for(var i=0;i<k;i++){ var st=g.steps[i]; if(st.know) for(var n in st.know) know[n]=st.know[n]; if(st.fin) fin=true; }
+    if(fin) g.ids.forEach(function(n){ know[n]=frac(g.val[n],g.D); });
+    return {know:know, fin:fin};
+  }
+  function isNum(x){ return /^[\d\/]+$/.test(x); }
+  /* plug the answer into x's equation, over a denominator that keeps every term whole */
+  function arith(g,x){
+    var src=g.into(x), m=1;
+    while(!src.every(function(v){ return (g.val[v]*m)%g.out[v]===0; })) m++;
+    return src.map(function(v){ return frac(g.val[v]*m/g.out[v],g.D*m); }).join(' + ')+' = '+frac(g.val[x]*m,g.D*m)+
+      (m>1 ? ' = '+frac(g.val[x],g.D) : '');
+  }
+  function stepHTML(g,i,cls){
+    var st=g.steps[i];
+    return '<div class="stp'+(cls?' '+cls:'')+'"><span class="sn">STEP '+(i+1)+' OF '+g.steps.length+'</span>'+T(st.h)+
+      (st.m||[]).map(function(l){ return '<span class="mth">'+T(l)+'</span>'; }).join('')+'</div>';
+  }
+  function draw(anim){
+    var g=PR[mode], st=state(), cur=k>0 ? g.steps[k-1] : null, use=cur && cur.eq ? cur.eq : [], n=g.steps.length;
+    var fresh=anim && cur ? (cur.fin ? g.ids : Object.keys(cur.know||{})) : [];
+
+    view.render(g.E.map(function(e){
+      var into=e[1]===sel;  // label only what flows into the selected page; the matrix has the rest
+      return {u:e[0], v:e[1], w:into ? (g.out[e[0]]===1 ? '1' : '1/'+g.out[e[0]]) : null, cls:into ? 'hi' : ''};
+    }), g.ids);
+    g.ids.forEach(function(x){
+      var nd=view.nodes[x], pv=view.vals[x], kv=st.know[x];
+      nd.classList.toggle('sel', x===sel);
+      pv.textContent=kv===undefined ? '?' : kv;
+      pv.setAttribute('class','pv'+(kv===undefined ? ' q' : isNum(kv) ? '' : ' x'));
+      if(fresh.indexOf(x)>=0){
+        nd.classList.remove('flash'); void nd.getBoundingClientRect(); nd.classList.add('flash');
+        void pv.getBoundingClientRect(); pv.classList.add('new');
+      }
+    });
+
+    clear(eqs);
+    g.ids.forEach(function(x){
+      var src=g.into(x), kv=st.know[x];
+      var rhs=src.map(function(v){ return P(v)+(g.out[v]>1 ? '/'+g.out[v] : ''); }).join(' + ');
+      var b=document.createElement('button');
+      b.className='eq'+(use.indexOf(x)>=0 ? ' use'+(anim?' pulse':'') : '');
+      b.setAttribute('aria-pressed', x===sel ? 'true' : 'false');
+      b.innerHTML='<span>'+P(x)+' = '+rhs+'</span><span class="eqv'+(kv===undefined?' q':isNum(kv)?'':' x')+'">'+(kv===undefined?'?':kv)+'</span>'+
+        (st.fin && src.length>1 ? '<span class="ar">= '+arith(g,x)+'</span>' : '');
+      b.addEventListener('click',function(){ sel=x; draw(false); });
+      eqs.appendChild(b);
+    });
+    var sum=document.createElement('div');
+    sum.className='eq sum'+(use.indexOf('sum')>=0 ? ' use'+(anim?' pulse':'') : '');
+    sum.innerHTML='<span>'+g.ids.map(P).join(' + ')+' = 1</span><span class="eqv">'+
+      (st.fin ? g.ids.map(function(x){ return frac(g.val[x],g.D); }).join(' + ')+' = 1 ✓' : '')+'</span>';
+    eqs.appendChild(sum);
+
+    expl.innerHTML='<strong>Into '+I(sel)+':</strong> '+T(g.why[sel]);
+
+    now.innerHTML=k===0
+      ? '<div class="stp">Press <strong>Next step</strong> or <strong>Play</strong> to solve these equations. The values fill in, on the graph and in the equations, as they’re found.</div>'
+      : stepHTML(g,k-1,'now'+(anim?' enter':''));
+    log.innerHTML=k===0 ? '<div class="stp">No steps yet.</div>' : g.steps.slice(0,k).map(function(_,i){ return stepHTML(g,i,''); }).join('');
+    logsum.textContent=k===n ? 'The whole solution ('+n+' steps)' : 'The solution so far ('+k+' of '+n+' steps)';
+    cnt.textContent=k===n ? 'solved' : 'step '+k+' of '+n;
+    bNext.disabled=k>=n;
+
+    var h='<tr><th></th>'+g.ids.map(function(c){ return '<th'+(c===sel?' class="hi"':'')+'>'+c+'</th>'; }).join('')+'<td class="rs"></td></tr>';
+    g.ids.forEach(function(rw){
+      h+='<tr><th>'+rw+'</th>'+g.ids.map(function(c){
+        var on=g.E.some(function(e){ return e[0]===rw && e[1]===c; });
+        var t=on ? (g.out[rw]===1 ? '1' : '1/'+g.out[rw]) : '0';
+        return '<td class="'+(c===sel?'hi':'')+(on?'':' z')+'">'+t+'</td>';
+      }).join('')+'<td class="rs">Σ = 1</td></tr>';
+    });
+    mx.innerHTML=h;
+    cap.innerHTML='The adjacency matrix '+I('M')+'. Row '+I('v')+' holds the weights on '+I('v')+'’s out-edges, and each row sums to 1. Column '+
+      I(sel)+' holds the weights coming into '+I(sel)+', the same coefficients as '+P(sel)+'’s equation. That’s why the equations read '+
+      I('M')+'<sup>T</sup>'+I('x')+' = '+I('x')+'.';
+  }
+
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } bPlay.setAttribute('aria-pressed','false'); bPlay.textContent='Play'; }
+  function go(to,anim){
+    var g=PR[mode];
+    k=Math.max(0,Math.min(g.steps.length,to));
+    var cur=k>0 ? g.steps[k-1] : null;
+    if(cur && cur.eq){ var f=cur.eq.filter(function(x){ return x!=='sum'; }); if(f.length) sel=f[0]; }
+    draw(anim);
+  }
+  bNext.addEventListener('click',function(){ stop(); go(k+1,true); });
+  bReset.addEventListener('click',function(){ stop(); go(0,false); });
+  bPlay.addEventListener('click',function(){
+    if(timer){ stop(); return; }
+    if(k>=PR[mode].steps.length) go(0,false);
+    bPlay.setAttribute('aria-pressed','true'); bPlay.textContent='Pause';
+    go(k+1,true);
+    if(k>=PR[mode].steps.length){ stop(); return; }
+    timer=setInterval(function(){ go(k+1,true); if(k>=PR[mode].steps.length) stop(); }, 2800);
+  });
+  seg.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ pressOnly(seg,b); load(b.dataset.k); });
+  });
+  load('four');
+})();
+
+/* ---------- §3 a crowd of surfers ---------- */
+(function(){
+  var host=document.getElementById('crowd'), seg=document.getElementById('crsel'), expl=document.getElementById('crexpl'),
+      nEl=document.getElementById('crN'), b1=document.getElementById('cr1'), b10=document.getElementById('cr10'), b0=document.getElementById('cr0');
+  if(!host) return;
+  var mode='four', t=0, x={}, rows={};
+  function reset(){
+    var g=PR[mode], N=g.N; t=0; x={};
+    nEl.textContent=N;
+    g.ids.forEach(function(n){ x[n]=N/g.ids.length; });
+    clear(host); rows={};
+    g.ids.forEach(function(n){
+      var r=document.createElement('div'); r.className='cr'+(n==='S'?' sup':'');
+      r.innerHTML='<span class="nm">'+n+'</span><div class="crbar"><div class="crfill"></div><div class="crtgt"></div></div><span class="ct"></span>';
+      host.appendChild(r);
+      rows[n]={fill:r.querySelector('.crfill'), tgt:r.querySelector('.crtgt'), ct:r.querySelector('.ct')};
+      rows[n].tgt.style.left=(g.val[n]/g.D*200)+'%';   // bars run from 0 to half the crowd
+    });
+    draw();
+  }
+  function step(k){
+    var g=PR[mode];
+    for(var i=0;i<k;i++){
+      var y={}; g.ids.forEach(function(n){ y[n]=0; });
+      g.E.forEach(function(e){ y[e[1]]+=x[e[0]]/g.out[e[0]]; });
+      x=y; t++;
+    }
+    draw();
+  }
+  /* whole numbers that still add up to the crowd */
+  function rounded(){
+    var g=PR[mode], fl={}, left=g.N;
+    g.ids.forEach(function(n){ fl[n]=Math.floor(x[n]+1e-9); left-=fl[n]; });
+    g.ids.slice().sort(function(p,q){ return (x[q]-fl[q])-(x[p]-fl[p]); }).slice(0,left).forEach(function(n){ fl[n]++; });
+    return fl;
+  }
+  function draw(){
+    var g=PR[mode], rd=rounded();
+    g.ids.forEach(function(n){
+      rows[n].fill.style.width=Math.min(100,x[n]/(g.N/2)*100)+'%';
+      rows[n].ct.innerHTML=rd[n]+' <small>/ '+Math.round(g.N*g.val[n]/g.D)+'</small>';
+    });
+    expl.innerHTML='After <strong>'+t+'</strong> click'+(t===1?'':'s')+'. Each row shows surfers now / surfers at PageRank. The '+
+      '<span class="tick"></span> on each bar marks that page’s PageRank, as a share of '+g.N+'.';
+  }
+  seg.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){ pressOnly(seg,b); mode=b.dataset.k; reset(); });
+  });
+  b1.addEventListener('click',function(){ step(1); });
+  b10.addEventListener('click',function(){ step(10); });
+  b0.addEventListener('click',reset);
+  reset();
+})();
+
+/* ---------- Space toggles a blank screen; never scrolls ---------- */
+(function(){
+  var blank=document.getElementById('blank');
+  if(!blank) return;
+  document.addEventListener('keydown',function(ev){
+    if(ev.key!==' ' && ev.code!=='Space') return;
+    var t=ev.target, tag=t && t.tagName;
+    if(tag==='INPUT' || tag==='TEXTAREA' || (t && t.isContentEditable)) return;
+    ev.preventDefault();
+    if(ev.repeat) return;
+    blank.classList.toggle('on');
+  });
+})();
+
+})();
+</script>
