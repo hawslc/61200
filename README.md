@@ -21,6 +21,7 @@ beyond a webfont. The links below open the live copy on GitHub Pages.
 | Lec 11 | [Graphs and coloring](https://hawslc.github.io/61200/companions/lec-11.html) |
 | Lec 12 | [Stable matching, day by day](https://hawslc.github.io/61200/companions/lec-12.html) |
 | Lec 13 | [Connectivity, digraphs and PageRank](https://hawslc.github.io/61200/companions/lec-13.html) |
+| Lec 15 | [Basic counting, with relations as arrows](https://hawslc.github.io/61200/companions/lec-15.html) |
 
 ## Reference
 

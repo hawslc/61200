@@ -1,0 +1,1152 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counting Is Choices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,400;0,500;0,600&display=swap">
+<style>
+:root{
+  --paper:#E7EAF0; --panel:#F7F8FB; --panel-2:#DBE0EA; --panel-3:#CDD4E1; --sunk:#EFF1F6;
+  --ink:#11141C; --ink-2:#464F61; --ink-3:#737E94; --rule:#C6CCDA; --rule-2:#AEB6C8;
+  --acc:#3733B0;  --acc-soft:#E0DFF6; --acc-line:#9C99DC;
+  --teal:#10645C; --teal-soft:#D5E8E5; --teal-line:#79B6AD;
+  --ok:#1F6338;   --ok-soft:#D7E9DC;  --ok-line:#7DB894;
+  --warn:#8A5605; --warn-soft:#F6E5CB;--warn-line:#D7AC6A;
+  --bad:#A61B12;  --bad-soft:#F8DCD9; --bad-line:#E0968E;
+  --shadow:0 1px 1px rgba(17,20,28,.05), 0 10px 26px -18px rgba(17,20,28,.5);
+  --disp:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}}
+:root[data-theme="dark"]{
+  --paper:#0B0D14; --panel:#141824; --panel-2:#1D2230; --panel-3:#282F40; --sunk:#10131D;
+  --ink:#E5E9F3; --ink-2:#A2ABBF; --ink-3:#727C92; --rule:#262C3B; --rule-2:#394154;
+  --acc:#9E9BFF; --acc-soft:#1C1B3E; --acc-line:#4F4B9C;
+  --teal:#45C6B4;--teal-soft:#08302C;--teal-line:#2A7268;
+  --ok:#6ACF8A;  --ok-soft:#0D2C19;  --ok-line:#2F6C45;
+  --warn:#E2AC4A;--warn-soft:#332209;--warn-line:#7D5D1C;
+  --bad:#F08074; --bad-soft:#39120E; --bad-line:#8A3A31;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 14px 32px -22px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:var(--disp); font-weight:700; line-height:1.14; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0} strong{font-weight:600}
+button{font-family:inherit; font-size:inherit; color:inherit}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px}
+.m{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:1.05em}
+.mm{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.05em}
+
+header.hero{padding:70px 0 32px; border-bottom:1px solid var(--rule);
+  background:radial-gradient(900px 340px at 14% -10%, var(--acc-soft), transparent 62%),
+             radial-gradient(760px 300px at 92% 0%, var(--teal-soft), transparent 58%)}
+.kicker{font-family:var(--mono); font-size:11.5px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--acc); font-weight:700; margin-bottom:13px}
+header.hero h1{font-size:clamp(31px,6vw,48px)}
+header.hero .sub{margin-top:15px; font-size:18.5px; color:var(--ink-2); max-width:56ch}
+
+section{padding:54px 0 6px}
+.shead{display:flex; align-items:flex-start; gap:12px; margin-bottom:6px}
+.snum{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); background:var(--acc-soft);
+  border:1px solid var(--acc-line); border-radius:6px; padding:3px 8px; line-height:1; flex:none;
+  margin-top:calc((clamp(24px,4vw,31px) * 1.14 - 20px) / 2)} /* centre 20px badge on h2's first line */
+section h2{font-size:clamp(24px,4vw,31px)}
+section p{margin-top:13px; max-width:64ch}
+section h3{font-size:18px; margin:30px 0 6px}
+hr.soft{border:0; border-top:1px solid var(--rule); margin:44px 0 0}
+
+.card{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:17px 19px; margin-top:18px;
+  box-shadow:var(--shadow)}
+.card h4{font-family:var(--disp); font-size:15px; margin:0 0 10px; font-weight:700}
+.tag{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  font-weight:700; padding:3px 8px; border-radius:5px; margin-bottom:9px; color:#fff; background:var(--acc)}
+:root[data-theme="dark"] .tag{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0B0D14}}
+.note{border-left:3px solid var(--acc-line); background:var(--acc-soft); padding:12px 15px; border-radius:0 9px 9px 0;
+  margin-top:18px; font-size:15.4px}
+.note.warnb{border-left-color:var(--warn); background:var(--warn-soft)}
+.note.okb{border-left-color:var(--ok); background:var(--ok-soft)}
+
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+.seg{display:inline-flex; border:1px solid var(--rule-2); border-radius:8px; overflow:hidden; flex-wrap:wrap}
+.seg button{background:var(--panel); border:0; padding:7px 13px; font-size:13.5px; font-weight:600; cursor:pointer;
+  border-right:1px solid var(--rule-2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--acc); color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0B0D14}
+.nbtn{width:40px; height:40px; border-radius:9px; border:2px solid var(--rule-2); background:var(--panel-2);
+  font-family:var(--mono); font-weight:700; font-size:14px; cursor:pointer; transition:.12s}
+.nbtn:hover{border-color:var(--acc)}
+.nbtn[aria-pressed="true"]{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .nbtn[aria-pressed="true"]{color:#0B0D14}
+.btn{background:var(--panel-2); border:1px solid var(--rule-2); border-radius:8px; padding:7px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; transition:.13s}
+.btn:hover{border-color:var(--acc); color:var(--acc)}
+.btn.pri{background:var(--acc); color:#fff; border-color:var(--acc)}
+:root[data-theme="dark"] .btn.pri{color:#0B0D14}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#0B0D14}}
+.btn:disabled{opacity:.45; cursor:default}
+input[type=range]{accent-color:var(--acc); width:100%; cursor:pointer}
+
+.out{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:14px 16px; margin-top:12px;
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.12em; line-height:1.85}
+.verdict{display:inline-block; font-family:var(--mono); font-weight:700; font-size:12px; padding:3px 9px;
+  border-radius:6px; margin-left:8px; letter-spacing:.05em}
+.verdict.T{background:var(--ok-soft); color:var(--ok); border:1px solid var(--ok-line)}
+.verdict.F{background:var(--bad-soft); color:var(--bad); border:1px solid var(--bad-line)}
+.expl{margin-top:11px; font-size:14.6px; line-height:1.55; color:var(--ink-2); font-family:var(--sans)}
+
+/* triage */
+.tcard{background:var(--panel-2); border:1px solid var(--rule); border-radius:10px; padding:12px 14px; margin-top:9px}
+.cand{font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:16.5px; margin-bottom:9px}
+.tbtns{display:flex; gap:6px; flex-wrap:wrap}
+.tbtn{font-size:12.6px; padding:5px 10px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel);
+  cursor:pointer; font-weight:600; transition:.12s}
+.tbtn:hover:not(.lk){border-color:var(--acc); color:var(--acc)}
+.tbtn.ok{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.tbtn.no{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.tfb{margin-top:9px; font-size:14px; line-height:1.55; display:none; padding:9px 12px; border-radius:8px}
+.tfb.show{display:block}
+.tfb.g{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.tfb.b{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+/* assume viewer */
+.slots{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px}
+.slot{padding:7px 12px; border-radius:8px; font-family:var(--mono); font-size:13px; font-weight:700;
+  border:2px solid var(--rule-2); background:var(--panel-2); color:var(--ink-3)}
+.slot.have{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.slot.goal{background:var(--acc); border-color:var(--acc); color:#fff}
+:root[data-theme="dark"] .slot.goal{color:#0B0D14}
+.slot.none{background:var(--warn-soft); border-color:var(--warn); color:var(--warn); border-style:dashed}
+
+/* verdict pair */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:13px}
+@media(max-width:560px){.pair{grid-template-columns:1fr}}
+.vcard{border-radius:11px; padding:13px 15px; border:2px solid var(--rule-2); background:var(--panel-2)}
+.vcard.yes{background:var(--ok-soft); border-color:var(--ok)}
+.vcard.no{background:var(--bad-soft); border-color:var(--bad)}
+.vcard .vt{font-family:var(--disp); font-weight:700; font-size:15.5px; display:flex; align-items:center; gap:7px}
+.vcard .vw{font-size:14px; margin-top:6px; line-height:1.5; color:var(--ink-2)}
+
+/* bar */
+.barwrap{margin-top:14px}
+.bar{height:44px; border-radius:9px; border:1px solid var(--rule-2); background:var(--panel-2); overflow:hidden;
+  display:flex; position:relative}
+.seg2{height:100%; border-right:1px solid rgba(255,255,255,.35); transition:width .25s}
+.gap{height:100%; background:repeating-linear-gradient(45deg,var(--bad-soft),var(--bad-soft) 6px,transparent 6px,transparent 12px);
+  border-left:2px solid var(--bad); transition:width .25s; display:flex; align-items:center; justify-content:center}
+.barlbl{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-3);
+  margin-top:6px}
+
+/* derivation */
+.deriv{margin-top:12px; display:flex; flex-direction:column; gap:0}
+.dline{padding:10px 14px; border-left:3px solid var(--rule-2); background:var(--sunk);
+  font-family:"Iowan Old Style",Palatino,Georgia,serif; font-size:1.05em; line-height:1.6; opacity:0;
+  max-height:0; overflow:hidden; transition:opacity .25s, max-height .25s, padding .25s}
+.dline.on{opacity:1; max-height:220px}
+.dline.good{border-left-color:var(--ok); background:var(--ok-soft)}
+.dline.bad{border-left-color:var(--bad); background:var(--bad-soft)}
+.dline .why{display:block; font-family:var(--sans); font-size:13px; color:var(--ink-3); margin-top:3px}
+
+/* mcq */
+.opts{display:flex; flex-direction:column; gap:7px; margin-top:10px}
+.opt{text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px; padding:10px 13px;
+  font-size:14.7px; cursor:pointer; transition:.13s; line-height:1.5; display:flex; gap:10px}
+.opt:hover:not(.locked){border-color:var(--acc); background:var(--acc-soft)}
+.opt .mk{font-family:var(--mono); font-weight:700; font-size:12px; color:var(--ink-3); flex:0 0 auto}
+.opt.correct{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.locked{cursor:default} .opt.dim{opacity:.5}
+.fb{margin-top:11px; padding:11px 14px; border-radius:9px; font-size:14.7px; display:none; line-height:1.55}
+.fb.show{display:block}
+.fb.good{background:var(--ok-soft); border:1px solid var(--ok-line)}
+.fb.bad{background:var(--bad-soft); border:1px solid var(--bad-line)}
+
+.take{background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:20px 22px; margin-top:20px;
+  box-shadow:var(--shadow)}
+.take ol{counter-reset:s; list-style:none; padding-left:0; margin:12px 0 0}
+.take li{counter-increment:s; padding-left:38px; position:relative; margin:11px 0; line-height:1.55; font-size:15.4px}
+.take li::before{content:counter(s); position:absolute; left:0; top:1px; width:25px; height:25px; border-radius:7px;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--acc); font-family:var(--mono);
+  font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+footer{padding:44px 0 70px; color:var(--ink-3); font-size:13.5px; border-top:1px solid var(--rule); margin-top:46px}
+
+/* from lec-08 */
+.facts{display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; margin-top:14px; font-size:15px}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.facts > div > div{padding:3px 0}
+.facts .fh{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  margin:6px 0 2px}
+.fid{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--acc); margin-right:7px}
+.fchip{display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:6px;
+  background:var(--teal-soft); color:var(--teal); border:1px solid var(--teal-line); margin-right:6px}
+.pnum{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); margin-bottom:4px; letter-spacing:.06em}
+.score{font-family:var(--mono); font-size:13px; color:var(--ink-3); margin-top:14px}
+
+/* lec-11 additions: drawn graphs */
+:root{ --c1:#CF3A30; --c2:#23864A; --c3:#3560C8; --c4:#A98606; --c5:#8446BF; --on-c:#FFFFFF }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }}
+:root[data-theme="dark"]{ --c1:#F07A6E; --c2:#5CC985; --c3:#7EA2F2; --c4:#E2C64C; --c5:#B98AF0; --on-c:#0B0D14 }
+.gbox{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; margin-top:12px; overflow:hidden}
+.gbox svg{display:block; width:100%; height:auto; max-height:360px; user-select:none; -webkit-user-select:none}
+svg .e{fill:none; stroke:var(--ink-3); stroke-width:2.4; stroke-linecap:round; transition:stroke .15s}
+svg .e.bad{stroke:var(--bad); stroke-width:4.2}
+svg .e.hi{stroke:var(--acc); stroke-width:4.2}
+svg .e.warn{stroke:var(--warn); stroke-width:3.4; stroke-dasharray:8 6}
+svg .vg{cursor:pointer; outline:none}
+svg .vg circle{fill:var(--panel); stroke:var(--ink); stroke-width:2; transition:fill .15s, stroke .15s}
+svg .vg:hover circle, svg .vg:focus-visible circle{stroke:var(--acc); stroke-width:3.4}
+svg .vg.sel circle{stroke:var(--acc); stroke-width:4.4; fill:var(--acc-soft)}
+svg .vg.sideL circle{fill:var(--acc-soft); stroke:var(--acc)}
+svg .vg.sideR circle{fill:var(--teal-soft); stroke:var(--teal)}
+svg .vl{font-family:var(--sans); font-size:15px; font-weight:600; fill:var(--ink); text-anchor:middle;
+  dominant-baseline:central; pointer-events:none}
+svg .vg.col .vl{fill:var(--on-c)}
+svg .vl.out, svg .vg.col .vl.out{font-family:var(--mono); font-size:13.5px; font-weight:700; fill:var(--ink-2)}
+svg .cap{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--ink-3); text-anchor:middle; letter-spacing:.06em}
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+@media(max-width:560px){.stats{grid-template-columns:1fr}}
+.stat{background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:10px 13px; font-size:14.4px; line-height:1.65}
+.stat .sh{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:4px}
+.kv{font-family:var(--mono); font-size:13.2px; line-height:1.85; overflow-wrap:anywhere}
+.out.plain{font-family:var(--sans); font-size:15px; line-height:1.6}
+.dot{display:inline-block; width:11px; height:11px; border-radius:50%; vertical-align:-1px; margin-right:5px;
+  border:1px solid var(--ink-3)}
+.lbl{font-family:var(--mono); font-size:12px; color:var(--ink-3); letter-spacing:.05em}
+@media(max-width:560px){
+  svg .e{stroke-width:3.2} svg .e.bad, svg .e.hi{stroke-width:5.4} svg .e.warn{stroke-width:4.2}
+  svg .vl{font-size:24px} svg .vl.out, svg .vg.col .vl.out{font-size:22px}
+  svg .cap{font-size:20px}
+  .wrap{padding:0 16px} .card{padding:15px 14px}
+}
+
+/* lec-15 additions: drawn relations */
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#0B0D14}}
+.seg button{flex:1 1 auto}
+.gbox.big svg{max-height:400px}
+.dataline{font-size:14px; line-height:1.55; color:var(--ink-2); margin-top:9px}
+.hint{font-size:14.4px; color:var(--ink-2); margin-top:10px; line-height:1.55}
+.hint:empty{display:none}
+svg .eg{transition:opacity .4s}
+svg .eg path{fill:none; stroke:var(--ink-3); stroke-width:1.7; stroke-linecap:round}
+svg .eg polygon{fill:var(--ink-3); stroke:none}
+svg .eg.hi path{stroke:var(--acc); stroke-width:3} svg .eg.hi polygon{fill:var(--acc)}
+svg .eg.ok path{stroke:var(--ok); stroke-width:3} svg .eg.ok polygon{fill:var(--ok)}
+svg .eg.ghost path{stroke:var(--bad); stroke-width:3; stroke-dasharray:5 5} svg .eg.ghost polygon{fill:var(--bad)}
+svg .eg.mis path{stroke:var(--bad); stroke-width:1.8; stroke-dasharray:4 5}
+svg .eg.mis.wit path{stroke-width:3.2; stroke-dasharray:7 5}
+svg .hit{stroke:transparent; stroke-width:16; fill:none; cursor:pointer}
+svg .nd rect{fill:var(--panel); stroke:var(--ink); stroke-width:1.7}
+svg .nd.me rect{fill:var(--acc-soft); stroke:var(--acc); stroke-width:2.6}
+svg .nd.bad rect{fill:var(--bad-soft); stroke:var(--bad); stroke-width:2.6}
+svg .nl{font-family:var(--mono); font-size:12.5px; font-weight:700; fill:var(--ink); text-anchor:middle;
+  dominant-baseline:central; pointer-events:none}
+svg .stg circle{fill:var(--acc)}
+svg .stg text{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-style:italic; font-size:13px;
+  fill:var(--panel); text-anchor:middle; dominant-baseline:central; font-weight:700}
+svg .blob{fill:var(--teal-soft); stroke:var(--teal); stroke-width:1.8; transition:opacity .4s}
+svg .blob.over{fill:var(--warn-soft); stroke:var(--warn); stroke-dasharray:7 5}
+svg .blbl{font-family:var(--mono); font-size:11.5px; font-weight:700; fill:var(--teal); text-anchor:middle; transition:opacity .4s}
+svg .ct{font-family:var(--mono); font-size:11.5px; font-weight:700; dominant-baseline:central}
+svg .ct.okc{fill:var(--ok)} svg .ct.badc{fill:var(--bad)}
+svg .chd{font-family:var(--mono); font-size:11px; font-weight:700; fill:var(--ink-3); text-anchor:middle; letter-spacing:.05em}
+
+/* relations: the square grid beside the arrows */
+.two{display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px; align-items:start; margin-top:12px}
+.two .gbox{margin-top:0}
+@media(max-width:680px){.two{grid-template-columns:minmax(0,1fr)}}
+.rg{display:grid; gap:3px; align-items:center; justify-content:start; font-family:var(--mono); font-size:12.5px;
+  background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:10px; width:max-content; max-width:100%}
+@media(max-width:680px){.rg{margin:0 auto}}
+.rg .ch{text-align:center; font-weight:700; color:var(--ink-2); line-height:1.15; padding-bottom:2px}
+.rg .ch small{display:block; font-size:9.5px; color:var(--ink-3); font-weight:500}
+.rg .rh{font-weight:700; padding-right:6px; white-space:nowrap}
+.gc{width:38px; height:38px; border-radius:7px; border:1px solid var(--rule-2); background:var(--panel); cursor:pointer; padding:0;
+  transition:background .12s, border-color .12s}
+.gc:hover{border-color:var(--acc)}
+.gc.on{background:var(--acc); border-color:var(--acc)}
+.gc.hot{outline:3px solid var(--warn); outline-offset:1px}
+.gc:focus-visible{outline:3px solid var(--acc); outline-offset:1px}
+.rset{margin-top:12px; background:var(--sunk); border:1px solid var(--rule); border-radius:10px; padding:10px 14px;
+  font-size:14px; line-height:1.9}
+.rset .pp{font-family:var(--mono); font-size:12.3px; font-weight:500; padding:2px 6px; border-radius:6px; border:1px solid var(--rule);
+  background:var(--panel); white-space:nowrap}
+.rset .pp.hot{background:var(--warn-soft); border-color:var(--warn)}
+.ptable{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:7px; margin-top:12px}
+@media(max-width:480px){.ptable{grid-template-columns:minmax(0,1fr)}}
+.pc{display:block; width:100%; text-align:left; background:var(--panel-2); border:1px solid var(--rule); border-radius:9px;
+  padding:9px 11px; line-height:1.42; transition:background .12s, border-color .12s}
+.pc.wide{grid-column:1 / -1}
+.pc.clk{cursor:pointer}
+.pc.clk:hover{border-color:var(--acc)}
+.pc[aria-pressed="true"]{background:var(--acc-soft); border-color:var(--acc)}
+.pc .w{font-weight:600; font-size:15px; display:flex; justify-content:space-between; gap:8px; align-items:baseline}
+.pc .s{display:block; font-size:13.6px; color:var(--ink-2); margin-top:3px}
+.pc .x{display:block; font-size:13.6px; margin-top:4px; font-weight:600}
+.pc .x.y{color:var(--ok)} .pc .x.n{color:var(--bad)}
+.vb{font-family:var(--mono); font-size:11.5px; font-weight:700; padding:2px 7px; border-radius:6px; border:1px solid var(--rule-2); white-space:nowrap}
+.vb.y{background:var(--ok-soft); color:var(--ok); border-color:var(--ok-line)}
+.vb.n{background:var(--bad-soft); color:var(--bad); border-color:var(--bad-line)}
+
+/* relations: rule rows and the blob caption */
+.rrows{display:flex; flex-direction:column; gap:6px; margin-top:12px}
+.ecap{border-left:3px solid var(--teal-line); background:var(--teal-soft); padding:11px 14px; border-radius:0 9px 9px 0; margin-top:10px;
+  font-size:15px; line-height:1.55}
+.ecap.stuck{border-left-color:var(--warn); background:var(--warn-soft)}
+
+/* counting */
+.lst{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
+.lc{font-family:var(--mono); font-size:12.5px; font-weight:700; padding:6px 10px; border-radius:7px; border:1px solid var(--acc-line);
+  background:var(--acc-soft); color:var(--ink)}
+.lc.t{border-color:var(--teal-line); background:var(--teal-soft)}
+.lc i{font-style:normal; font-weight:500; color:var(--ink-3); margin-right:7px}
+.rg.cg{margin-top:12px; column-gap:6px}
+.nc{min-width:38px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:6px; font-size:12px; font-weight:700;
+  background:var(--acc-soft); border:1px solid var(--acc-line); color:var(--ink)}
+.bitgrid{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; margin-top:12px}
+.sb{font-family:var(--mono); font-weight:700; border-radius:8px; border:1px solid var(--rule-2); background:var(--panel); cursor:pointer;
+  padding:9px 0; font-size:12.5px; text-align:center; transition:background .12s, border-color .12s}
+.sb:hover{border-color:var(--acc)}
+.sb.bit{font-size:20px; padding:7px 0; background:var(--sunk)}
+.sb[aria-pressed="true"]{background:var(--acc); border-color:var(--acc); color:var(--panel)}
+.dpick{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
+.dpick .btn:disabled{text-decoration:line-through}
+.slots .slot{font-family:var(--sans); font-size:13.6px}
+.slot small{display:block; font-family:var(--mono); font-size:10.5px; font-weight:500; opacity:.8}
+@media(max-width:560px){ .wrap{padding:0 16px} .card{padding:15px 13px} .sb{font-size:11px} .sb.bit{font-size:18px} }
+
+/* relations stay collapsed at the bottom of the page */
+section#relations{padding-top:34px}
+details.more summary{cursor:pointer; list-style:none; display:flex; gap:11px; align-items:baseline; padding:15px 19px;
+  background:var(--panel); border:1px solid var(--rule); border-radius:13px; box-shadow:var(--shadow); transition:border-color .12s}
+details.more summary:hover{border-color:var(--acc)}
+details.more summary:focus-visible{outline:3px solid var(--acc); outline-offset:2px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"▸"; font-size:14px; color:var(--acc); transition:transform .15s; flex:none}
+details.more[open] summary::before{transform:rotate(90deg)}
+details.more .mt{display:block; font-family:var(--disp); font-weight:700; font-size:19px; line-height:1.25}
+details.more .ms{display:block; font-size:14.4px; color:var(--ink-2); margin-top:2px; line-height:1.45}
+details.more .body > h2{margin-top:32px}
+details.more .body > h2:first-child{margin-top:28px}
+
+/* ---- Space = blank screen (presenting) ---- */
+#blank{position:fixed; inset:0; z-index:1000; background:var(--paper); display:none}
+#blank.on{display:block}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">6.1200 · after Lecture 15</div>
+    <h1>Counting is choices</h1>
+    <p class="sub">Lecture’s counting rules come down to one question about each choice: is it an “and” or an “or”? When
+      neither helps, match your set to one you can already size. The relations half of the lecture is in an expandable at
+      the very bottom.</p>
+  </div>
+</header>
+
+<!-- ================= counting ================= -->
+<section id="counting">
+  <div class="wrap">
+    <div class="shead"><h2>Count by choices: “and” multiplies, “or” adds</h2></div>
+    <p>Lecture’s shepherd can’t count, but still knows every sheep came back: one pebble per sheep is a bijection, so the
+      sizes match. Counting usually works like that. Describe the set as a series of choices, or match it to a set you can
+      already size.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4><span class="m">X</span> is four Course 6 subjects and <span class="m">Y</span> is three Course 18 subjects. Same two
+        lists, one word different.</h4>
+      <div id="andOr"></div>
+    </div>
+
+    <div class="note">Lecture’s version: 10 shirts and 6 pants make 16 articles of clothing, because you choose a shirt
+      <em>or</em> pants, and 60 outfits, because you choose a shirt <em>and</em> pants.</div>
+
+    <h3>A bijection moves the count</h3>
+    <p>How many subsets do five subjects have? Listing them is tedious, but each subset matches one bit string: bit
+      <span class="m">i</span> says whether subject <span class="m">i</span> is in.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Click a subject or its bit. You’re changing one choice, written two ways.</h4>
+      <div id="subsets"></div>
+    </div>
+
+    <div class="note">Each subset gets exactly one string, and each string comes from exactly one subset. That’s a bijection.
+      By the <strong>Bijection rule</strong>, there are as many subsets as strings in <span class="m">B</span>⁵ = {0, 1}⁵, and
+      by the <strong>Product rule</strong> that’s 2 · 2 · 2 · 2 · 2 = 32.</div>
+
+    <h3>The choices can change, as long as their number doesn’t</h3>
+    <p>Rank your top three of five dorms. Your second pick can’t repeat your first, so the plain Product rule doesn’t apply.</p>
+
+    <div class="card">
+      <span class="tag">Try it</span>
+      <h4>Pick three in order, then start over with a different first pick.</h4>
+      <div id="rank"></div>
+    </div>
+
+    <div class="note">Different first picks leave different sets of four dorms, but always four. That’s all the
+      <strong>Generalized Product rule</strong> needs. It’s also lecture’s deck of cards: 52 · 51 · ⋯ · 1 = 52! shuffles.</div>
+
+    <div class="card">
+      <span class="tag">Check</span>
+      <h4>“And” or “or”?</h4>
+      <div id="countCheck"></div>
+    </div>
+
+    <div class="take">
+      <h3 style="font-size:19px;margin:0">The short version</h3>
+      <ol>
+        <li><strong>“And” multiplies, “or” adds.</strong> The Sum rule needs pairwise disjoint sets, so don’t count one
+          subject twice.</li>
+        <li><strong>Use a bijection to move the count.</strong> Match your set to one whose size you already know.</li>
+        <li><strong>Only the number of choices has to stay fixed.</strong> The set of choices can change from step to step.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= relations, collapsed ================= -->
+<section id="relations">
+  <div class="wrap">
+    <details class="more">
+      <summary><span><span class="mt">Relations</span><span class="ms">The other half of Lecture 15: arrows, the words for
+        counting them, and equivalence relations.</span></span></summary>
+      <div class="body">
+
+        <h2>An arrow is one pair</h2>
+        <p>A relation <span class="m">R</span> ⊆ <span class="m">A</span> × <span class="m">B</span> has three parts: a domain
+          <span class="m">A</span>, a codomain <span class="m">B</span>, and a subset of ordered pairs. Each arrow is one pair,
+          drawn: (<span class="m">a</span>, <span class="m">b</span>) ∈ <span class="m">R</span>, <span class="m">a R b</span>,
+          <span class="m">R</span>(<span class="m">a</span>, <span class="m">b</span>), and an arrow from
+          <span class="m">a</span> to <span class="m">b</span> all say the same thing.</p>
+        <p>The top of your notes says 6.1200J / 18.062J: one subject, two departments. Let <span class="m">A</span> be four
+          subjects, <span class="m">B</span> four Courses, and <span class="m">a R b</span> mean “subject
+          <span class="m">a</span> is offered by Course <span class="m">b</span>”.</p>
+
+        <div class="card">
+          <span class="tag">Try it</span>
+          <h4>Each square is one element of <span class="m">A</span> × <span class="m">B</span>. Click to add or remove that
+            pair. Exactly one click makes <span class="m">R</span> a bijection. Find it.</h4>
+          <div class="two">
+            <div class="rg" id="catGrid" style="grid-template-columns:auto repeat(4,auto)"></div>
+            <div class="gbox"><svg id="catSvg" role="img" aria-label="Arrows from subjects on the left to Courses on the right, one for each pair in R"></svg></div>
+          </div>
+          <div class="rset" id="catSet"></div>
+          <div class="ptable" id="catProps"></div>
+          <div class="hint" id="catStat"></div>
+          <div class="row"><button class="btn" type="button" id="catReset">Back to the catalog</button></div>
+        </div>
+
+        <div class="note">These words describe <span class="m">A</span>, <span class="m">B</span> and
+          <span class="m">R</span> together. Lecture’s <span class="m">f</span>(<span class="m">x</span>) =
+          1/<span class="m">x</span>² isn’t total as ℝ → ℝ but is total as ℝ<sub>≠0</sub> → ℝ<sub>≠0</sub>, with exactly the
+          same pairs. And partial doesn’t mean “not total”: a total function is a partial function too.</div>
+
+        <div class="card">
+          <span class="tag">Check</span>
+          <h4>Now <span class="m">A</span> is students, <span class="m">B</span> is dorms, and <span class="m">a R b</span>
+            means <span class="m">a</span> lives in <span class="m">b</span>. Each sentence breaks exactly one word. Which?</h4>
+          <div id="housing"></div>
+        </div>
+
+        <h2>Three rules turn arrows into blobs</h2>
+        <p>With <span class="m">R</span> ⊆ <span class="m">A</span> × <span class="m">A</span> you have a binary relation on
+          <span class="m">A</span>: one set of dots with arrows among them, which is literally a digraph. Equivalence relations
+          behave like =, and Definition 6 asks for three rules: reflexive, symmetric, transitive.</p>
+
+        <div class="card">
+          <span class="tag">Try it</span>
+          <h4><span class="m">A</span> is eight students. Click a rule to see it on the arrows, then draw the relation as blobs.
+            Flip between the two relations.</h4>
+          <div id="relDorm"></div>
+        </div>
+
+        <div class="card">
+          <span class="tag">Check</span>
+          <h4>Each relation on students breaks exactly one rule. Which?</h4>
+          <div id="ruleCheck"></div>
+        </div>
+
+        <h3>The same contrast with numbers</h3>
+        <p>Take <span class="m">A</span> = {2, 3, …, 12}. It starts at 2 because 1 has no prime factors.</p>
+
+        <div class="card">
+          <span class="tag">Try it</span>
+          <h4>The two relations sound close. Only one of them can be drawn as blobs.</h4>
+          <div id="relPrime"></div>
+        </div>
+
+        <div class="note okb"><strong>The pattern to keep.</strong> If <span class="m">a R b</span> means
+          <span class="m">f</span>(<span class="m">a</span>) = <span class="m">f</span>(<span class="m">b</span>) for a total
+          function <span class="m">f</span>, all three rules come free, because = already has them. That’s the dorm, the largest
+          prime factor, and <span class="m">a</span> ≡₁₀ <span class="m">b</span>, where <span class="m">f</span>(<span class="m">x</span>) =
+          <span class="m">x</span> rem 10. “Has something in common” comes with no such guarantee: what
+          <span class="m">a</span> shares with <span class="m">b</span> can differ from what <span class="m">b</span> shares
+          with <span class="m">c</span>.</div>
+
+        <div class="take">
+          <h3 style="font-size:19px;margin:0">The short version, for relations</h3>
+          <ol>
+            <li><strong>Read a pair as an arrow, and say <span class="m">A</span> and <span class="m">B</span>.</strong> The same
+              pairs with a different domain or codomain can give different answers.</li>
+            <li><strong>Count arrows out and arrows in.</strong> Function ≤ 1 out, total ≥ 1 out, injective ≤ 1 in, surjective
+              ≥ 1 in.</li>
+            <li><strong>Ask whether it’s “same value” or “something in common”.</strong> The first gives equivalence classes.
+              The second usually fails at transitive.</li>
+          </ol>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<div id="blank" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap">6.1200J / 18.062J · a short companion to Lecture 15, relations and counting, Fall 2026. Dorm assignments
+    and schedules are made up.</div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- small helpers ---------- */
+var NS="http://www.w3.org/2000/svg";
+function $(id){return document.getElementById(id);}
+function S(tag,attrs,parent){
+  var e=document.createElementNS(NS,tag),k;
+  for(k in attrs){ if(attrs.hasOwnProperty(k)){ e.setAttribute(k,attrs[k]); } }
+  if(parent){ parent.appendChild(e); }
+  return e;
+}
+function H(tag,cls,html,parent){
+  var e=document.createElement(tag);
+  if(cls){ e.className=cls; }
+  if(html!==undefined && html!==null){ e.innerHTML=html; }
+  if(parent){ parent.appendChild(e); }
+  return e;
+}
+function clear(n){ while(n.firstChild){ n.removeChild(n.firstChild); } }
+function m(s){ return '<span class="m">'+s+'</span>'; }
+function f1(x){ return Math.round(x*10)/10; }
+var REDUCE=window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* ---------- drawing kit: pills, arrows, loops ---------- */
+var HH=14;
+function hwOf(s){ return Math.max(17,String(s).length*4.1+9.5); }
+function rectPt(c,dx,dy,hw){
+  var ax=Math.abs(dx),ay=Math.abs(dy),t=Math.min(ax<1e-6?1e9:hw/ax,ay<1e-6?1e9:HH/ay);
+  return {x:c.x+dx*t,y:c.y+dy*t};
+}
+function headPts(tx,ty,ux,uy,len,wid){
+  var bx=tx-ux*len,by=ty-uy*len;
+  return f1(tx)+","+f1(ty)+" "+f1(bx-uy*wid)+","+f1(by+ux*wid)+" "+f1(bx+uy*wid)+","+f1(by-ux*wid);
+}
+function edgeShape(p,q,hp,hq,bend,hop){
+  var dx=q.x-p.x,dy=q.y-p.y,L=Math.sqrt(dx*dx+dy*dy)||1,
+      cx=(p.x+q.x)/2-dy/L*bend,cy=(p.y+q.y)/2+dx/L*bend,
+      s=rectPt(p,cx-p.x,cy-p.y,hp),e=rectPt(q,cx-q.x,cy-q.y,hq),
+      ux=e.x-cx,uy=e.y-cy,uL=Math.sqrt(ux*ux+uy*uy)||1,tx,ty,back;
+  ux/=uL; uy/=uL;
+  tx=e.x-ux*1.2; ty=e.y-uy*1.2;
+  back=8.5*hop;
+  return {d:"M"+f1(s.x)+" "+f1(s.y)+"Q"+f1(cx)+" "+f1(cy)+" "+f1(tx-ux*back)+" "+f1(ty-uy*back),
+          pts:headPts(tx,ty,ux,uy,8.5,4.2)};
+}
+function loopShape(p,hw,ang){
+  var a1=ang-0.52,a2=ang+0.52,R=27,
+      s=rectPt(p,Math.cos(a1),Math.sin(a1),hw),e=rectPt(p,Math.cos(a2),Math.sin(a2),hw),
+      c1x=s.x+Math.cos(a1)*R,c1y=s.y+Math.sin(a1)*R,c2x=e.x+Math.cos(a2)*R,c2y=e.y+Math.sin(a2)*R,
+      ux=e.x-c2x,uy=e.y-c2y,uL=Math.sqrt(ux*ux+uy*uy)||1,tx,ty;
+  ux/=uL; uy/=uL;
+  tx=e.x-ux*1.2; ty=e.y-uy*1.2;
+  return {d:"M"+f1(s.x)+" "+f1(s.y)+"C"+f1(c1x)+" "+f1(c1y)+" "+f1(c2x)+" "+f1(c2y)+" "+f1(tx-ux*7)+" "+f1(ty-uy*7),
+          pts:headPts(tx,ty,ux,uy,7.5,3.9)};
+}
+function addNode(parent,label){
+  var g=S("g",{"class":"nd"},parent),hw=hwOf(label);
+  S("rect",{x:-hw,y:-HH,width:2*hw,height:2*HH,rx:HH},g);
+  S("text",{"class":"nl"},g).textContent=label;
+  g._hw=hw;
+  return g;
+}
+function moveNode(g,p){ g.setAttribute("transform","translate("+f1(p.x)+","+f1(p.y)+")"); }
+function addEdge(parent,cls){
+  var g=S("g",{"class":"eg"+(cls?" "+cls:"")},parent);
+  g._p=S("path",{},g); g._h=S("polygon",{},g);
+  return g;
+}
+function setShape(g,sh){ g._p.setAttribute("d",sh.d); g._h.setAttribute("points",sh.pts); }
+
+/* ---------- pick-one cards ---------- */
+function tri(hostId,options,items){
+  var host=$(hostId); if(!host){ return; }
+  items.forEach(function(it){
+    var c=H("div","tcard",null,host),done=false,btns=[];
+    H("div","cand",it.q,c);
+    var row=H("div","tbtns",null,c),fb=H("div","tfb",null,c);
+    (it.opts||options).forEach(function(o,i){
+      var b=H("button","tbtn",o,row);
+      b.type="button"; btns.push(b);
+      b.addEventListener("click",function(){
+        if(done){ return; }
+        done=true;
+        var right=i===it.a;
+        b.classList.add(right?"ok":"no");
+        if(!right){ btns[it.a].classList.add("ok"); }
+        btns.forEach(function(x){ x.classList.add("lk"); x.style.cursor="default"; });
+        fb.className="tfb show "+(right?"g":"b");
+        fb.innerHTML=it.why;
+      });
+    });
+  });
+}
+
+/* ---------- relations: the catalog, as squares, arrows, pairs ---------- */
+(function(){
+  var gridEl=$("catGrid"); if(!gridEl){ return; }
+  var svg=$("catSvg"),setEl=$("catSet"),propEl=$("catProps"),statEl=$("catStat");
+  var A=["6.1200","18.01","8.01","5.111"],B=["6","18","8","5"];
+  var CAT=[["6.1200","6"],["6.1200","18"],["18.01","18"],["8.01","8"],["5.111","5"]];
+  var R={},hot=null,cells={},nodes={},cts={},posA={},posB={},pcs={},W=400,h=4*50+34;
+  var WORDS={
+    "function":{p:"≤ 1 arrow out",s:"every "+m("a")+" ∈ "+m("A")+" relates to at most one "+m("b")+" ∈ "+m("B")},
+    "total":{p:"≥ 1 arrow out",s:"every "+m("a")+" ∈ "+m("A")+" relates to at least one "+m("b")+" ∈ "+m("B")},
+    "injective":{p:"≤ 1 arrow in",s:"every "+m("b")+" ∈ "+m("B")+" has at most 1 element "+m("a")+" satisfying "+m("a R b")},
+    "surjective":{p:"≥ 1 arrow in",s:"every "+m("b")+" ∈ "+m("B")+" has at least 1 element "+m("a")+" satisfying "+m("a R b")},
+    "bijection":{p:"exactly 1 arrow out, exactly 1 arrow in",s:"a total function that is both injective and surjective"}
+  };
+  function key(a,b){ return a+"|"+b; }
+  function cn(b){ return "Course "+b; }
+  function reset(){ R={}; CAT.forEach(function(p){ R[key(p[0],p[1])]=1; }); }
+  function outOf(a){ return B.filter(function(b){ return R[key(a,b)]; }).length; }
+  function inTo(b){ return A.filter(function(a){ return R[key(a,b)]; }).length; }
+  function pairs(){ var o=[]; A.forEach(function(a){ B.forEach(function(b){ if(R[key(a,b)]){ o.push([a,b]); } }); }); return o; }
+  function plural(n){ return n+" arrow"+(n===1?"":"s"); }
+  /* each word: is it true, and who breaks it */
+  function check(word){
+    var bad;
+    if(word==="function"||word==="total"){
+      bad=A.filter(function(a){ return word==="function"?outOf(a)>1:outOf(a)<1; })[0];
+      return bad?{ok:false,msg:bad+" has "+plural(outOf(bad))+" out."}:{ok:true};
+    }
+    if(word==="injective"||word==="surjective"){
+      bad=B.filter(function(b){ return word==="injective"?inTo(b)>1:inTo(b)<1; })[0];
+      return bad?{ok:false,msg:cn(bad)+" has "+plural(inTo(bad))+" in."}:{ok:true};
+    }
+    var all=["function","total","injective","surjective"].filter(function(w){ return !check(w).ok; });
+    return all.length?{ok:false,msg:"Still breaks: "+all.join(", ")+"."}:{ok:true};
+  }
+  /* grid */
+  H("div","ch","<small>Course →</small>",gridEl);
+  B.forEach(function(b){ H("div","ch",b,gridEl); });
+  A.forEach(function(a){
+    H("div","rh",a,gridEl);
+    B.forEach(function(b){
+      var c=H("button","gc",null,gridEl);
+      c.type="button";
+      c.setAttribute("aria-label","Pair "+a+", Course "+b);
+      c.addEventListener("click",function(){
+        if(R[key(a,b)]){ delete R[key(a,b)]; } else { R[key(a,b)]=1; }
+        update();
+      });
+      c.addEventListener("mouseenter",function(){ hot=key(a,b); paintHot(); });
+      c.addEventListener("focus",function(){ hot=key(a,b); paintHot(); });
+      cells[key(a,b)]=c;
+    });
+  });
+  gridEl.addEventListener("mouseleave",function(){ hot=null; paintHot(); });
+  /* arrow diagram */
+  svg.setAttribute("viewBox","0 0 "+W+" "+h);
+  S("text",{"class":"chd",x:108,y:18},svg).textContent="A: subjects";
+  S("text",{"class":"chd",x:292,y:18},svg).textContent="B: Courses";
+  var gEdges=S("g",{},svg);
+  A.forEach(function(a,i){
+    var y=34+(i+0.5)*(h-34)/A.length;
+    posA[a]={x:108,y:y};
+    nodes["A"+a]=addNode(svg,a); moveNode(nodes["A"+a],posA[a]);
+    cts["A"+a]=S("text",{"class":"ct",x:20,y:y},svg);
+  });
+  B.forEach(function(b,i){
+    var y=34+(i+0.5)*(h-34)/B.length;
+    posB[b]={x:292,y:y};
+    nodes["B"+b]=addNode(svg,cn(b)); moveNode(nodes["B"+b],posB[b]);
+    cts["B"+b]=S("text",{"class":"ct",x:345,y:y},svg);
+  });
+  function paintHot(){
+    var gs=gEdges.childNodes,pp=setEl.querySelectorAll(".pp"),i;
+    Object.keys(cells).forEach(function(k){ cells[k].classList.toggle("hot",k===hot); });
+    for(i=0;i<gs.length;i++){ gs[i].setAttribute("class","eg"+(gs[i]._pair===hot?" hi":"")); }
+    for(i=0;i<pp.length;i++){ pp[i].classList.toggle("hot",pp[i].getAttribute("data-k")===hot); }
+  }
+  function update(){
+    Object.keys(cells).forEach(function(k){
+      var on=!!R[k];
+      cells[k].classList.toggle("on",on);
+      cells[k].setAttribute("aria-pressed",on?"true":"false");
+    });
+    clear(gEdges);
+    pairs().forEach(function(p){
+      var a=p[0],b=p[1],g=addEdge(gEdges,""),
+          sh=edgeShape(posA[a],posB[b],nodes["A"+a]._hw,nodes["B"+b]._hw,0,1),
+          hit=S("path",{"class":"hit",d:sh.d},g);
+      setShape(g,sh);
+      g._pair=key(a,b);
+      hit.addEventListener("click",function(){ delete R[key(a,b)]; hot=null; update(); });
+      hit.addEventListener("mouseenter",function(){ hot=key(a,b); paintHot(); });
+      hit.addEventListener("mouseleave",function(){ hot=null; paintHot(); });
+    });
+    setEl.innerHTML=m("R")+" = { "+pairs().map(function(p){
+      return '<span class="pp" data-k="'+key(p[0],p[1])+'">('+p[0]+", "+p[1]+")</span>";
+    }).join(" ")+" }";
+    A.forEach(function(a){
+      var n=outOf(a);
+      cts["A"+a].textContent=n+" out";
+      cts["A"+a].setAttribute("class","ct "+(n===1?"okc":"badc"));
+      nodes["A"+a].setAttribute("class","nd"+(n===1?"":" bad"));
+    });
+    B.forEach(function(b){
+      var n=inTo(b);
+      cts["B"+b].textContent=n+" in";
+      cts["B"+b].setAttribute("class","ct "+(n===1?"okc":"badc"));
+      nodes["B"+b].setAttribute("class","nd"+(n===1?"":" bad"));
+    });
+    Object.keys(pcs).forEach(function(w){
+      var c=check(w);
+      pcs[w].innerHTML='<span class="w"><span>'+w+" · "+WORDS[w].p+'</span><span class="vb '+(c.ok?"y":"n")+'">'+(c.ok?"true":"false")+'</span></span><span class="s">'+WORDS[w].s+"</span>"+(c.ok?"":'<span class="x n">'+c.msg+"</span>");
+    });
+    statEl.innerHTML=check("bijection").ok?"A bijection, so <strong>Theorem 3</strong> says |"+m("A")+"| = |"+m("B")+"|. You can see why: the arrows pair subjects with Courses one to one.":"";
+    paintHot();
+  }
+  ["function","total","injective","surjective","bijection"].forEach(function(w){
+    pcs[w]=H("div","pc"+(w==="bijection"?" wide":""),"",propEl);
+  });
+  $("catReset").addEventListener("click",function(){ reset(); hot=null; update(); });
+  reset(); update();
+})();
+
+tri("housing",["function","total","injective","surjective"],[
+  {q:"Ada lives off campus.",a:1,
+   why:"Total. Zero arrows out of Ada, and total wants at least one. "+m("R")+" can still be a function, since zero is at most one."},
+  {q:"Ben and Cam both live in Baker.",a:2,
+   why:"Injective. Two arrows in to Baker, and injective wants at most one."},
+  {q:"One dorm is closed for renovation, so nobody lives there.",a:3,
+   why:"Surjective. Zero arrows in to that dorm."},
+  {q:"Dee has a room in both Simmons and East Campus, which the Housing Office would like to hear about.",a:0,
+   why:"Function. Two arrows out of Dee, so "+m("R")+"(Dee) isn’t defined."}
+]);
+
+/* ---------- relations on one set ---------- */
+var RULES={
+  refl:{word:"Reflexive",formal:m("a R a")+" for all "+m("a")+" ∈ "+m("A"),pic:"a loop on every vertex"},
+  sym:{word:"Symmetric",formal:m("a R b")+" iff "+m("b R a")+" for all "+m("a")+", "+m("b")+" ∈ "+m("A"),pic:"every arrow has its opposite"},
+  trans:{word:"Transitive",formal:m("a R b")+" and "+m("b R c")+" implies "+m("a R c")+" for all "+m("a")+", "+m("b")+", "+m("c")+" ∈ "+m("A"),pic:"every two-step walk has a one-step shortcut"}
+};
+function makeRel(ids,test){
+  var set={},pairs=[];
+  ids.forEach(function(a){ ids.forEach(function(b){
+    if(test(a,b)){ set[a+"|"+b]=1; pairs.push([a,b]); }
+  }); });
+  return {ids:ids,pairs:pairs,has:function(a,b){ return set[a+"|"+b]===1; }};
+}
+/* one instance of a rule: the first that fails, else a typical one that holds */
+function findInst(rule,R){
+  var I=R.ids,i,j,k,a,b,c,ex=null;
+  if(rule==="refl"){
+    for(i=0;i<I.length;i++){ if(!R.has(I[i],I[i])){ return {ok:false,v:{a:I[i]}}; } }
+    return {ok:true,v:{a:I[0]}};
+  }
+  for(i=0;i<I.length;i++){ a=I[i];
+    for(j=0;j<I.length;j++){ b=I[j];
+      if(a===b||!R.has(a,b)){ continue; }
+      if(rule==="sym"){
+        if(!R.has(b,a)){ return {ok:false,v:{a:a,b:b}}; }
+        if(!ex){ ex={a:a,b:b}; }
+      } else {
+        for(k=0;k<I.length;k++){ c=I[k];
+          if(R.has(b,c)&&!R.has(a,c)){ return {ok:false,v:{a:a,b:b,c:c}}; }
+          if(!ex&&c!==a&&c!==b&&R.has(b,c)){ ex={a:a,b:b,c:c}; }
+        }
+      }
+    }
+  }
+  return {ok:true,v:ex};
+}
+function arrowsFor(rule,v){
+  if(rule==="refl"){ return [[v.a,v.a]]; }
+  if(rule==="sym"){ return [[v.a,v.b],[v.b,v.a]]; }
+  return [[v.a,v.b],[v.b,v.c],[v.a,v.c]];
+}
+function r(x,y){ return x+" "+m("R")+" "+y; }
+function instText(rule,t){
+  var v=t.v;
+  if(rule==="refl"){ return t.ok?"For example, "+r(v.a,v.a)+".":r(v.a,v.a)+" is false."; }
+  if(rule==="sym"){ return t.ok?"For example, "+r(v.a,v.b)+" and "+r(v.b,v.a)+".":r(v.a,v.b)+", but "+r(v.b,v.a)+" is false."; }
+  return t.ok?"For example, "+r(v.a,v.b)+" and "+r(v.b,v.c)+", and also "+r(v.a,v.c)+".":r(v.a,v.b)+" and "+r(v.b,v.c)+", but "+r(v.a,v.c)+" is false.";
+}
+function relCard(cfg){
+  var host=$(cfg.host); if(!host){ return; }
+  var ids=cfg.ids;
+  host.innerHTML=
+    '<div class="row" style="margin-top:4px"><div class="seg" data-r role="group" aria-label="Relation"></div></div>'+
+    '<div class="dataline" data-d></div>'+
+    '<div class="gbox big"><svg role="img" viewBox="0 0 '+cfg.W+' '+cfg.H+'" aria-label="The relation drawn as arrows or as blobs"></svg></div>'+
+    '<div class="row"><div class="seg" data-v role="group" aria-label="How to draw it">'+
+      '<button type="button" data-k="arrows">Every arrow</button><button type="button" data-k="blobs">As blobs</button></div></div>'+
+    '<div class="ecap" data-t hidden></div>'+
+    '<div class="rrows" data-u></div>';
+  function q(sel){ return host.querySelector(sel); }
+  var svg=q("svg"),gB=S("g",{},svg),gM=S("g",{},svg),gE=S("g",{},svg),gG=S("g",{},svg),gN=S("g",{},svg),gT=S("g",{},svg),
+      nodes={},pos={},edges=[],misses=[],blobs=[],ghosts=[],tags=[],rowBtns={},raf=0,
+      st={rel:0,rule:"trans",view:"arrows"};
+  function hw(id){ return nodes[id]._hw; }
+  ids.forEach(function(id){
+    nodes[id]=addNode(gN,id);
+    pos[id]={x:cfg.pos[id].x,y:cfg.pos[id].y};
+    moveNode(nodes[id],pos[id]);
+  });
+  function isEquiv(R){
+    return findInst("refl",R).ok && findInst("sym",R).ok && findInst("trans",R).ok;
+  }
+  function build(){
+    var rel=cfg.rels[st.rel],R=rel.R,eq=isEquiv(R),box=q("[data-u]");
+    clear(gB); clear(gM); clear(gE); edges=[]; misses=[]; blobs=[];
+    ids.forEach(function(id){ pos[id]={x:cfg.pos[id].x,y:cfg.pos[id].y}; });
+    R.pairs.forEach(function(p){
+      var a=p[0],b=p[1],b0=(a!==b&&R.has(b,a))?11:0;
+      edges.push({a:a,b:b,loop:a===b,g:addEdge(gE,""),b0:b0,bend:b0,hop:1});
+    });
+    rel.blobs.forEach(function(bl){
+      var cl=bl.ids,xs=cl.map(function(id){ return rel.cluster[id].x; }),ys=cl.map(function(id){ return rel.cluster[id].y; }),i,j,
+          w=Math.max.apply(null,cl.map(hw)),
+          x0=Math.min.apply(null,xs)-w-11,x1=Math.max.apply(null,xs)+w+11,
+          y0=Math.min.apply(null,ys)-HH-(bl.label?25:11),y1=Math.max.apply(null,ys)+HH+11,
+          lw=bl.label?bl.label.length*7+14:0,
+          rect,t=null;
+      if(x1-x0<lw){ x0=(x0+x1-lw)/2; x1=x0+lw; }
+      rect=S("rect",{"class":"blob"+(eq?"":" over"),x:x0,y:y0,width:x1-x0,height:y1-y0,rx:Math.min(26,(x1-x0)/2),opacity:0},gB);
+      if(bl.label){ t=S("text",{"class":"blbl",x:(x0+x1)/2,y:y0+16,opacity:0},gB); t.textContent=bl.label; }
+      blobs.push({r:rect,t:t});
+      if(!eq){
+        for(i=0;i<cl.length;i++){ for(j=i+1;j<cl.length;j++){
+          if(!R.has(cl[i],cl[j])){
+            var isW=(rel.wit[0]===cl[i]&&rel.wit[2]===cl[j])||(rel.wit[0]===cl[j]&&rel.wit[2]===cl[i]);
+            if(isW||!rel.onlyWit){ misses.push({a:cl[i],b:cl[j],g:addEdge(gM,"mis"+(isW?" wit":""))}); }
+          }
+        } }
+      }
+    });
+    q("[data-d]").innerHTML=rel.data;
+    var rs=q("[data-r]").children,i;
+    for(i=0;i<rs.length;i++){ rs[i].setAttribute("aria-pressed",i===st.rel?"true":"false"); }
+    clear(box); rowBtns={};
+    ["refl","sym","trans"].forEach(function(k){
+      var t=findInst(k,R),b=H("button","pc clk",
+        '<span class="w"><span>'+RULES[k].word+'</span><span class="vb '+(t.ok?"y":"n")+'">'+(t.ok?"true":"false")+'</span></span>'+
+        '<span class="s">'+RULES[k].formal+'</span><span class="s">In the picture: '+RULES[k].pic+'.</span>'+
+        '<span class="x '+(t.ok?"y":"n")+'">'+instText(k,t)+"</span>",box);
+      b.type="button";
+      b.addEventListener("click",function(){ st.rule=k; st.view="arrows"; paint(true); });
+      rowBtns[k]=b;
+    });
+  }
+  function layout(){
+    edges.forEach(function(e){
+      setShape(e.g,e.loop?loopShape(pos[e.a],hw(e.a),cfg.loop[e.a]):edgeShape(pos[e.a],pos[e.b],hw(e.a),hw(e.b),e.bend,e.hop));
+      e.g._h.style.opacity=e.loop?1:e.hop;
+    });
+    ghosts.forEach(function(x){
+      setShape(x.g,x.a===x.b?loopShape(pos[x.a],hw(x.a),cfg.loop[x.a]):edgeShape(pos[x.a],pos[x.b],hw(x.a),hw(x.b),11,1));
+    });
+    misses.forEach(function(x){
+      setShape(x.g,edgeShape(pos[x.a],pos[x.b],hw(x.a),hw(x.b),0,0));
+      x.g._h.style.opacity=0;
+    });
+    ids.forEach(function(id){ moveNode(nodes[id],pos[id]); });
+    tags.forEach(function(t){
+      t.g.setAttribute("transform","translate("+f1(pos[t.id].x+hw(t.id)+2+t.i*15)+","+f1(pos[t.id].y-HH+1)+")");
+    });
+  }
+  function paint(animate){
+    var rel=cfg.rels[st.rel],R=rel.R,eq=isEquiv(R),blob=st.view==="blobs",
+        t=findInst(st.rule,R),hot={},wit={},inUse={},from={},fromE=[],start=0,dur=(animate&&!REDUCE)?480:0,
+        target=blob?rel.cluster:cfg.pos,arrows=arrowsFor(st.rule,t.v);
+    arrows.forEach(function(p){ hot[p[0]+"|"+p[1]]=1; });
+    if(rel.wit){
+      wit[rel.wit[0]+"|"+rel.wit[1]]=1; wit[rel.wit[1]+"|"+rel.wit[0]]=1;
+      wit[rel.wit[1]+"|"+rel.wit[2]]=1; wit[rel.wit[2]+"|"+rel.wit[1]]=1;
+    }
+    edges.forEach(function(e,i){
+      var k=e.a+"|"+e.b,op=1,cls="",tb=e.b0,th=1;
+      if(blob){
+        tb=0; th=e.loop?1:0;
+        if(e.loop||eq){ op=0; }
+        else if(wit[k]){ cls="hi"; }
+        else if(rel.onlyWit){ op=0.25; }
+      } else if(hot[k]){ cls=t.ok?"ok":"hi"; }
+      else { op=0.2; }
+      fromE[i]={b:e.bend,h:e.hop};
+      e.tb=tb; e.th=th;
+      e.g.setAttribute("class","eg"+(cls?" "+cls:""));
+      e.g.style.opacity=op;
+    });
+    /* the arrow a failing rule is missing */
+    clear(gG); ghosts=[];
+    if(!blob){
+      arrows.forEach(function(p){
+        if(!R.has(p[0],p[1])){ ghosts.push({a:p[0],b:p[1],g:addEdge(gG,"ghost")}); }
+      });
+    }
+    misses.forEach(function(x){ x.g.style.opacity=blob?1:0; });
+    blobs.forEach(function(b){
+      b.r.style.opacity=blob?1:0;
+      if(b.t){ b.t.style.opacity=blob?1:0; }
+    });
+    /* a, b, c on the vertices */
+    clear(gT); tags=[];
+    if(!blob){
+      ["a","b","c"].forEach(function(k){ if(t.v[k]){ (inUse[t.v[k]]=inUse[t.v[k]]||[]).push(k); } });
+      Object.keys(inUse).forEach(function(id){
+        inUse[id].forEach(function(k,i){
+          var g=S("g",{"class":"stg"},gT);
+          S("circle",{r:8.5},g);
+          S("text",{},g).textContent=k;
+          tags.push({g:g,id:id,i:i});
+        });
+      });
+    }
+    ids.forEach(function(id){
+      from[id]={x:pos[id].x,y:pos[id].y};
+      nodes[id].setAttribute("class","nd"+(inUse[id]?(t.ok?" me":" bad"):""));
+    });
+    if(raf){ cancelAnimationFrame(raf); raf=0; }
+    function frame(ts){
+      if(!start){ start=ts; }
+      var u=dur?Math.min(1,(ts-start)/dur):1,w=u<0.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+      ids.forEach(function(id){
+        pos[id].x=from[id].x+(target[id].x-from[id].x)*w;
+        pos[id].y=from[id].y+(target[id].y-from[id].y)*w;
+      });
+      edges.forEach(function(e,i){
+        if(!e.loop){ e.bend=fromE[i].b+(e.tb-fromE[i].b)*w; e.hop=fromE[i].h+(e.th-fromE[i].h)*w; }
+      });
+      layout();
+      raf=u<1?requestAnimationFrame(frame):0;
+    }
+    if(dur){ raf=requestAnimationFrame(frame); } else { frame(1); }
+    /* words and buttons */
+    var vs=q("[data-v]").children,cap=q("[data-t]"),i;
+    for(i=0;i<vs.length;i++){ vs[i].setAttribute("aria-pressed",vs[i].getAttribute("data-k")===st.view?"true":"false"); }
+    Object.keys(rowBtns).forEach(function(k){ rowBtns[k].setAttribute("aria-pressed",(!blob&&k===st.rule)?"true":"false"); });
+    cap.hidden=!blob;
+    cap.className="ecap"+(eq?"":" stuck");
+    cap.innerHTML=rel.blobCap;
+  }
+  cfg.rels.forEach(function(rel,i){
+    var b=H("button","",rel.label,q("[data-r]"));
+    b.type="button";
+    b.addEventListener("click",function(){
+      if(raf){ cancelAnimationFrame(raf); raf=0; }
+      st.rel=i; st.rule="trans"; st.view="arrows";
+      build(); paint(false);
+    });
+  });
+  var vb=q("[data-v]").children,vi;
+  for(vi=0;vi<vb.length;vi++){
+    vb[vi].addEventListener("click",function(ev){ st.view=ev.currentTarget.getAttribute("data-k"); paint(true); });
+  }
+  build(); paint(false);
+}
+function meets(x,y){ return x.some(function(v){ return y.indexOf(v)>=0; }); }
+var THEOREM4="Each rule makes some arrows redundant: every loop is there, every arrow has its opposite, and every connected piece is all-to-all. So the blobs carry the same information as the arrows: "+m("a R b")+" iff "+m("a")+" and "+m("b")+" share a blob. That’s <strong>Theorem 4</strong>, and the blobs are the equivalence classes.";
+
+/* eight students */
+var STU=["Ada","Ben","Cam","Dee","Eli","Fay","Gus","Hal"],posStu={},loopStu={};
+STU.forEach(function(id,i){
+  var t=-Math.PI/2+i*2*Math.PI/8;
+  posStu[id]={x:200+137*Math.cos(t),y:170+112*Math.sin(t)};
+  loopStu[id]=t;
+});
+var DORM={Ada:"Baker",Dee:"Baker",Gus:"Baker",Ben:"Next House",Eli:"Next House",Hal:"Next House",Cam:"Simmons",Fay:"Simmons"};
+var SCHED={Ada:["6.1200"],Ben:["6.1200","8.01"],Cam:["8.01"],Dee:["18.01"],Eli:["18.01","5.111"],Fay:["5.111"],Gus:["6.1200"],Hal:["3.091"]};
+relCard({host:"relDorm",W:400,H:340,ids:STU,pos:posStu,loop:loopStu,rels:[
+  {label:"Same dorm",R:makeRel(STU,function(a,b){ return DORM[a]===DORM[b]; }),
+    data:"Baker: Ada, Dee, Gus · Next House: Ben, Eli, Hal · Simmons: Cam, Fay. "+m("a R b")+" iff "+m("a")+" and "+m("b")+" live in the same dorm.",
+    cluster:{Ada:{x:72,y:125},Dee:{x:72,y:180},Gus:{x:72,y:235},Ben:{x:200,y:125},Eli:{x:200,y:180},Hal:{x:200,y:235},Cam:{x:328,y:152},Fay:{x:328,y:207}},
+    blobs:[{ids:["Ada","Dee","Gus"],label:"Baker"},{ids:["Ben","Eli","Hal"],label:"Next House"},{ids:["Cam","Fay"],label:"Simmons"}],
+    blobCap:THEOREM4+" Check: 3² + 3² + 2² = 22 pairs."},
+  {label:"Has a class with",R:makeRel(STU,function(a,b){ return meets(SCHED[a],SCHED[b]); }),wit:["Ada","Ben","Cam"],
+    data:"6.1200: Ada, Ben, Gus · 8.01: Ben, Cam · 18.01: Dee, Eli · 5.111: Eli, Fay · 3.091: Hal. "+m("a R b")+" iff "+m("a")+" and "+m("b")+" have a class in common.",
+    cluster:{Ada:{x:52,y:115},Gus:{x:52,y:225},Ben:{x:122,y:170},Cam:{x:190,y:115},Dee:{x:262,y:80},Eli:{x:346,y:120},Fay:{x:262,y:160},Hal:{x:310,y:262}},
+    blobs:[{ids:["Ada","Ben","Gus","Cam"]},{ids:["Dee","Eli","Fay"]},{ids:["Hal"]}],
+    blobCap:"<strong>Blobs don’t work here.</strong> A blob claims every pair inside it is in "+m("R")+", and the dashed lines are the pairs it would invent. Ben has 6.1200 with Ada and 8.01 with Cam, but "+r("Ada","Cam")+" is false."}
+]});
+
+tri("ruleCheck",["reflexive","symmetric","transitive"],[
+  {q:m("a")+" has declared the same major as "+m("b")+". Some first-years haven’t declared yet.",a:0,
+   why:"Reflexive. Someone with no major hasn’t declared the same major as themself, so that vertex has no loop."},
+  {q:m("a")+"’s Kerberos username comes no later in the alphabet than "+m("b")+"’s.",a:1,
+   why:"Symmetric. If ada comes before ben, then ben doesn’t come before ada, so that arrow has no opposite."},
+  {q:m("a")+" lives on the same floor as "+m("b")+", or on the floor directly above or below.",a:2,
+   why:"Transitive. Floors 3 and 4 are close, floors 4 and 5 are close, but floors 3 and 5 aren’t. A two-step walk with no shortcut."}
+]);
+
+/* {2, …, 12} */
+var NUM=["2","3","4","5","6","7","8","9","10","11","12"],posNum={},loopNum={};
+NUM.forEach(function(id,i){
+  var t=-Math.PI/2+i*2*Math.PI/11;
+  posNum[id]={x:200+150*Math.cos(t),y:178+126*Math.sin(t)};
+  loopNum[id]=t;
+});
+function primesOf(n){ var o=[],p; n=+n; for(p=2;p<=n;p++){ if(n%p===0){ o.push(p); while(n%p===0){ n/=p; } } } return o; }
+function largest(n){ var ps=primesOf(n); return ps[ps.length-1]; }
+relCard({host:"relPrime",W:400,H:360,ids:NUM,pos:posNum,loop:loopNum,rels:[
+  {label:"Same largest prime factor",R:makeRel(NUM,function(a,b){ return largest(a)===largest(b); }),
+    data:m("a R b")+" iff "+m("a")+" and "+m("b")+" have the same largest prime factor. So 10 = 2 · 5 gets 5, and 12 = 2 · 2 · 3 gets 3.",
+    cluster:{"2":{x:45,y:125},"4":{x:45,y:180},"8":{x:45,y:235},"3":{x:113,y:150},"6":{x:113,y:205},"9":{x:165,y:150},"12":{x:165,y:205},"5":{x:236,y:150},"10":{x:236,y:205},"7":{x:298,y:180},"11":{x:358,y:180}},
+    blobs:[{ids:["2","4","8"],label:"2"},{ids:["3","6","9","12"],label:"3"},{ids:["5","10"],label:"5"},{ids:["7"],label:"7"},{ids:["11"],label:"11"}],
+    blobCap:"An equivalence relation, with one blob per largest prime factor. Blobs of one are fine: 7 relates only to itself, and its loop still counts. Check: 9 + 16 + 4 + 1 + 1 = 31 pairs."},
+  {label:"Shares a prime factor",R:makeRel(NUM,function(a,b){ return meets(primesOf(a),primesOf(b)); }),wit:["2","6","3"],onlyWit:true,
+    data:m("a R b")+" iff some prime divides both "+m("a")+" and "+m("b")+".",
+    cluster:{"2":{x:45,y:85},"3":{x:235,y:85},"6":{x:140,y:150},"4":{x:45,y:170},"12":{x:235,y:170},"9":{x:235,y:255},"8":{x:140,y:235},"10":{x:45,y:255},"5":{x:140,y:310},"7":{x:300,y:180},"11":{x:362,y:180}},
+    blobs:[{ids:["2","3","4","5","6","8","9","10","12"]},{ids:["7"]},{ids:["11"]}],
+    blobCap:"<strong>Blobs don’t work here.</strong> Follow the highlighted walk: "+r("2","6")+" through the prime 2, and "+r("6","3")+" through the prime 3, but the dashed line says "+r("2","3")+" is false."}
+]});
+
+/* ---------- counting ---------- */
+/* "and" vs "or" on the same two lists */
+(function(){
+  var host=$("andOr"); if(!host){ return; }
+  var X=["6.1010","6.1210","6.1800","6.3900"],Y=["18.03","18.06","18.600"],mode="or";
+  host.innerHTML='<div class="row" style="margin-top:4px"><div class="seg" role="group" aria-label="Choice"></div></div><div data-p></div><div class="out plain" data-f></div>';
+  var seg=host.querySelector(".seg"),pic=host.querySelector("[data-p]"),fm=host.querySelector("[data-f]");
+  function render(){
+    var kids=seg.children,i,n=0;
+    for(i=0;i<kids.length;i++){ kids[i].setAttribute("aria-pressed",kids[i].getAttribute("data-k")===mode?"true":"false"); }
+    clear(pic);
+    if(mode==="or"){
+      var lst=H("div","lst",null,pic);
+      X.forEach(function(s){ n++; H("div","lc","<i>"+n+"</i>"+s,lst); });
+      Y.forEach(function(s){ n++; H("div","lc t","<i>"+n+"</i>"+s,lst); });
+      fm.innerHTML="<strong>Sum rule.</strong> The lists are disjoint, so |"+m("X")+" ∪ "+m("Y")+"| = |"+m("X")+"| + |"+m("Y")+"| = 4 + 3 = 7.";
+    } else {
+      var g=H("div","rg cg",null,pic);
+      g.style.gridTemplateColumns="auto repeat(3,auto)";
+      H("div","ch","",g);
+      Y.forEach(function(s){ H("div","ch",s,g); });
+      X.forEach(function(s){
+        H("div","rh",s,g);
+        Y.forEach(function(){ n++; H("div","nc",String(n),g); });
+      });
+      fm.innerHTML="<strong>Product rule.</strong> Each choice is a pair in "+m("X")+" × "+m("Y")+", one numbered square. So |"+m("X")+" × "+m("Y")+"| = |"+m("X")+"| · |"+m("Y")+"| = 4 · 3 = 12.";
+    }
+  }
+  [["or","One from "+m("X")+" or "+m("Y")],["and","One from "+m("X")+" and one from "+m("Y")]].forEach(function(o){
+    var b=H("button","",o[1],seg);
+    b.type="button";
+    b.setAttribute("data-k",o[0]);
+    b.addEventListener("click",function(){ mode=o[0]; render(); });
+  });
+  render();
+})();
+
+/* subsets of five subjects, as five bits */
+(function(){
+  var host=$("subsets"); if(!host){ return; }
+  var G=["18.01","18.02","8.01","8.02","5.111"],on=[true,false,true,false,false],subs=[],bits=[];
+  var grid=H("div","bitgrid",null,host),out=H("div","out plain",null,host);
+  function toggle(i){ on[i]=!on[i]; render(); }
+  G.forEach(function(s,i){
+    var b=H("button","sb",s,grid);
+    b.type="button"; b.setAttribute("aria-label","Subject "+s);
+    b.addEventListener("click",function(){ toggle(i); });
+    subs.push(b);
+  });
+  G.forEach(function(s,i){
+    var b=H("button","sb bit","0",grid);
+    b.type="button"; b.setAttribute("aria-label","Bit for "+s);
+    b.addEventListener("click",function(){ toggle(i); });
+    bits.push(b);
+  });
+  function render(){
+    var chosen=[],str="";
+    G.forEach(function(s,i){
+      subs[i].setAttribute("aria-pressed",on[i]?"true":"false");
+      bits[i].setAttribute("aria-pressed",on[i]?"true":"false");
+      bits[i].textContent=on[i]?"1":"0";
+      if(on[i]){ chosen.push(s); }
+      str+=on[i]?"1":"0";
+    });
+    out.innerHTML=(chosen.length?"{"+chosen.join(", ")+"}":"∅")+' ↔ <span style="font-family:var(--mono);font-weight:700">'+str+"</span>";
+  }
+  render();
+})();
+
+/* rank three of five dorms */
+(function(){
+  var host=$("rank"); if(!host){ return; }
+  var D=["Baker","East Campus","Maseeh","Next House","Simmons"],picks=[],NAMES=["1st","2nd","3rd"];
+  var slots=H("div","slots",null,host),pickEl=H("div","dpick",null,host),out=H("div","out plain",null,host),btns={};
+  D.forEach(function(d){
+    var b=H("button","btn",d,pickEl);
+    b.type="button";
+    b.addEventListener("click",function(){ if(picks.length<3){ picks.push(d); render(); } });
+    btns[d]=b;
+  });
+  var row=H("div","row",null,host),again=H("button","btn","Start over",row);
+  again.type="button";
+  again.addEventListener("click",function(){ picks=[]; render(); });
+  function render(){
+    clear(slots);
+    NAMES.forEach(function(nm,i){
+      var cls="slot"+(i<picks.length?" have":(i===picks.length?" goal":""));
+      H("div",cls,"<small>"+nm+"</small>"+(i<picks.length?picks[i]:(5-i)+" choices"),slots);
+    });
+    D.forEach(function(d){ btns[d].disabled=picks.indexOf(d)>=0||picks.length===3; });
+    var left=D.filter(function(d){ return picks.indexOf(d)<0; });
+    if(picks.length===0){ out.innerHTML="5 choices for your first pick."; }
+    else if(picks.length<3){ out.innerHTML=left.length+" choices left: "+left.join(", ")+"."; }
+    else { out.innerHTML="5 · 4 · 3 = <strong>60</strong> rankings. The plain Product rule’s 5 · 5 · 5 = 125 would count Baker, Baker, Baker."; }
+  }
+  render();
+})();
+
+tri("countCheck",null,[
+  {q:"6.1200J / 18.062J is one subject offered by both Courses. Add it to both lists from the first example, then take one subject from either list. How many options?",
+   opts:["5 + 4 = 9","4 + 3 + 1 = 8","5 · 4 = 20"],a:1,
+   why:"8. It’s one subject on both lists, so the lists aren’t disjoint and the Sum rule doesn’t apply to them as they stand. Count it once."},
+  {q:"Say a username has 2 or 3 characters: a lowercase letter, followed by lowercase letters or digits. How many usernames?",
+   opts:["26 · 36 + 26 · 36²","(26 · 36) · (26 · 36²)","36² + 36³"],a:0,
+   why:"Length 2 <em>or</em> length 3 adds. Within one length, the first character <em>and</em> the rest multiply. Lecture’s passwords work the same way."}
+]);
+
+/* ---------- Space toggles a blank screen; never scrolls ---------- */
+(function(){
+  var blank=document.getElementById("blank");
+  if(!blank){ return; }
+  document.addEventListener("keydown",function(ev){
+    if(ev.key!==" " && ev.code!=="Space"){ return; }
+    var t=ev.target,tag=t && t.tagName;
+    if(tag==="INPUT" || tag==="TEXTAREA" || (t && t.isContentEditable)){ return; }
+    ev.preventDefault();
+    if(ev.repeat){ return; }
+    blank.classList.toggle("on");
+  });
+})();
+
+})();
+</script>

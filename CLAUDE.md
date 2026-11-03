@@ -50,6 +50,7 @@ number only, no topic slug:
 | `companions/lec-11.html` | Lecture 11 — graphs and coloring: what the picture doesn’t tell you |
 | `companions/lec-12.html` | Lecture 12 — matching and stable matching: Gale-Shapley day by day, predict each step |
 | `companions/lec-13.html` | Lecture 13 — connectivity and digraph edge cases, each drawn; PageRank on four examples, solved step by step as linear equations |
+| `companions/lec-15.html` | Lecture 15 — basic counting: “and” multiplies, “or” adds, a bijection moves the count, ranking dorms for the generalized product rule; relations in an expandable at the bottom: arrows on the catalog, dorms and two number-theory relations, down to blobs for equivalence classes |
 
 - `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
 - Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.
