@@ -51,6 +51,7 @@ number only, no topic slug:
 | `companions/lec-12.html` | Lecture 12 — matching and stable matching: Gale-Shapley day by day, predict each step |
 | `companions/lec-13.html` | Lecture 13 — connectivity and digraph edge cases, each drawn; PageRank on four examples, solved step by step as linear equations |
 | `companions/lec-15.html` | Lecture 15 — basic counting: “and” multiplies, “or” adds, a bijection moves the count, ranking dorms for the generalized product rule; relations in an expandable at the bottom: arrows on the catalog, dorms and two number-theory relations, down to blobs for equivalence classes |
+| `companions/quiz-02.html` | Quiz 2 practice — Lectures 10–18, twelve short quiz-style problems (two of them multi-technique counting: surjections → partitions, no-two-consecutive subsets), each solved step by step with feedback per wrong answer, then the write-up and common mistakes; number boxes take formulas (`12 choose 4`, `C(12,4)`, `3^5`); `#/board` is a one-page chalkboard version (statement, numbered board lines, what to say, answer; ← → jumps, prints cleanly) |
 
 - `rec-NN.html` for a recitation, `lec-NN.html` for a lecture topic. Two digits.
 - Footer matches the file: `a short companion to Recitation NN` or `… to Lecture NN, <topic>`.
